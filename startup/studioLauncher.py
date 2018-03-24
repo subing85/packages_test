@@ -47,8 +47,8 @@ class Launcher (FROM, BASE):
   
         uic.loadUi(UI_FILE, self)    
 
-        #console = studioConsole.Console ()    
-        #console.stdout().messageWritten.connect (self.textEdit_output.insertPlainText) 
+        console = studioConsole.Console ()    
+        console.stdout().messageWritten.connect (self.textEdit_output.insertPlainText) 
 
         try:
             __file__
@@ -80,6 +80,9 @@ class Launcher (FROM, BASE):
         self.button_patch.clicked.connect (partial (self.makeVersion, 'patch'))
         self.button_minor.clicked.connect (partial (self.makeVersion, 'minor'))
         self.button_major.clicked.connect (partial (self.makeVersion, 'major'))        
+        
+        self.button_removeThumbs.clicked.connect (partial (self.removeFiles, 'Thumbs.db'))        
+        #self.button_removePyc.clicked.connect (partial (self.removeFiles, '.pyc'))  
         
         self.annotation ()
 
@@ -159,6 +162,39 @@ class Launcher (FROM, BASE):
         
         #reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v FOOBAR /f
         #set "PATH=%PATH:Python24=Python27%"
+        
+    
+    def removeFiles (self, fileType):
+        
+        packagePath = os.environ['PACKAGE_PATH']
+        
+        if not os.path.isdir(packagePath):
+            QtGui.QMessageBox.warning (self, 'Warning', '{}\nNo such directory'.format(packagePath), QtGui.QMessageBox.Ok)
+            return False
+        
+        removedList = []
+        ing  = 0
+        for root, dir, files in os.walk(packagePath):                  
+            for eachFile in files :
+                if fileType not in eachFile:
+                    continue                
+                
+                self.progressBar.setValue (ing)
+                self.progressBar.setMaximum ((ing+100))
+                    
+                try :
+                    os.chmod (os.path.join(root, eachFile), 0777)
+                    os.remove (os.path.join(root, eachFile))
+                    removedList.append('removed\t{}'.format (os.path.join(root, eachFile)))
+                except Exception, result :
+                    print result
+              
+                ing+=1
+                
+        self.progressBar.setMaximum (100)
+        self.progressBar.setValue (100)
+                        
+        print '\n'.join (removedList)                    
 
                 
 if __name__ == '__main__':
