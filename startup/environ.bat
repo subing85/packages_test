@@ -51,6 +51,8 @@ set GIMP_PLUGIN_PATH=%PACKAGE_PATH%/plugins/gimp
 set BLENDER_VERSION=2.79
 set BLENDER_PATH=C:/Program Files/Blender Foundation/Blender/blender.exe
 set BLENDER_PLUGIN_PATH=%PACKAGE_PATH%/plugins/blender
+set BLENDER_SYSTEM_PLUGINS=%PACKAGE_PATH%/plugins/blender
+set BLENDER_USER_PLUGINS=%PACKAGE_PATH%/plugins/blender
 
 set NARTON_VERSION=1.5
 set NATRON_PATH=C:/Program Files/INRIA/Natron-2.3.7/bin/Natron.exe

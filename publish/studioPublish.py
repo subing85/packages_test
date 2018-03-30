@@ -150,7 +150,9 @@ class Publish (FROM, BASE):
         index = 0
         
         for ing, module in result.items () :             
-            currentModule = bundle[module]            
+            currentModule = bundle[module]    
+            
+            print '\n\n\nsubin\t',      currentModule   , '\n\n'
            
             button_number = QtGui.QPushButton(self)       
             button_number.setObjectName('button_number_{}'.format(currentModule['NAME']))
@@ -247,8 +249,8 @@ class Publish (FROM, BASE):
             widget.setVisible (values)           
         
     
-    def executeBundle (self, bundle, button, layout):        
-        
+    def executeBundle (self, bundle, button, layout):                
+       
         currentModule = 'from {} import {}\nreload({})\nresult = {}.trailRun()'.format (self.publishType, bundle['__name__'], bundle['__name__'], bundle['__name__'])      
        
         try :        
