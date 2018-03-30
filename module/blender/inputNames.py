@@ -26,7 +26,7 @@ class Names (object) :
         self._globalScale = 'GlobalScale'
         self._globals = 'Global'
         
-        self._jointRadius = 0.1
+        self._jointRadius = 0.15
         self._nameStyle = (0, 1, 2)
         #self._nameStyle = (1, 0, 2)
         #self._nameStyle = (2, 1, 0)

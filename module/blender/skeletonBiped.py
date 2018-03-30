@@ -1,5 +1,5 @@
 '''
-Biped Skeleton for Puppet CS v1.0.0
+Biped Skeleton for Blender Puppet CS v1.0.0
 Date : March 29, 2018
 Last modified: March 29, 2018
 Author: Subin. Gopi (subing85@gmail.com)
@@ -25,11 +25,16 @@ VERSION = 1.0
 CLASS = 'Biped'
 
 import imp
+import warnings
 import bpy
+
 
 
 from module.blender import inputNames
 imp.reload(inputNames)
+
+from module.blender import openBlender
+imp.reload(openBlender)
 
 
 class Biped (object):
@@ -53,12 +58,15 @@ class Biped (object):
             :return    None
         '''  
 
-        leftPelvis = createEmptyObject ('SPHERE', False, (1, 0, 6.5), name='%s_%s_%s'% (self.input._leftSide, self.input._pelvis, self.input._fitJoint))        
-        leftHipt = createEmptyObject ('SPHERE', False, (1, 0, 6.0), name='%s_%s_%s'% (self.input._leftSide, self.input._hip, self.input._fitJoint))
-        leftKnee = createEmptyObject ('SPHERE', False, (1, 0, 3.5), name='%s_%s_%s'% (self.input._leftSide, self.input._knee, self.input._fitJoint))
-        leftAnkle = createEmptyObject ('SPHERE', False, (1, 0, 2.0), name='%s_%s_%s'% (self.input._leftSide, self.input._ankle, self.input._fitJoint))
-        leftLegPole = createEmptyObject ('SPHERE', False, (1, -2.5, 3.492), name='%s_%s_%s'% (self.input._leftSide, self.input._legPoleVector, self.input._fitJoint))
-        
+        pelvis_contextObject, pelvis_dataObject = createEmptyObject ('SPHERE', False, (1, 0, 5.5), radius=self.jointRadius, name='%s_%s_%s'% (self.input._leftSide, self.input._pelvis, self.input._fitJoint))        
+        knee_contextObject, knee_dataObject = createEmptyObject ('SPHERE', False, (1, 0, 3.25), radius=self.jointRadius, name='%s_%s_%s'% (self.input._leftSide, self.input._knee, self.input._fitJoint))
+        ankle_contextObject, ankle_dataObject = createEmptyObject ('SPHERE', False, (1, 0, 1.0), radius=self.jointRadius, name='%s_%s_%s'% (self.input._leftSide, self.input._ankle, self.input._fitJoint))
+        legPole_contextObject, legPole_dataObject = createEmptyObject ('SPHERE', False, (1, -2.5, 3.25), radius=self.jointRadius, name='%s_%s_%s'% (self.input._leftSide, self.input._legPoleVector, self.input._fitJoint))
+
+        openBlender.setParent(knee_contextObject.name, pelvis_contextObject.name)
+        openBlender.setParent(ankle_contextObject.name, knee_contextObject.name)
+        openBlender.setParent(legPole_contextObject.name, knee_contextObject.name)
+
          
     
     def removeSkeleton(self):
@@ -73,13 +81,40 @@ class Biped (object):
         pass
 
 
-def createEmptyObject (type, align, location, name):    
-    bpy.ops.object.empty_add (type=type, view_align=align, location=location)    
-    bpy.context.object.name = name
-    bpy.context.object.empty_draw_size = 0.22 
-        
-    return bpy.context.object
+def createEmptyObject (type, align, location, radius, name):  
     
+    '''
+    Description
+        Standalone Function for create Empty blender Object based on inputs                        
+        :Type - class function (method)            
+        :param   type    <str>  example 'SPHERE'
+        :param   align    <bool>   False
+        :param   location   <tuple>    (0, 0, 0)
+        :param   name    <str>    example 'Puppet_Joint'
+        :param   radius    <float>    example 0.22
+        :return currentJoint    <<class 'bpy_types.Object'>> 
+    '''  
+    
+         
+    if bpy.data.objects.get(name) :
+        try :
+            bpy.data.objects[name].select = True
+            #bpy.ops.object.delete(use_global=False)
+            bpy.data.objects.remove(bpy.data.objects[name], True)   
+        except Exception as result:
+            warnings.warn ('node remove error', result)       
+     
+    bpy.ops.object.empty_add(type=type, view_align=align, location=location)    
+    bpy.context.object.name = name
+    bpy.context.object.empty_draw_size = radius 
+    
+    contextObject = bpy.context.object
+    dataObject = bpy.data.objects[bpy.context.object.name]
+    
+    return contextObject, dataObject
+
+
+
     
     
 '''       

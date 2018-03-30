@@ -2,4 +2,4 @@ resources
 sample
 .project
 .pydevproject
-.pyc
+*.pyc
