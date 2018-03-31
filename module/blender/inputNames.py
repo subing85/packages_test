@@ -26,22 +26,15 @@ class Names (object) :
         self._globalScale = 'GlobalScale'
         self._globals = 'Global'
         
-        self._jointRadius = 0.15
+        self._jointRadius = 0.1
         self._nameStyle = (0, 1, 2)
         #self._nameStyle = (1, 0, 2)
         #self._nameStyle = (2, 1, 0)
-                
-        self._cog = 'Cog'
-        self._spine = 'Spine'
-        self._chest = 'Chest'        
-        self._neck = 'Neck'
-        self._head = 'Head'        
         
         self._leg = 'Leg'
         self._legFinger = 'LegFinger'  
                       
         self._pelvis = 'Pelvis'
-        self._hip = 'Hip'
         self._knee = 'Knee'
         self._ankle = 'Ankle'
         self._legPoleVector = 'LegPoleVector'
@@ -51,46 +44,94 @@ class Names (object) :
         self._toe = 'Toe'
         self._heel = 'Heel'
         self._pinkyToe = 'PinkyToe'
-        self._bigToe = 'BigToe'            
-
-        self._arm = 'Arm'
-        self._armFinger = 'ArmFinger'
-
+        self._bigToe = 'BigToe'        
+        
+        self._hip = 'Hip' 
+        self._hipTail = 'HipTail'                       
+        self._cog = 'Cog'
+        self._spineA = 'SpineA'
+        self._spineB = 'SpineB'        
+        self._chest = 'Chest'        
+        self._neckA = 'NeckA'
+        self._neckB = 'NeckB'        
+        self._head = 'Head'        
+        self._headTail = 'HeadTail'        
+        
+        self._upperJaw = 'UpperJaw'
+        self._upperJawTail = 'UpperJawTail'        
+        self._lowerJaw = 'LowerJaw'     
+        self._lowerJawTail = 'LowerJawTail' 
+           
+        self._tongueA = 'TongueA'
+        self._tongueB = 'TongueB'
+        self._tongueC = 'TongueC'
+        self._tongueD = 'TongueD' 
+        self._tongueE = 'TongueE' 
+        
+        self._uvulaA = 'UvulaA'
+        self._uvulaB = 'UvulaB'
+        self._uvulaC = 'UvulaC'
+        self._uvulaD = 'UvulaD'  
+        
+        self._eyeA = 'EyeA'
+        self._eyeB = 'EyeB'        
+        self._eyeAim = 'EyeAim'
+        
+        self._earA = 'EarA' 
+        self._earB = 'EarB'
+        
         self._clavicle = 'Clavicle'
         self._shoulder = 'Shoulder'
         self._elbow = 'Elbow'
         self._wrist = 'Wrist'
-        self._armPoleVector = 'ArmPoleVector' 
-        self._thumb = 'Thumb'
-        self._index = 'Index'
-        self._middle = 'Middle'
-        self._ring = 'Ring'        
-        self._pinky = 'PinkyRoot' 
-
-        self._upperJaw = 'UpperJaw'
-        self._lowerJaw = 'LowerJaw'     
-
-        self._eyeRoot = 'EyeRoot'
-        self._eye = 'Eye'
-        self._eyeAim = 'EyeAim'
-        self._upperEyeBrow = 'UpperEyeBrow'
-        self._lowerEyeBrow = 'LowerEyeBrow'       
+        self._armPoleVector = 'ArmPoleVector'         
         
-        self._tongue = 'Tongue'
-        self._ear = 'Ear' 
-        self._uvula = 'Uvula'
-        self._tail = 'Tail'   
-        self._earD = 'EarD'  
+        self._thumbA = 'ThumbA'
+        self._thumbB = 'ThumbB'
+        self._thumbC = 'ThumbC'
+        self._thumbD = 'ThumbD'
+        self._thumbE = 'ThumbE'        
+        
+        self._indexA = 'IndexA'
+        self._indexB = 'IndexB'
+        self._indexC = 'IndexC'
+        self._indexD = 'IndexD'
+        self._indexE = 'IndexE'
+                
+        self._middleA = 'MiddleA'
+        self._middleB = 'MiddleB'
+        self._middleC = 'MiddleC'
+        self._middleD = 'MiddleD'
+        self._middleE = 'MiddleE'        
+        
+        self._ringA = 'RingA'    
+        self._ringB = 'RingB'    
+        self._ringC = 'RingC'    
+        self._ringD = 'RingD'    
+        self._ringE = 'RingE'            
+            
+        self._pinkyA = 'PinkyA'         
+        self._pinkyB = 'PinkyB'         
+        self._pinkyC = 'PinkyC'         
+        self._pinkyD = 'PinkyD'         
+        self._pinkyE = 'PinkyE'          
+        
+        self._tailA = 'TailA'   
+        self._tailB = 'TailB'   
+        self._tailC = 'TailC'   
+        self._tailD = 'TailD'   
+        self._tailE = 'TailE'
+        self._tailF = 'TailF'        
 
         self._characterName = 'Generic'        
         self._joint = 'Jnt'
         self._fitJoint = 'FJnt'
         self._twist = 'Twist'
-        self._leftSide = 'LT'
-        self._rightSide = 'RT'
-        self._centerSide = 'CT'
-        self._frontSide = 'FR'
-        self._backSide = 'BK' 
+        self._leftSide = 'L'
+        self._rightSide = 'R'
+        self._centerSide = 'C'
+        self._frontSide = 'F'
+        self._backSide = 'B' 
 
         self._ik = 'IK'
         self._fk = 'FK'
@@ -134,3 +175,5 @@ class Names (object) :
                                             '5_Global': [],                                            
                                             }
                                  }
+        
+#End########################################################################################################        
