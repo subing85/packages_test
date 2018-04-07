@@ -44,8 +44,8 @@ class Names (object) :
         self._toe = 'Toe'
         self._heel = 'Heel'
         self._pinkyToe = 'PinkyToe'
-        self._bigToe = 'BigToe'        
-        
+        self._bigToe = 'BigToe'
+                
         self._hip = 'Hip' 
         self._hipTail = 'HipTail'                       
         self._cog = 'Cog'
@@ -122,6 +122,55 @@ class Names (object) :
         self._tailD = 'TailD'   
         self._tailE = 'TailE'
         self._tailF = 'TailF'        
+        
+        self._legList = [   self._pelvis, 
+                            self._knee, 
+                            self._ankle,
+                            self._legPoleVector,
+                            self._ball,
+                            self._toe,
+                            self._heel,
+                            self._pinkyToe,
+                            self._bigToe
+                            ]
+        
+        self._armList = [   self._clavicle,
+                            self._shoulder,
+                            self._elbow,
+                            self._wrist,
+                            self._armPoleVector,
+                            self._thumbA,
+                            self._thumbB,
+                            self._thumbC,
+                            self._thumbD,
+                            self._thumbE,  
+                            
+                            self._indexA,
+                            self._indexB,
+                            self._indexC,
+                            self._indexD,
+                            self._indexE,
+                                
+                            self._middleA,
+                            self._middleB,
+                            self._middleC,
+                            self._middleD,
+                            self._middleE,
+                            
+                            self._ringA,
+                            self._ringB, 
+                            self._ringC, 
+                            self._ringD,
+                            self._ringE,        
+                            
+                            self._pinkyA,   
+                            self._pinkyB,      
+                            self._pinkyC,       
+                            self._pinkyD,       
+                            self._pinkyE, 
+                            ]        
+        
+        
 
         self._characterName = 'Generic'        
         self._joint = 'Jnt'
