@@ -25,7 +25,7 @@
      <number>5</number>
     </property>
     <item>
-     <widget class="QGroupBox" name="groupBox_applications">
+     <widget class="QGroupBox" name="groupBox_projects">
       <property name="minimumSize">
        <size>
         <width>150</width>
@@ -33,9 +33,9 @@
        </size>
       </property>
       <property name="title">
-       <string>Applications</string>
+       <string>Projects</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_projects">
        <property name="leftMargin">
         <number>10</number>
        </property>
@@ -48,47 +48,6 @@
        <property name="bottomMargin">
         <number>10</number>
        </property>
-       <item>
-        <widget class="QPushButton" name="button_gimp">
-         <property name="text">
-          <string>Gimp</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="button_blender">
-         <property name="text">
-          <string>Blender</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="button_natron">
-         <property name="text">
-          <string>Natron</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="button_studioPipe">
-         <property name="text">
-          <string>Studio Pipe</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
       </layout>
      </widget>
     </item>
@@ -119,51 +78,43 @@
           <number>5</number>
          </property>
          <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+          <widget class="QGroupBox" name="groupBox_applications">
+           <property name="title">
+            <string/>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_remove">
-           <property name="minimumSize">
-            <size>
-             <width>150</width>
-             <height>0</height>
-            </size>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <property name="spacing">
-             <number>1</number>
-            </property>
-            <property name="margin">
-             <number>5</number>
-            </property>
-            <item>
-             <widget class="QPushButton" name="button_removeThumbs">
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="button_gimp">
               <property name="text">
-               <string>Remove Thumbs</string>
+               <string>Gimp</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QPushButton" name="button_removePyc">
+            <item row="1" column="0">
+             <widget class="QPushButton" name="button_blender">
               <property name="text">
-               <string>Remove PYC</string>
+               <string>Blender</string>
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QPushButton" name="pushButton_2">
+            <item row="1" column="1">
+             <widget class="QPushButton" name="button_maya2016">
               <property name="text">
-               <string>PushButton</string>
+               <string>Maya 2016</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="button_natron">
+              <property name="text">
+               <string>Natron</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="button_studioPipe">
+              <property name="text">
+               <string>Studio Pipe</string>
               </property>
              </widget>
             </item>
@@ -206,6 +157,44 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="button_removeThumbs">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Remove Thumbs</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_removePyc">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Remove PYC</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -232,7 +221,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="textEdit_output"/>
+       <widget class="QTextEdit" name="textEdit_output">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

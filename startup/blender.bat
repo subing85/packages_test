@@ -25,7 +25,7 @@ echo "................................................................"
 echo "Blender"
 echo $BLENDER_VERSION
 echo $BLENDER_PATH
-echo "Loading Natron, please wait .............................."
+echo "Loading Blender, please wait .............................."
 echo ""
 
 start "" "%BLENDER_PATH%"

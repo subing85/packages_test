@@ -29,6 +29,7 @@ from PyQt4 import QtCore
 from PyQt4 import QtGui
 from PyQt4 import uic
 
+from module import studioProjects
 from module import qtWidgets
 from module import studioConsole
 from module import jsonManager
@@ -49,6 +50,7 @@ class Launcher (FROM, BASE):
 
         console = studioConsole.Console ()    
         console.stdout().messageWritten.connect (self.textEdit_output.insertPlainText) 
+        
 
         try:
             __file__
@@ -62,18 +64,21 @@ class Launcher (FROM, BASE):
             pass
 
         self.setWindowTitle ('Studio Launc-HER v0.1')
-        
+        self.resize (750, 500)
         self.standalonePackages = [ 'resources',
-                                      'plugins',
-                                      'bin',
-                                      'icons']
+                                    'plugins',
+                                    'bin',
+                                    'icons']
         
-  
+        self.loadProject()                              
+
         for eachWidget in self.findChildren(QtGui.QPushButton) :            
             qtWidgets.setIcon(eachWidget, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)             
         
         self.button_gimp.clicked.connect (partial (self.launchApplication, 'gimp'))
         self.button_blender.clicked.connect (partial (self.launchApplication, 'blender'))
+        self.button_maya2016.clicked.connect (partial (self.launchApplication, 'maya2016'))
+        
         self.button_natron.clicked.connect (partial (self.launchApplication, 'natron')) 
         self.button_studioPipe.clicked.connect (partial (self.launchApplication, 'studioPipe'))
         
@@ -85,7 +90,41 @@ class Launcher (FROM, BASE):
         #self.button_removePyc.clicked.connect (partial (self.removeFiles, '.pyc'))  
         
         self.annotation ()
+        
+    
+    def loadProject(self):
+        
+        #hide exists application launcher buttons
+        for eachButton in self.groupBox_applications.findChildren(QtGui.QPushButton):
+            eachButton.hide()            
+        
+        self.sp = studioProjects.StudioProjects()
+        
+        for eachProject in self.sp.projects:            
+            button = QtGui.QPushButton(self)   
+            button.setText(eachProject)    
+            button.setObjectName('button_{}'.format(eachProject))
+            self.verticalLayout_projects.addWidget(button)            
+            button.clicked.connect (partial (self.setMyProject, eachProject))
+            
+        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout_projects.addItem(spacerItem)
 
+        
+    def setMyProject(self, currentProject):
+        
+        #hide exists application launcher buttons
+        for eachButton in self.groupBox_applications.findChildren(QtGui.QPushButton):        
+            eachButton.hide()    
+        
+        for ecahApplication in self.sp.projects[currentProject]:             
+            for eachButton in self.groupBox_applications.findChildren(QtGui.QPushButton):                    
+                if not str(eachButton.objectName()).endswith(ecahApplication):
+                    continue
+                eachButton.show()
+
+        print 'Current Project\t- ', currentProject
+        
 
     def launchApplication (self, application):     
             
@@ -94,7 +133,8 @@ class Launcher (FROM, BASE):
         command = 'start "" {}/{}.bat'.format (CURRENT_PATH, application)
         print command
         subprocess.call (command, stdout=None, shell=True, stderr=None) 
-        #print command        
+        #print command     
+           
         
     def annotation (self):
         
