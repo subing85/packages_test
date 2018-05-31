@@ -1,0 +1,21 @@
+/*
+
+userSetup v0.1 
+Date : May 31, 2018
+Last modified: May 31, 2018
+Author: Subin. Gopi (subing85@gmail.com)
+
+# Copyright (c) 2018, Subin Gopi
+# All rights reserved.
+
+# WARNING! All changes made in this file will be lost!
+
+Description
+    This module is a wrapper of "mayaSetup.py" module, to manage the startup script, ie any script can run with Maya launch.
+*/
+
+python ("from setup.maya import mayaSetup");
+python ("reload(mayaSetup)");
+python ("mayaSetup.customSetup()");
+
+//End/////////////////////////////////////////////////////////////

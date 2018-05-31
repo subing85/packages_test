@@ -21,9 +21,9 @@ set DRIVE=Z:
 
 set PACKAGE_PATH=Z:/packages
 
-set PROJECT_NAME=A Teeth Pain Stroy
-set PROJECT_NICENAME=TPS
-set PROJECT_PATH=Z:/TPS
+rem set PROJECT_NAME=A Teeth Pain Stroy
+rem set PROJECT_NICE_NAME=TPS
+rem set PROJECT_PATH=Z:/TPS
 
 set PROJECT_ADMIN=meera
 

@@ -33,7 +33,7 @@ from functools import partial
 from module import collectToolKit
 from module import jsonManager
 
-PROJECT_NICENAME = os.environ['PROJECT_NICENAME']
+PROJECT_NICE_NAME = os.environ['PROJECT_NICE_NAME']
 PLUGINS_PATH = os.environ['PLUGINS_PATH']
 
 
@@ -86,7 +86,7 @@ class Menu (object):
         
         for eachFolder, bundles in toolKit.bundle.iteritems():            
             for eachModule, bundleData in bundles.iteritems():                
-                grouping = '{}/{}/{}s'.format(PROJECT_NICENAME, eachFolder, bundleData['__name__'])
+                grouping = '{}/{}/{}s'.format(PROJECT_NICE_NAME, eachFolder, bundleData['__name__'])
                 function = bundleData['__name__']
                 key = 'QtCore.Qt.Key.Key_L'
                 modifiers = 'QtCore.Qt.KeyboardModifier.ShiftModifier'              

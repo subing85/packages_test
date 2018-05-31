@@ -30,28 +30,28 @@ class Toolkits (object):
         self.bundle= collectModules (os.path.join(TOOLKIT_PATH, toolKitType)) 
 
 
-def collectModules (path):    
+def collectModules (path):     
 
     if not path :
         warnings.warn('argument is none')
-
+ 
     if not os.path.isdir(path) :
         warnings.warn('No such directory')
-
+ 
     bundles = {}
-
+ 
     for eachFolder in os.listdir(path):
-
+ 
         bundlePath = os.path.join(path, eachFolder)         
-       
+        
         if not os.path.isdir(bundlePath):            
             continue  
-         
+          
         buldleObject = collectBundels.Bundles (path=bundlePath , bundelType='wrapper')   
-        wrapperBuldle = buldleObject.getBundles ()   
-
+        wrapperBuldle = buldleObject.getValidBundles()   
+ 
         bundles.setdefault(eachFolder, wrapperBuldle)        
-
+ 
     return bundles
 
 

@@ -35,9 +35,10 @@ import getpass
 from functools import partial
 
 from module import collectToolKit
+reload(collectToolKit)
 
-#PROJECT_NICENAME = os.environ['PROJECT_NICENAME']
-PROJECT_NICENAME ='TPS'
+#PROJECT_NICENAME = os.environ['PROJECT_NICE_NAME']
+PROJECT_NICE_NAME ='TPS'
 #PLUGINS_PATH = os.environ['PLUGINS_PATH']
 
 
@@ -71,7 +72,7 @@ class Menu (object):
                 print (eachFolder, eachModule, bundleData['__name__'])
                                
                 #===============================================================
-                # grouping = '{}/{}/{}s'.format(PROJECT_NICENAME, eachFolder, bundleData['__name__'])
+                # grouping = '{}/{}/{}s'.format(PROJECT_NICE_NAME, eachFolder, bundleData['__name__'])
                 # function = bundleData['__name__']
                 # key = 'QtCore.Qt.Key.Key_L'
                 # modifiers = 'QtCore.Qt.KeyboardModifier.ShiftModifier'              

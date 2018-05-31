@@ -30,5 +30,6 @@ echo "Loading Maya, please wait .............................."
 echo ""
 
 start "" "%MAYA_PATH%"
+exit
 
 : End: : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :

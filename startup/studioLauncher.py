@@ -49,8 +49,7 @@ class Launcher (FROM, BASE):
         uic.loadUi(UI_FILE, self)    
 
         console = studioConsole.Console ()    
-        console.stdout().messageWritten.connect (self.textEdit_output.insertPlainText) 
-        
+        console.stdout().messageWritten.connect (self.textEdit_output.insertPlainText)         
 
         try:
             __file__
@@ -89,8 +88,6 @@ class Launcher (FROM, BASE):
         self.button_removeThumbs.clicked.connect (partial (self.removeFiles, 'Thumbs.db'))        
         #self.button_removePyc.clicked.connect (partial (self.removeFiles, '.pyc'))  
         
-        self.annotation ()
-        
     
     def loadProject(self):
         
@@ -117,13 +114,20 @@ class Launcher (FROM, BASE):
         for eachButton in self.groupBox_applications.findChildren(QtGui.QPushButton):        
             eachButton.hide()    
         
-        for ecahApplication in self.sp.projects[currentProject]:             
+        for ecahApplication in self.sp.projects[currentProject]['applications']:             
             for eachButton in self.groupBox_applications.findChildren(QtGui.QPushButton):                    
                 if not str(eachButton.objectName()).endswith(ecahApplication):
                     continue
                 eachButton.show()
+                
+        #set global variables
+        os.environ['PROJECT_PATH'] = self.sp.projects[currentProject]['path']
+        os.environ['PROJECT_NICE_NAME'] = self.sp.projects[currentProject]['niceName'] 
+        os.environ['PROJECT_FULL_NAME'] = self.sp.projects[currentProject]['fullName'] 
+        
+        self.annotation ()   
 
-        print 'Current Project\t- ', currentProject
+        print '\nCurrent Project\t- ', currentProject
         
 
     def launchApplication (self, application):     
@@ -140,9 +144,9 @@ class Launcher (FROM, BASE):
         
         try :
             print 'PROJECT_PATH\t', os.environ['PROJECT_PATH']      
-            print 'PROJECT_NAME\t', os.environ['PROJECT_NAME'] 
-            print 'DATA_PATH\t', os.environ['DATA_PATH'] 
-            print 'PYTHONPATH\t', os.environ['PYTHONPATH'] 
+            print 'PROJECT_NICE_NAME\t', os.environ['PROJECT_NICE_NAME'] 
+            #print 'DATA_PATH\t', os.environ['DATA_PATH'] 
+            #print 'PYTHONPATH\t', os.environ['PYTHONPATH'] 
         except Exception as result :
             print result
             
@@ -173,7 +177,7 @@ class Launcher (FROM, BASE):
             
             if eachKey=='pythonCode':
                 pass  
-                 
+                             
         
     def makeVersion (self, versionType):
         

@@ -20,5 +20,15 @@ class StudioProjects(object):
     
     def __init__(self):
         
-        self.projects = {   'TPS': ['gimp', 'blender', 'natron', 'studioPipe'],
-                            'BAN': ['gimp', 'maya2016', 'natron', 'studioPipe']}
+        self.projects = {   'TPS': {'fullName': 'A Teeth Pain Story',
+                                    'niceName': 'TPS',
+                                    'path': 'Z:/TPS',
+                                    'applications': ['gimp', 'blender', 'natron', 'studioPipe']                                    
+                                    },
+                            'BAN': {'fullName': 'Boy And Nurse',
+                                    'niceName': 'BAN',
+                                    'path': 'Z:/BAN',
+                                    'applications':  ['gimp', 'maya2016', 'natron', 'studioPipe']                                  
+                                    }
+                            }
+        
