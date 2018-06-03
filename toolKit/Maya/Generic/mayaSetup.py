@@ -5,6 +5,7 @@ DATE = 'May 31, 2018'
 AUTHOR = 'Subin Gopi'
 COMMENTS = 'To Configure Maya (startup script)'
 VERSION = 1.0
+ICON = 'mayaSetup.png'
 CLASS = 'CreateAssetHierarchy'
 
 class MayaSetup ():       

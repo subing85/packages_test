@@ -29,19 +29,20 @@ from pipe import pipeLayout
 from module import qtWidgets
 
 from pipe import studioDetails
-
 reload (studioDatabase)
 
-
-
-CURRENT_PATH = os.path.dirname (__file__)
-
-PRJECT_PATH = '/media/meera/FE5868105867C5CD/Project/MiniMovie'
-DATABASE_PATH = '/media/meera/FE5868105867C5CD/Project/MiniMovie/database'
-DATABASE_SOURCE = (os.path.join (CURRENT_PATH, 'pipeInput.json')) 
-
-
 #CURRENT_PATH = os.getcwd()
+CURRENT_PATH = os.path.dirname (__file__)
+PRJECT_PATH = os.environ['PROJECT_PATH']
+PROJECT_NICE_NAME = os.environ['PROJECT_NICE_NAME']
+PROJECT_FULL_NAME = os.environ['PROJECT_FULL_NAME']
+PRJECT_PATH = os.environ['PROJECT_PATH']
+DATABASE_PATH = os.environ['DATABASE_PATH']
+
+#PRJECT_PATH = 'Z:/BAN'
+#DATABASE_PATH = 'Z:/BAN/DataBase'
+
+DATABASE_SOURCE = (os.path.join (CURRENT_PATH, 'pipeInput_%s.json'% PROJECT_NICE_NAME))
 UI_FILE = '{}/studioPipe_ui.ui'.format (CURRENT_PATH)
 
 FROM, BASE = uic.loadUiType (UI_FILE)
@@ -56,8 +57,7 @@ class Pipes (QtGui.QMainWindow):
         try:
             __file__
         except NameError:
-            __file__ = sys.argv[0]             
-
+            __file__ = sys.argv[0]
 
         self.setWindowTitle ('Studio Publi-SH v0.1')
 
@@ -69,12 +69,12 @@ class Pipes (QtGui.QMainWindow):
         self.groupBox_shelf.hide ()
         self.treeWidget_properties.hide ()
         self.groupBox_details.hide ()        
+                
+        self.pipe = pipeLayout.Layout (DATABASE_SOURCE) #ge the database information     
         
+        #pprint.pprint (self.pipe)
         
-        self.pipe = pipeLayout.Layout (DATABASE_SOURCE) #ge the database information      
-        
-        self.scene = 'scene'     
-              
+        self.scene = 'scene'              
                       
         self.currentLayout = None
         self.defaluDatabase = {} 

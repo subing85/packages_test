@@ -68,7 +68,7 @@ class Menu (object):
                                 p=folderMenu,
                                 c=toolSubMenus[eachTool]['command']) 
                 
-                print '\n', toolSubMenus[eachTool]['command']               
+                #print '\n', toolSubMenus[eachTool]['command']               
                 #print toolSubMenus[eachTool]['command']
                 
                                      
@@ -79,7 +79,7 @@ class Menu (object):
                             
         for eachFolder, bundles in toolKit.bundle.iteritems():                            
             modules = {}                             
-            for eachModule, bundleData in bundles.iteritems():                                
+            for eachModule, bundleData in bundles.iteritems():
                 modules[bundleData['ORDER']] = {'name': bundleData['NAME'], 
                                                 'comments': bundleData['COMMENTS'],
                                                 'folder': eachFolder,
@@ -91,7 +91,7 @@ class Menu (object):
                                                 'command': 'from toolKit.Maya.{} import {}\nresult = {}.trailRun()'.format(eachFolder, 
                                                                                                                            bundleData['__name__'],
                                                                                                                            bundleData['__name__'])                                                 
-                                                }                
+                                                }
                          
             menuList.setdefault(eachFolder, modules)             
             

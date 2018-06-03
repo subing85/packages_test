@@ -41,7 +41,7 @@ class Layout (object):
             warnings.warn ('#TypeError: __init__() missing 1 required positional argument: filepath') 
             return None            
             
-        if not os.path.isdir(args[0]):
+        if not os.path.isfile(args[0]):
             warnings.warn ('{} No such file.'.format(args[0]))           
             return None  
         
@@ -90,7 +90,7 @@ def getPublishLayouts (attributes) :
     
     layouts = []
     
-    pprint.pprint (attributes)
+    #pprint.pprint (attributes)
     for eachAttribute, ecahValue in attributes.iteritems() :        
         for eachSecondory in ecahValue['secondary'] :
             layouts.append(eachSecondory)

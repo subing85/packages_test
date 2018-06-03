@@ -66,6 +66,10 @@ set NARTON_VERSION=1.5
 set NATRON_PATH=C:/Program Files/INRIA/Natron-2.3.7/bin/Natron.exe
 set NATRON_PLUGIN_PATH=%PACKAGE_PATH%/setup/natron
 
+set STUDIOPIPE_VERSION=1.5
+set STUDIOPIPE_PATH=%PACKAGE_PATH%/pipe/studioPipe.py
+set STUDIOPIPE_PLUGIN_PATH=%PACKAGE_PATH%/setup/studioPipe
+
 set DATA_PATH=%PACKAGE_PATH%/data
 set PLUGINS_PATH=%PACKAGE_PATH%/plugins
 

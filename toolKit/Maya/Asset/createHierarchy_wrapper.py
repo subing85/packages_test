@@ -5,19 +5,20 @@ DATE = 'May 31, 2018'
 AUTHOR = 'Subin Gopi'
 COMMENTS = 'To Create Asset Hierarchy'
 VERSION = 1.0
-CLASS = 'CreateAssetHierarchy'
+ICON = 'assetHierarchy.png'
+CLASS = 'CreateAssetHierarchy_Wrapper'
 
-from assets import studioHierarchy
-reload (studioHierarchy)
 
-class CreateAssetHierarchy ():       
+class CreateAssetHierarchy_Wrapper ():       
     
     def __init__(self):
-        
+	
+        from assets import studioHierarchy
+        reload (studioHierarchy)
         studioHi = studioHierarchy.StudioHierarchy(assetName='Asset')
         studioHi.create()        
         
     
 def trailRun ():
     
-    CreateAssetHierarchy ()
+    CreateAssetHierarchy_Wrapper ()
