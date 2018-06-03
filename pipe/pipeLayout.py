@@ -56,6 +56,7 @@ class Layout (object):
         #self.pipeDefaul = getDefaultValue (pipeData['pipe']['attributes'])        
         
         self._publishLayouts = getPublishLayouts (self._pipeAttributes)
+        self._pipeAssetTypeList = self._pipeAttributes['assets']['primary']['catagory']['types']['values']
 
 
 
@@ -84,6 +85,7 @@ def getPipeLayout (file=None) :
 
 
 def getPublishLayouts (attributes) :
+    
     '''
         only get publish layouts, collect from secondary    
     '''    
@@ -96,7 +98,6 @@ def getPublishLayouts (attributes) :
             layouts.append(eachSecondory)
     
     return layouts
-
     
 
 def setReorder (data) :

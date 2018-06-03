@@ -27,6 +27,7 @@ import warnings
 import pprint
 
 from pipe import pipeLayout
+from module import studioDatabase
 
 from pymel import core as pymel
 from maya import OpenMaya as openMaya
@@ -37,7 +38,7 @@ PROJECT_FULL_NAME = os.environ['PROJECT_FULL_NAME']
 PRJECT_PATH = os.environ['PROJECT_PATH']
 DATABASE_PATH = os.environ['DATABASE_PATH']
 PACKAGE_PATH = os.environ['PACKAGE_PATH']
-DATABASE_SOURCE = (os.path.join (PACKAGE_PATH,  'pipe', 'pipeInput_%s.json'% PROJECT_NICE_NAME))
+DATABASE_SOURCE = os.environ['DATABASE_SOURCE']
 
 
 class StudioAsset(object):
@@ -201,9 +202,7 @@ class StudioAsset(object):
                 :param    None           
                 :return   None
         '''        
-        
-        
-              
+  
         #transforms = pymel.ls(type='transform')  
         transforms = pymel.ls(assemblies=1)
         nulls = []      
@@ -221,7 +220,82 @@ class StudioAsset(object):
         self.node = nulls[0]
         
         #return nulls[0]
+        
+        
+    def getAssets(self, assetType=None, dataType=None):
+        
+        '''
+            Description
+                This function set collect the specific assets from database or scene.    
+                :Type - class function (method)       
+                :param    assetType   <str>    example 'Props'
+                :param    dataType    <str>     example 'database' or 'scenes'                
+                :return   result      <list>    example ['Bat', 'Ball']
+        '''            
+        
+        if not assetType:
+            warnings.warn ('function getAssets argument \"assetType\" None') 
+            return None         
+        
+        if not dataType:
+            warnings.warn ('function getAssets argument \"dataType\" None') 
+            return None 
+        
+        assets = self.getAllAssets(dataType=dataType)
+        
+        if not assets:
+            warnings.warn ('function getAssets empty database') 
+            return None
+
+        
+        if assetType not in assets:
+            warnings.warn ('{} does not exists in the database'.format(assetType))  
             
+        result = assets[assetType]          
+        return result
+    
+            
+    def getAllAssets(self, dataType=None):
+        
+        '''
+            Description
+                This function set collect the all assets from database or scene.    
+                :Type - class function (method)       
+                :param    dataType    <str>     example 'database' or 'scenes'                
+                :return   result      <dict>    example  {'Props': ['Bed']} 
+        '''            
+                
+        if not dataType:
+            warnings.warn ('function getAssets argument \"dataType\" None') 
+            return None         
+                 
+        assetTypeList = self.getAssetTypeList()        
+        result = {}
+        
+        if dataType=='database':
+            
+            db = studioDatabase.Database (dataType='assets')
+            db.getValue()
+            databaseValue = db.value            
+            
+            for eachOrder,  eachValue in databaseValue.iteritems():
+                currentAsset = eachValue['primary']['title']['label']['value']
+                currentIndex = int(eachValue['primary']['catagory']['types']['value'])
+                currentAssetType = assetTypeList[currentIndex-1]         
+                result.setdefault(currentAssetType, []).append(currentAsset)
+                
+        if dataType=='scenes':            
+            print '\nWork in progress'
+
+        return result        
+        
+        
+    def getAssetTypeList(self):
+        
+        pipe = pipeLayout.Layout (DATABASE_SOURCE)
+        assetList = pipe._pipeAssetTypeList
+        return assetList       
+
 
 def setReorder (data) :   
 

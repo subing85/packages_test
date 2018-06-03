@@ -37,6 +37,7 @@ from module import openStyleSheet
 from module import studioVersioning
    
 CURRENT_PATH = os.path.dirname (__file__)
+PACKAGE_PATH = os.environ['PACKAGE_PATH']
 #CURRENT_PATH = os.getcwd()
 UI_FILE = '{}/studioLauncher_ui.ui'.format (CURRENT_PATH)
 FROM, BASE = uic.loadUiType (UI_FILE)
@@ -125,10 +126,18 @@ class Launcher (FROM, BASE):
         os.environ['PROJECT_NICE_NAME'] = self.sp.projects[currentProject]['niceName'] 
         os.environ['PROJECT_FULL_NAME'] = self.sp.projects[currentProject]['fullName'] 
         
-        self.annotation ()   
+        os.environ['ASSET_PATH'] = '{}/asset'.format (self.sp.projects[currentProject]['path']) 
+        os.environ['ANIMATION_PATH'] = '{}/animation'.format (self.sp.projects[currentProject]['path']) 
+        os.environ['RENDERING_PATH'] = '{}/rendering'.format (self.sp.projects[currentProject]['path']) 
+        os.environ['COMPOSITING_PATH'] = '{}/composting'.format (self.sp.projects[currentProject]['path']) 
+        os.environ['DATABASE_PATH'] = '{}/dataBase'.format (self.sp.projects[currentProject]['path']) 
+        os.environ['PIPEINPUT_FILE'] = os.path.abspath(os.path.join (PACKAGE_PATH, 'pipe', 'pipeInput_%s.json'% self.sp.projects[currentProject]['niceName'])).replace('\\', '/')
+        os.environ['DATABASE_SOURCE'] = os.path.abspath(os.path.join (PACKAGE_PATH,  'pipe', 'pipeInput_%s.json'% self.sp.projects[currentProject]['niceName'])).replace('\\', '/')
 
+
+        self.annotation ()   
         print '\nCurrent Project\t- ', currentProject
-        
+
 
     def launchApplication (self, application):     
             
@@ -137,8 +146,7 @@ class Launcher (FROM, BASE):
         command = 'start "" {}/{}.bat'.format (CURRENT_PATH, application)
         print command
         subprocess.call (command, stdout=None, shell=True, stderr=None) 
-        #print command     
-           
+
         
     def annotation (self):
         
@@ -200,13 +208,9 @@ class Launcher (FROM, BASE):
         
         thread = threading.Thread(target=version.createVersion (), args = ())
         thread.start()
-        thread.join()   
-        
+        thread.join()        
         print '\nDone'
-        
-        #reg delete "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v FOOBAR /f
-        #set "PATH=%PATH:Python24=Python27%"
-        
+
     
     def removeFiles (self, fileType):
         

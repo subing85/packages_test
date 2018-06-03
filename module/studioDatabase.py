@@ -20,7 +20,7 @@ import anydbm
 import json
 import pprint
 
-DATABASE_PATH = '/media/meera/FE5868105867C5CD/Project/MiniMovie/database'
+DATABASE_PATH = os.environ['DATABASE_PATH']
 
 class Database (object):
     
@@ -40,6 +40,8 @@ class Database (object):
         
         if 'keyValue' in kwargs :
             self.keyValue = kwargs['keyValue']
+            
+        print 'self.filePath\t', self.filePath
                 
     
     def create (self) :
@@ -160,5 +162,4 @@ def hasJsonDatabaseValue(currentKey, filePath):
     
     return result
 
-
-
+#End######################################################################################

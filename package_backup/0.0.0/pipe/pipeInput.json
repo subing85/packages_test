@@ -1,0 +1,198 @@
+{   "comment": "Studio Pipe  Input v1.0",
+    "Date": "February 09, 2018",
+    "Last modified": "February 09, 2018",
+    "Author": "Subin. Gopi (subing85@gmail.com)",
+    "#Copyright" : "(c) 2018, Subin Gopi All rights reserved.",	    
+    "WARNING": "# WARNING! All changes made in this file will be lost!",
+    "Description": "",
+    "mandatory": ["title", "catagory"],
+        
+    "pipe": {    
+    
+                "layout" :		{	"assets": {  "niceName": "Assets", 			                               
+				                                "order": 1
+				                               },                                             
+                
+	                                "animation": { "niceName": "Animation", 
+					                               "order": 2
+					                               },	                                                
+	                                
+	                                "rendering": { "niceName": "Rendering", 
+				                                "order": 2
+				                                },                                          
+	                                
+	                                "composting": {    "niceName": "Composting", 
+					                                   "order": 4
+					                                   },
+					                                   
+	                                "vfx": {    "niceName": "V F X", 
+					                                   "order": 5
+					                                   }					                                   
+					                                   
+									},
+
+                
+                "attributes" : {"assets" : {     "primary":  {   "title": {	"label": {"type": "string", "niceName": "Asset", "order": 1, "color": "red", "value": null, "values": null}
+                															} , 
+                															                                            
+                                                                "catagory": {	"types": {"type": "enum", "niceName": "Asset Type", "order": 2, "color": "red", "value": 0, "values": ["Props","Characters", "Sets", "SetDress",  "PropDress", "Camera", "Light", "FX" ]}
+                                                                				},                                                        
+                                                
+                                                				"illustration": {"illustrationArtist": {"type": "enum", "niceName": "Illu Artist", "order": 3, "color": "darkCyan", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                                                                    
+					                                                             "illustrationStatus": {"type": "enum", "niceName": "Illu Status", "order": 4, "color": "darkCyan", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+					                                                             }, 
+					                                                              
+					                                             "model": {	"modelArtist": {"type": "enum", "niceName": "Model Artist", "order": 5, "color": "blue", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                                                                
+                                                                			"modelStatus": {"type": "enum", "niceName": "Model Status", "order": 6, "color": "blue", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			},                                                                    
+                                                                                
+                                                                "uv": {	"uvArtist": {"type": "enum", "niceName": "UV Artist", "order": 7, "color": "green", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                		"uvStatus": {"type": "enum", "niceName": "UV Status", "order": 8, "color": "green", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                		},
+                                                                		
+                                                                "texture": {"textureArtist": {"type": "enum", "niceName": "Texture Artist", "order": 9, "color": "magenta", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                			"textureStatus": {"type": "enum", "niceName": "Texture Status", "order": 10, "color": "magenta", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			},  
+                                                                			
+                                                               	"lightAndShade": {	"lightAndShadeArtist": {"type": "enum", "niceName": "L&S Artist", "order": 11, "color": "black", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                					"lightAndShadeStatus": {"type": "enum", "niceName": "L&S Status", "order": 12, "color": "black", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                					},
+                                                                					
+                                                                "puppet": {	"puppetArtist": {"type": "enum", "niceName": "Puppet Artist", "order": 13, "color": "darkGreen", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                			"puppetStatus": {"type": "enum", "niceName": "Puppet Status", "order": 14, "color": "darkGreen", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			},
+                                                                "render": {	"renderArtist": {"type": "enum", "niceName": "Render Artist", "order": 15, "color": "darkBlue", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                			"renderStatus": {"type": "enum", "niceName": "Render Status", "order": 16, "color": "darkBlue", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			}                                                          
+                                                                
+                                                                } ,     
+                                                             
+                                                "secondary": {  "illustration": {	"illustrationStartDate": {"type": "striang", "niceName": "S-Date", "order": 1, "color": "blue", "value": null, "values": null},
+                                                									"illustrationEndDate": {"type": "string", "niceName": "E-Date", "order": 2, "color": "blue", "value": null, "values": null},
+                                                                					"illustrationPublish": {"type": "listItem", "niceName": "Illustration Publish", "color": "blue", "order": 3, "value": null, "values": null},
+                                                                            		"illustrationThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                             		"illustrationMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                             		"illustrationComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                                					},
+                                                                 
+                                                                "model": {	"modelStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},                                                    
+			                                                                "modelEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},
+			                                                                "modelPublish": {"type": "listItem", "niceName": "Model Publish", "color": "blue", "order": 3, "value": null, "values": null},			                                                                
+                                                                    		"modelThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                     		"modelMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            "modelComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                                     					                                                                
+			                                                                },                                                             
+                                                                                
+                                                                "uv": {	"uvStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},
+		                                                                "uvEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},                                        
+		                                                                "uvPublish": {"type": "listItem", "niceName": "UV Publish", "color": "blue", "order": 3, "value": null, "values": null},		                                                                
+                                                                		"uvThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                 		"uvMovie": {"type": "movie", "niceName": "Movie", "order": 5, "color": "blue", "value": null, "values": null},
+                                                                        "uvComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                                 				                                                                
+		                                                                },                                                        
+                                                                
+                                                                "texture": {"textureStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},
+			                                                                "textureEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},                        
+			                                                                "texturePublish": {"type": "listItem", "niceName": "Texture Publish", "color": "blue", "order": 3, "value": null, "values": null},			                                                                
+	                                  										"textureThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                 			"textureMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            "textureComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                                 					                                                                
+			                                                                },                                                               
+                                        
+                                                                "lightAndShade": {	"lightAndShadeStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},                            
+					                                                                "lightAndShadeEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},
+					                                                                "lightAndShadePublish": {"type": "listItem", "niceName": "L&S Publish", "color": "blue", "order": 3, "value": null, "values": null},
+					                                                                "lightAndShadeThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                 					"lightAndShadeMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            		"lightAndShadeComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+					                                                                },                                                             
+					                                                               
+                                                                "puppet": {	"puppeteStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},
+			                                                                "puppetEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},
+			                                                                "puppetPublish": {"type": "listItem", "niceName": "Puppet Publish", "color": "blue", "order": 3, "value": null, "values": null},
+	                                                                      	"puppetThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                         					"puppetMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            "puppetComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                         								                                                                
+			                                                                },                                                              
+                                                                                        
+                                                                "render": { "renderStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},
+			                                                                "renderEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},
+			                                                                "renderPublish": {"type": "listItem", "niceName": "Render Publish", "color": "blue", "order": 3, "value": null, "values": null},
+			                                                                "renderThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                         					"renderMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            "renderComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                               					
+			                                                                }                                            
+                                                				}                                               				                                            
+											},                         
+                                                
+                			   "animation" : {     "primary":  {   "title": {	"label": {"type": "string", "niceName": "Asset", "order": 1, "color": "red", "value": null, "values": null}
+                															} , 
+                															                                            
+                                                                "catagory": {	"types": {"type": "enum", "niceName": "Asset Type", "order": 2, "color": "red", "value": 0, "values": ["Props","Characters", "Sets", "SetDress",  "PropDress", "Camera", "Light", "FX" ]}
+                                                                				},                                                        
+                                                
+                                                				"illustration": {"illustrationArtist": {"type": "enum", "niceName": "Illu Artist", "order": 3, "color": "darkCyan", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                                                                    
+					                                                             "illustrationStatus": {"type": "enum", "niceName": "Illu Status", "order": 4, "color": "darkCyan", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+					                                                             }, 
+					                                                              
+					                                             "model": {	"modelArtist": {"type": "enum", "niceName": "Model Artist", "order": 5, "color": "blue", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                                                                
+                                                                			"modelStatus": {"type": "enum", "niceName": "Model Status", "order": 6, "color": "blue", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			},                                                                    
+                                                                                
+                                                                "uv": {	"uvArtist": {"type": "enum", "niceName": "UV Artist", "order": 7, "color": "green", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                		"uvStatus": {"type": "enum", "niceName": "UV Status", "order": 8, "color": "green", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                		},
+                                                                		
+                                                                "texture": {"textureArtist": {"type": "enum", "niceName": "Texture Artist", "order": 9, "color": "magenta", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                			"textureStatus": {"type": "enum", "niceName": "Texture Status", "order": 10, "color": "magenta", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			},  
+                                                                			
+                                                               	"lightAndShade": {	"lightAndShadeArtist": {"type": "enum", "niceName": "L&S Artist", "order": 11, "color": "black", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                					"lightAndShadeStatus": {"type": "enum", "niceName": "L&S Status", "order": 12, "color": "black", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                					},
+                                                                					
+                                                                "puppet": {	"puppetArtist": {"type": "enum", "niceName": "Puppet Artist", "order": 13, "color": "darkGreen", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                			"puppetStatus": {"type": "enum", "niceName": "Puppet Status", "order": 14, "color": "darkGreen", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			},
+                                                                "render": {	"renderArtist": {"type": "enum", "niceName": "Render Artist", "order": 15, "color": "darkBlue", "value": 0, "values": ["Sachin", "Rahul", "Subin", "Mohan"]},                                        
+                                                                			"renderStatus": {"type": "enum", "niceName": "Render Status", "order": 16, "color": "darkBlue", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
+                                                                			}                                                          
+                                                                
+                                                                } ,     
+                                                             
+                                                "secondary": {  "layout": {	"illustrationStartDate": {"type": "striang", "niceName": "S-Date", "order": 1, "color": "blue", "value": null, "values": null},
+                                                									"illustrationEndDate": {"type": "string", "niceName": "E-Date", "order": 2, "color": "blue", "value": null, "values": null},
+                                                                					"illustrationPublish": {"type": "listItem", "niceName": "Illustration Publish", "color": "blue", "order": 3, "value": null, "values": null},
+                                                                            		"illustrationThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                             		"illustrationMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                             		"illustrationComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                                					},
+                                                                 
+                                                                "primary": {	"modelStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},                                                    
+			                                                                "modelEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},
+			                                                                "modelPublish": {"type": "listItem", "niceName": "Model Publish", "color": "blue", "order": 3, "value": null, "values": null},			                                                                
+                                                                    		"modelThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                     		"modelMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            "modelComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+                                                                     					                                                                
+			                                                                },                                  
+                                
+                                
+                                                                 "secondary": {	"modelStartDate": {"type": "string", "niceName": "S-Date", "color": "blue", "order": 1, "value": null, "values": null},                                                    
+			                                                                "modelEndDate": {"type": "string", "niceName": "E-Date", "color": "blue", "order": 2, "value": null, "values": null},
+			                                                                "modelPublish": {"type": "listItem", "niceName": "Model Publish", "color": "blue", "order": 3, "value": null, "values": null},			                                                                
+                                                                    		"modelThumbnail": {"type": "image", "niceName": "Thumbnail", "color": "blue", "order": 4, "value": null, "values": null},
+                                                                     		"modelMovie": {"type": "movie", "niceName": "Movie", "color": "blue", "order": 5, "value": null, "values": null},
+                                                                            "modelComment": {"type": "stringItem", "niceName": "Comment", "color": "blue", "order": 6, "value": null, "values": null}                                                                					
+			                                                                }                                            
+                                                				}                                               				                                            
+											}                       
+                                }                               
+                                
+                           
+            } 
+        }

@@ -15,7 +15,6 @@ Description
 '''
 
 import os
-
 from pymel import core as pymel
 
 def customSetup():
@@ -46,66 +45,68 @@ def customSetup():
     pymel.workspace(fr=('mayaAscii', 'scenes'))
     pymel.workspace(fr=('autoSave', 'autoSave'))
     pymel.workspace(fr=('diskCache', 'cache'))
-    pymel.workspace(fr=('mayaBinary', 'scenes'))
-     
+    pymel.workspace(fr=('mayaBinary', 'scenes'))     
      
     #Units
     pymel.mel.eval('setUpAxis \"y\" ;')
     pymel.currentUnit(  linear='centimeter', 
                         time='pal', 
                         angle='degree')
-    pymel.playbackOptions(ast=1, aet=25, min=1, max=25)
+    
+    pymel.playbackOptions(min=1, max=25, ast=1, aet=25)   
+    #playbackOptions -min 1 -max 120 -ast 1 -aet 200
+    pymel.currentTime(1)  
+    
     pymel.playbackOptions(v='all')
     pymel.playbackOptions(l='continuous')
-    pymel.playbackOptions(ps=0)
-     
-     
+    pymel.playbackOptions(ps=0)      
+      
     #settings
     pymel.mel.eval('setAttributeEditorVisible 0 ;')
     pymel.mel.eval('setChannelsLayersVisible 1 ;')
     pymel.optionVar(fv=('defaultCameraNearClipValue', 1))
     pymel.optionVar(fv=('defaultCameraFarClipValue', 1000000))
     pymel.undoInfo(state=True, infinity=True)
-     
-     
+       
     #load plugins
     plugins = { 'vray': 'C:/Program Files/Autodesk/Maya2016/vray/plug-ins/vrayformaya.mll',
                 'xgenVRay': 'C:/Program Files/Autodesk/Maya2016/vray/plug-ins/xgenVRay.py',            
                 'AbcExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcExport.mll',
-                #'AbcImport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcImport.mll',
+                'AbcImport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcImport.mll',
                 'animImportExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/animImportExport.mll',
                 'gpuCache': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/gpuCache.mll',
-                'ik2Bsolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ik2Bsolver.mll',
-                'ikSpringSolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ikSpringSolver.mll',
-                'MayaMuscle': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/MayaMuscle.mll',
+                #'ik2Bsolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ik2Bsolver.mll',
+                #'ikSpringSolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ikSpringSolver.mll',
+                #'MayaMuscle': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/MayaMuscle.mll',
                 'objExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/objExport.mll',
-                'ik2Bsolver': 'C:/Program Files/Autodesk/Maya2016/plug-ins/fbx/plug-ins/fbxmaya.mll',
-                'fbxmaya': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ik2Bsolver.mll',
+                'fbxmaya': 'C:/Program Files/Autodesk/Maya2016/plug-ins/fbx/plug-ins/fbxmaya.mll',
                 }
-     
+        
     for eachPlugin, pluginPath in plugins.iteritems():
         try:
-            pymel.loadPlugin(pluginPath)
+            pymel.loadPlugin(pluginPath, qt=True)
         except Exception as result:
             print result            
-     
+    
     #pymel.mel.eval('unifiedRenderGlobalsWindow;') 
     #pymel.mel.eval('updateRendererUI;')    
          
-    #render global settings    
-    defaultRenderGlobals = pymel.PyNode('defaultRenderGlobals')    
-    defaultRenderGlobals.setAttr('currentRenderer', 'vray')
-    pymel.mel.eval('updateRendererUI;')
-    
-    try :        
-        pymel.setAttr('vraySettings.width', 1920)
-        pymel.setAttr('vraySettings.height', 1080)
-        pymel.setAttr('vraySettings.aspectLock', True)
-        pymel.setAttr('defaultResolution.lockDeviceAspectRatio', True)
-        pymel.setAttr('vraySettings.aspectRatio',  1.778)
-        pymel.setAttr('vraySettings.pixelAspect',  1.00)
-    except :
-        pass
+    #===========================================================================
+    # #render global settings    
+    # defaultRenderGlobals = pymel.PyNode('defaultRenderGlobals')    
+    # defaultRenderGlobals.setAttr('currentRenderer', 'vray')
+    # pymel.mel.eval('updateRendererUI;')
+    # 
+    # try :        
+    #     pymel.setAttr('vraySettings.width', 1920)
+    #     pymel.setAttr('vraySettings.height', 1080)
+    #     pymel.setAttr('vraySettings.aspectLock', True)
+    #     pymel.setAttr('defaultResolution.lockDeviceAspectRatio', True)
+    #     pymel.setAttr('vraySettings.aspectRatio',  1.778)
+    #     pymel.setAttr('vraySettings.pixelAspect',  1.00)
+    # except :
+    #     pass
+    #===========================================================================
        
     #pymel.window('unifiedRenderGlobalsWindow', e=1, vis=0)
     

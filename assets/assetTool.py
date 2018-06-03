@@ -54,11 +54,10 @@ PACKAGE_PATH = os.environ['PACKAGE_PATH']
 DATABASE_SOURCE = (os.path.join (PACKAGE_PATH,  'pipe', 'pipeInput_%s.json'% PROJECT_NICE_NAME))
 
 UI_PATH = os.path.join (CURRENT_PATH, 'assetTool_ui.ui')
-MAINWINDOW = shiboken.wrapInstance (long(openMayaUI.MQtUtil.mainWindow()), QtGui.QWidget)
+MAYA_MAIN_WINOW = shiboken.wrapInstance(long(openMayaUI.MQtUtil.mainWindow()), QtGui.QWidget)
 
 FROM, BASE = openPySide.loadUi (UI_PATH)    
 
-MAYA_MAIN_WINOW    = shiboken.wrapInstance(long(openMayaUI.MQtUtil.mainWindow()), QtGui.QWidget)
 
 
 def runMayaUiDemo():
@@ -136,7 +135,8 @@ class StudioAsset (FROM, BASE):
         worksStatus = self.pipe._pipeAttributes['assets']['primary']['model']['modelStatus']['values']
         self.comboBox_workStatus.addItems(worksStatus)        
         
-        assetPath = os.path.abspath(os.path.join(PRJECT_PATH, 'PreProduction', 'asset')).replace('\\', '/')        
+        assetPath = os.path.abspath(os.path.join(PRJECT_PATH, 'PreProduction', 'asset')).replace('\\', '/')
+        
         self.lineEdit_assetPath.setText(assetPath)        
 
 

@@ -1,13 +1,16 @@
-NAME = 'Studio Publish111'
-ORDER = 2
-TYPE = 'wrapper'
-DATE = 'March 08, 2018'
+NAME = 'Image Check'
+ORDER = 1
+TYPE = 'validate'
+DATE = 'February 07, 2018'
 AUTHOR = 'Subin Gopi'
-COMMENTS = 'To Check Image Extenstion1111'
+COMMENTS = 'To Check Image Extenstion'
 VERSION = 1.0
-CLASS = 'Validate_Imag1e'
+CLASS = 'Validate_Image'
 
-class Validate_Image1 (object):       
+
+
+
+class Validate_Image (object):       
     
     def __init__(self):
         
@@ -21,8 +24,5 @@ class Validate_Image1 (object):
         
     
 def trailRun ():
-
-    from publish import studioPublish
-    reload(studioPublish)
-    window = studioPublish.Publish(types='compositing')
-    window.show ()
+    Validate_Image ()
+    

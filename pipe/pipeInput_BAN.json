@@ -38,18 +38,18 @@
                                                                 "catagory": {	"types": {"type": "enum", "niceName": "Asset Type", "order": 2, "color": "red", "value": 0, "values": ["Props","Characters", "Sets", "SetDress",  "PropDress", "Camera", "Light", "FX" ]}
                                                                 				},                                                        
                                                 
-                                                				"illustration": {"illustrationArtist": {"type": "enum", "niceName": "Illu Artist", "order": 3, "color": "darkCyan", "value": 0, "values": ["None", "Subin", "Freelands"]},                                                                                    
+                                                				"illustration": {"illustrationArtist": {"type": "enum", "niceName": "Illu Artist", "order": 3, "color": "darkCyan", "value": 0, "values": ["Subin", "Freelands"]},                                                                                    
 					                                                             "illustrationStatus": {"type": "enum", "niceName": "Illu Status", "order": 4, "color": "darkCyan", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
 					                                                             }, 
 					                                                              
-					                                             "model": {	"modelArtist": {"type": "enum", "niceName": "Model Artist", "order": 5, "color": "blue", "value": 0, "values": ["None", "Subin", "Freelands"]},                                                                                
+					                                             "model": {	"modelArtist": {"type": "enum", "niceName": "Model Artist", "order": 5, "color": "blue", "value": 0, "values": ["Subin", "Freelands"]},                                                                                
                                                                 			"modelStatus": {"type": "enum", "niceName": "Model Status", "order": 6, "color": "blue", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
                                                                 			}, 
                                                                 					
-                                                                "puppet": {	"puppetArtist": {"type": "enum", "niceName": "Puppet Artist", "order": 7, "color": "darkGreen", "value": 0, "values": ["None", "Subin", "Freelands"]},                                        
+                                                                "puppet": {	"puppetArtist": {"type": "enum", "niceName": "Puppet Artist", "order": 7, "color": "darkGreen", "value": 0, "values": ["Subin", "Freelands"]},                                        
                                                                 			"puppetStatus": {"type": "enum", "niceName": "Puppet Status", "order": 8, "color": "darkGreen", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
                                                                 			},
-                                                                "render": {	"renderArtist": {"type": "enum", "niceName": "Render Artist", "order": 9, "color": "darkBlue", "value": 0, "values": ["None", "Subin", "Freelands"]},                                        
+                                                                "render": {	"renderArtist": {"type": "enum", "niceName": "Render Artist", "order": 9, "color": "darkBlue", "value": 0, "values": ["Subin", "Freelands"]},                                        
                                                                 			"renderStatus": {"type": "enum", "niceName": "Render Status", "order": 10, "color": "darkBlue", "value": 0, "values": ["Not at Start", "WIP", "Correction", "Done", "Approved"]}
                                                                 			}                                                          
                                                                 

@@ -1,13 +1,14 @@
-NAME = 'Studio Publish'
+NAME = 'Image Check'
 ORDER = 1
-TYPE = 'wrapper'
-SHOTCUT = 'Ctrl+P'
-
-DATE = 'March 08, 2018'
+TYPE = 'validate'
+DATE = 'February 07, 2018'
 AUTHOR = 'Subin Gopi'
 COMMENTS = 'To Check Image Extenstion'
 VERSION = 1.0
 CLASS = 'Validate_Image'
+
+
+
 
 class Validate_Image (object):       
     
@@ -19,12 +20,9 @@ class Validate_Image (object):
                                 'error': 'magenta',
                                 'success': 'green' }
         
-
+        return None
         
     
 def trailRun ():
-    from publish import studioPublish
-    reload(studioPublish)
-    window = studioPublish.Publish(application='natron', types='illustration')
-    #window = studioPublish.Publish(application='natron', types='composing')    
-    window.show ()    
+    Validate_Image ()
+    

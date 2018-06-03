@@ -16,7 +16,7 @@ example
 from publish import studioPublish
 reload(studioPublish)
 window = studioPublish.Publish(types='compositing')
-window.show ()      
+window.show ()     
 
 '''
 
@@ -34,11 +34,7 @@ from functools import partial
 from module import collectBundels
 from pipe import pipeLayout
 
-#reload(collectBundels)
-#reload(pipeLayout)
-
-#PIPEINPUT_FILE = os.environ['PIPEINPUT_FILE']
-PIPEINPUT_FILE = 'os'
+PIPEINPUT_FILE =  os.environ['PIPEINPUT_FILE']
 
 CURRENT_PATH = os.path.dirname (__file__) # CURRENT_PATH = os.getcwd()
 UI_FILE = '{}/studioPublish_ui.ui'.format (CURRENT_PATH)
@@ -62,7 +58,8 @@ except:
 class Publish (FROM, BASE):
      
     def __init__(self, application=None, types=None, parent=None):
-        super(Publish, self).__init__(parent=None) #QtGui.QMainWindow.__init__(self, parent)
+        
+        super(Publish, self).__init__(parent=parent) #QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self) 
     
         try:
@@ -93,7 +90,7 @@ class Publish (FROM, BASE):
         
         self.loadPublishLayouts()
         
-        self.button_publish.clicked.connect (self.createMObject)    
+        self.button_publish.clicked.connect (self.createMObject) 
               
         
     def createMObject (self):
@@ -109,7 +106,8 @@ class Publish (FROM, BASE):
             pass
         
     
-    def loadPublishLayouts (self):
+    def loadPublishLayouts (self):        
+        
         self.pipe = pipeLayout.Layout (PIPEINPUT_FILE)
         
         if not self.pipe._publishLayouts :
@@ -136,9 +134,12 @@ class Publish (FROM, BASE):
             currentIndex    = itemLoop
                 
         self.comboBox_layout.setCurrentIndex (currentIndex)
-        #self.comboBox_layout.setItemText (0, self.publishType)
+
+
         
-        #need to work######################################       
+        #need to work###################################### 
+        
+        print 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv'      
             
         self.lineEdit_bundle.setText ('publishName')       
         
@@ -220,6 +221,7 @@ class Publish (FROM, BASE):
          
 
     def decorateWidget (self, widget, lable, min, max, policy) :
+        
         widget.setText(lable)      
         widget.setMinimumSize(QtCore.QSize(min[0], min[1]))
         widget.setMaximumSize(QtCore.QSize(max[0], max[1]))       

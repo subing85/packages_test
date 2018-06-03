@@ -38,11 +38,11 @@ PROJECT_NICE_NAME = os.environ['PROJECT_NICE_NAME']
 PROJECT_FULL_NAME = os.environ['PROJECT_FULL_NAME']
 PRJECT_PATH = os.environ['PROJECT_PATH']
 DATABASE_PATH = os.environ['DATABASE_PATH']
+PACKAGE_PATH = os.environ['PACKAGE_PATH']
 
-#PRJECT_PATH = 'Z:/BAN'
-#DATABASE_PATH = 'Z:/BAN/DataBase'
+DATABASE_SOURCE = os.path.abspath(os.path.join (PACKAGE_PATH, 'pipe', 'pipeInput_%s.json'% PROJECT_NICE_NAME))
 
-DATABASE_SOURCE = (os.path.join (CURRENT_PATH, 'pipeInput_%s.json'% PROJECT_NICE_NAME))
+print 'DATABASE_SOURCE\t', DATABASE_SOURCE
 UI_FILE = '{}/studioPipe_ui.ui'.format (CURRENT_PATH)
 
 FROM, BASE = uic.loadUiType (UI_FILE)
@@ -68,7 +68,9 @@ class Pipes (QtGui.QMainWindow):
         
         self.groupBox_shelf.hide ()
         self.treeWidget_properties.hide ()
-        self.groupBox_details.hide ()        
+        self.groupBox_details.hide () 
+        
+        print 'DATABASE_SOURCE\t', DATABASE_SOURCE       
                 
         self.pipe = pipeLayout.Layout (DATABASE_SOURCE) #ge the database information     
         
@@ -91,8 +93,7 @@ class Pipes (QtGui.QMainWindow):
         qtWidgets.setToolBar (None, [self.action_addOn, self.action_update, self.action_remove], self.horizontalLayout_shelf, True)        
         self.treeWidget_properties.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)   
         
-        
-        
+
     def uiSignals (self):        
         self.action_addOn.triggered.connect (partial (self.createPipeData, self.pipe._pipeAttributes, self.currentLayout, self.treeWidget_properties))    
         self.action_update.triggered.connect (partial (self.updatePipeData, self.pipe._pipeAttributes, self.treeWidget_properties)) 
@@ -100,8 +101,6 @@ class Pipes (QtGui.QMainWindow):
            
         #self.treeWidget_properties.itemEntered.connect (partial (self.updateEachPipeData, self.treeWidget_properties))     
         self.treeWidget_properties.itemClicked.connect (partial (self.setCurrentPipeAttributes, self.treeWidget_properties))     
-    
-    
         #self.action_remove.triggered.connect (self.remove)    
         
         
@@ -142,10 +141,10 @@ class Pipes (QtGui.QMainWindow):
         self.groupBox_shelf.show ()        
         
         self.primaryPipe = self.pipe._pipeAttributes[layout]['primary']
-        self.secondaryPipe = self.pipe._pipeAttributes[layout]['secondary']                                  
+        self.secondaryPipe = self.pipe._pipeAttributes[layout]['secondary']   
         
         primaryList, catagoryData = pipeLayout.setNestedReorder (self.primaryPipe) # sort the order the dict based on the order number        
-
+        
         for index in range (len(primaryList)) :                
             colors = catagoryData[primaryList[index]]['color']
             niceName = catagoryData[primaryList[index]]['niceName']
