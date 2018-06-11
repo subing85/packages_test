@@ -1,0 +1,1562 @@
+/*
+	SG ControlMaker v1.0
+	Date : december-11-2010
+	Last modified: January 04, 2012
+	Author: Subin. Gopi
+	Subing85@yhoo.o.in
+	Copyright ©2012 Subin. Gopi - All Rights Reserved.
+
+ 	USAGE:
+	source " sgControlMaker.mel"; sgControlMaker() ;
+*/
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//GUI/////////////////////////////////////////////////////////////////////////////
+	global proc sgControlMaker ()
+	 {
+		if (`window -q -exists sgControlMakerW`) 
+		deleteUI sgControlMakerW ;	
+
+		string $sgControlMakerWin		= `window	-title "SG Control Maker"
+									-iconName "Short Name"
+									-widthHeight 435 435
+									-menuBar true
+									sgControlMakerW` ;
+
+		//	showWindow $sgControlMakerWin ;
+	
+		menu -label "File" -tearOff true ;
+   		menuItem -label "New" ;
+  		menuItem -label "Open" ;
+  		menuItem -label "Save" ;
+    		menuItem -divider true ;
+    		menuItem -label "Quit" ;
+		menu -label "Help" -helpMenu true ;
+    		menuItem -label "About Application..." ;
+
+		string $font[]		= {"boldLabelFont", "smallBoldLabelFont", "tinyBoldLabelFont", "plainLabelFont", "smallPlainLabelFont", "obliqueLabelFont", "smallObliqueLabelFont", "fixedWidthFont", "smallFixedWidthFont"} ; 
+		float $butC[]	= {0.8, 0.8, 0.8} ;
+
+		frameLayout -labelVisible 0 -marginHeight 10 -marginWidth 10 ;
+		columnLayout -adjustableColumn true ;
+
+		rowColumnLayout -nc 5 -cw 1 140 -cw 2 140 -cw 3 70 -cw 4 45 -cw 5 150 ;
+
+		optionMenu -l "Shapes:" -cc "currentShapeSelected" ctrlShapes_Opt ;
+				menuItem -l "Circle" ;
+				menuItem -l "Square" ;
+				menuItem -l "Cross" ;
+				menuItem -l "Triangle" ;
+				menuItem -l "Single Arrow" ;
+				menuItem -l "Double Arrow" ;
+				menuItem -l "Four Fat" ;
+				menuItem -l "N Arrow on Ball" ;
+				menuItem -l "S Arrow on Ball" ;
+				menuItem -l "Single Pin" ;
+				menuItem -l "Two Pin" ;
+				menuItem -l "COG Plane" ;
+
+				menuItem -l "   " ;
+
+				menuItem -l "Cube" ;
+				menuItem -l "Normal Sphere" ;
+				menuItem -l "Smooth Sphere" ;
+				menuItem -l "Normal Cylinder" ;
+				menuItem -l "Smooth Cylinder" ;
+				menuItem -l "Hexagon" ;
+				menuItem -l "Cone" ;
+				menuItem -l "Loc Shape" ;
+				menuItem -l "Star Shape" ;
+				menuItem -l "Selected Shape" ;
+
+		optionMenu -l "Type:" -en 0 ctrlType_Opt ;			
+				menuItem -l "Nurbs Curve" ;
+				menuItem -l "Nurbs Surface" ;
+
+		optionMenu -l "Axis:"  ctrlAxis_Opt ;
+				menuItem -l "X" ;
+				menuItem -l "Y" ;
+				menuItem -l "Z" ;
+
+		symbolButton -h 20 -image "OUT_RADIUSDIMENSION.xpm" -c "shapeTranfer_b" ;
+		textField -tx "" -vis 0 -en 0 seletedShape_textField ;
+
+		setParent ..;
+		separator -height 10 -style "in" ;
+
+		rowColumnLayout -nc 3 -cw 1 230 -cw 2 2 -cw 3 230 ;
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Translate ->"
+				-labelArray3 "All" "Lock" "Hide" 
+				-cw 1 65 -cw 2 55 -cw 3 55
+				-on1 "translateAllOnSwitch"
+				-of1 "translateAllOfSwitch"
+				translateLH_checkBox ;
+
+ 		 button -label " " -h 10 ;
+
+		checkBoxGrp	-numberOfCheckBoxes 3
+			-label "Axis ->"
+			-labelArray3 "X" "Y" "Z" 
+			-cw 1 50 -cw 2 40 -cw 3 40 
+			translateAxis_checkBox ;
+		setParent ..;
+
+		rowColumnLayout -nc 3 -cw 1 230 -cw 2 2 -cw 3 230 ;
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Rotate    ->"
+				-labelArray3 "All" "Lock" "Hide" 
+				-cw 1 65 -cw 2 55 -cw 3 55 
+				-on1 "rotateAllOnSwitch"
+				-of1 "rotateAllOfSwitch"
+				rotateLH_checkBox ;
+
+		button -label " " -h 10 ;
+
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Axis ->"
+				-labelArray3 "X" "Y" "Z" 
+				-cw 1 50 -cw 2 40 -cw 3 40 
+				rotateAxis_checkBox ;
+
+		setParent ..;
+
+		rowColumnLayout -nc 3 -cw 1 230 -cw 2 2 -cw 3 230 ;
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Scale      ->"
+				-labelArray3 "All" "Lock" "Hide" 
+				-cw 1 65 -cw 2 55 -cw 3 55 
+				-on1 "scaleAllOnSwitch"
+				-of1 "scaleAllOfSwitch"
+				scaleLH_checkBox ;
+
+		button -label " " -h 10 ;
+
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Axis ->"
+				-labelArray3 "X" "Y" "Z" 
+				-cw 1 50 -cw 2 40 -cw 3 40 
+				scaleAxis_checkBox ;
+
+		setParent ..;
+
+		rowColumnLayout -nc 3 -cw 1 230 -cw 2 2 -cw 3 230 ;
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Visibility   ->"
+				-labelArray3 "All" "Lock" "Hide" 
+				-cw 1 65 -cw 2 55 -cw 3 55 
+				-on1 "visibilityOnSwitch"
+				-of1 "visibilityOfSwitch"
+				visibilityLH_checkBox ;
+
+ 		button -label " " -h 10 ;
+
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label "Axis ->"
+				-labelArray3 "X" "Y" "Z" 
+				-en 0
+				-cw 1 50 -cw 2 40 -cw 3 40 visibilityAxis_checkBox ;
+		setParent ..;
+		separator -height 10 -style "in" ;
+
+
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label " "
+				-labelArray3 "Parent Constraint" "Scale Constraint" "Point Constraint" 
+				-cw 1 30 -cw 2 120 -cw 3 120  
+				-on1 "parentConstOnSwitch"
+				-on2 "scaleConstOnSwitch"
+				-on3 "pointConstOnSwitch"
+				connectionTypeA_checkBoxGrp ; 
+
+		checkBoxGrp	-numberOfCheckBoxes 3
+				-label " "
+				-labelArray3 "Parenting" "Connection" "Orient Constraint " 
+				-cw 1 30 -cw 2 120 -cw 3 120
+				-on1 "parentingOnSwitch"
+				-on2 "connectionOnSwitch"
+				-on3 "orientConstOnSwitch"
+				connectionTypeB_checkBoxGrp ; 
+
+		separator -height 10 -style "in" ;
+
+		rowColumnLayout -nc 4 -cw 1 90 -cw 2 215 -cw 3 45 -cw 4 45 ;
+		checkBox -label "Driver Name :"   -align "left" driverName_checkBox ;
+		textField -tx "" driverName_textField ;
+		textField -tx "Ctrl" driverNameSuffix_textField ;
+		button -label "Reset" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "driverNameReset" ;
+		setParent ..;
+
+		rowColumnLayout -nc 4 -cw 1 90 -cw 2 215 -cw 3 45 -cw 4 45 ;
+		checkBox -label "Driven Name :" -align "left" drivenName_checkBox ;
+		textField -tx "" drivenName_textField  ;
+		textField -tx "Jnt" drivenNameSuffix_textField ;
+		button -label "Reset" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "drivenNameReset" ;
+		setParent ..;
+		separator -height 10 -style "in" ;
+
+		rowColumnLayout -nc 4 -cw 1 245 -cw 2 2 -cw 3 105 -cw 4 45 ;
+		checkBoxGrp	-numberOfCheckBoxes 3
+				//-label ""
+				-labelArray3 "Hierarchy Rig" "FK Rig" "Single Rig" 
+				-cw 1 100 -cw 2 65 -cw 3 70 
+				-on2 "fkRigOnSwitch"
+				-on3 "singleRigOnSwitch"
+				rigType_checkBox ;
+
+ 		button -label " " -h 5 ;
+
+		text -label "  Offset Group Count :" ;
+   		intField -minValue -1 -maxValue 26 -value 1 offsetGroupCount_intField ;
+ 
+		setParent ..;
+		separator -height 10 -style "in" ;
+
+		rowColumnLayout -nc 3 -cw 1 245 -cw 2 75 -cw 3 75 ;
+		colorIndexSliderGrp  -min 0 -max 32 -value 0 shapeColore_slider ;	
+		button -label "Clean" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "cleanColor_b" ;
+		button -label "Apply" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "colorApply_b" ;
+		setParent ..;
+		separator -height 10 -style "in" ;
+
+		rowColumnLayout -nc 9 -cw 1 65 -cw 2 45 -cw 3 30 -cw 4 30 -cw 5 85 -cw 6 50 -cw 7 30  -cw 8 30 -cw 9 30 ;
+
+		text -label "Shape Size :" ;
+		floatField -minValue -1000 -maxValue 1000 -value 1.00 -precision 2 -step .01 shapeSizefloatField ;
+		symbolButton -h 20 -image "SETEDADDCMD.xpm" -c sumShapeSize_b ;
+		symbolButton -h 20 -image "SETEDREMOVECMD.XPM" -c subtractShapeSize_b ;
+
+		text -label "   Shape Rotate :" ;
+		floatField -minValue -360 -maxValue 360 -value 90.00 -precision 2 -step .01 shapeRotatefloatField ;
+		button -label "X" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "shapeRotateX_b" ;
+		button -label "Y" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "shapeRotateY_b" ;
+		button -label "Z" -align "center" -h 20 -bgc $butC[0] $butC[1] $butC[2] -c "shapeRotateZ_b" ;
+		setParent ..;
+		separator -height 10 -style "in" ;
+
+		rowColumnLayout -nc 3 -cw 1 130 -cw 2 135 -cw 3 130 ;
+
+		button -label "Reset" -align "center" -h 25 -bgc $butC[0] $butC[1] $butC[2] -c "buildCtrl_Reset" ;
+		button -label "Apply" -align "center" -h 25 -bgc $butC[0] $butC[1] $butC[2] -c "buildCtrl_Apply" ;
+		button -label "Close" -align "center" -h 25 -bgc $butC[0] $butC[1] $butC[2] -c "deleteUI sgControlMakerW" ;
+
+		setParent ..;
+		separator -height 10 -style "in" ;
+		
+	
+		rowColumnLayout -nc 2 -cw 1 120 -cw 2 275 ;
+		text -l "subing85@yahoo.co.in"  -al "left" ;
+		text -l "Copyright ©2011 Subin. Gopi - All Rights Reserved." -al "right" ;
+		setParent ..;
+
+		showWindow $sgControlMakerWin ;
+	 }
+
+	sgControlMaker ;
+	//End GUI/////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Lock And Hide Check Box Auto Settings //////////////////////////////////////////
+	global proc translateAllOnSwitch ()
+	 {
+		checkBoxGrp -e -v2 1 translateLH_checkBox ;
+		checkBoxGrp -e -v3 1 translateLH_checkBox ;		
+		checkBoxGrp -e -v1 1 translateAxis_checkBox ;		
+		checkBoxGrp -e -v2 1 translateAxis_checkBox ;		
+		checkBoxGrp -e -v3 1 translateAxis_checkBox ;	
+	 }
+
+	global proc translateAllOfSwitch ()
+	 {
+		checkBoxGrp -e -v2 0 translateLH_checkBox ;
+		checkBoxGrp -e -v3 0 translateLH_checkBox ;		
+		checkBoxGrp -e -v1 0 translateAxis_checkBox ;		
+		checkBoxGrp -e -v2 0 translateAxis_checkBox ;		
+		checkBoxGrp -e -v3 0 translateAxis_checkBox ;	
+	 }
+
+	global proc rotateAllOnSwitch ()
+	 {
+		checkBoxGrp -e -v2 1 rotateLH_checkBox ;
+		checkBoxGrp -e -v3 1 rotateLH_checkBox ;		
+		checkBoxGrp -e -v1 1 rotateAxis_checkBox ;		
+		checkBoxGrp -e -v2 1 rotateAxis_checkBox ;		
+		checkBoxGrp -e -v3 1 rotateAxis_checkBox ;	
+	 }
+
+	global proc rotateAllOfSwitch ()
+	 {
+		checkBoxGrp -e -v2 0 rotateLH_checkBox ;
+		checkBoxGrp -e -v3 0 rotateLH_checkBox ;		
+		checkBoxGrp -e -v1 0 rotateAxis_checkBox ;		
+		checkBoxGrp -e -v2 0 rotateAxis_checkBox ;		
+		checkBoxGrp -e -v3 0 rotateAxis_checkBox ;	
+	 }
+
+	global proc scaleAllOnSwitch ()
+	 {
+		checkBoxGrp -e -v2 1 scaleLH_checkBox ;
+		checkBoxGrp -e -v3 1 scaleLH_checkBox ;		
+		checkBoxGrp -e -v1 1 scaleAxis_checkBox ;		
+		checkBoxGrp -e -v2 1 scaleAxis_checkBox ;		
+		checkBoxGrp -e -v3 1 scaleAxis_checkBox ;	
+	 }
+
+	global proc scaleAllOfSwitch ()
+	 {
+		checkBoxGrp -e -v2 0 scaleLH_checkBox ;
+		checkBoxGrp -e -v3 0 scaleLH_checkBox ;		
+		checkBoxGrp -e -v1 0 scaleAxis_checkBox ;		
+		checkBoxGrp -e -v2 0 scaleAxis_checkBox ;		
+		checkBoxGrp -e -v3 0 scaleAxis_checkBox ;	
+	 }
+
+	global proc visibilityOnSwitch()
+	 {
+		checkBoxGrp -e -v2 1 visibilityLH_checkBox ;
+		checkBoxGrp -e -v3 1 visibilityLH_checkBox ;		
+	 }
+
+	global proc visibilityOfSwitch ()
+	 {
+		checkBoxGrp -e -v2 0 visibilityLH_checkBox ;
+		checkBoxGrp -e -v3 0 visibilityLH_checkBox ;		
+	 }
+	//End Lock And Hide Check Box Auto Settings //////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Connection Type Check Box Auto Settings Start///////////////////////////////////
+	global proc parentConstOnSwitch ()
+	 {
+		checkBoxGrp -e -v3 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeB_checkBoxGrp ; 
+	 }
+
+	global proc scaleConstOnSwitch ()
+	 {
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeB_checkBoxGrp ; 
+	 }
+
+	global proc pointConstOnSwitch ()
+	 {
+		checkBoxGrp -e -v1 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeB_checkBoxGrp ; 
+	 }
+
+	global proc parentingOnSwitch ()
+	 {
+		checkBoxGrp -e -v1 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeB_checkBoxGrp ; 
+	 }
+
+	global proc connectionOnSwitch ()
+	 {
+		checkBoxGrp -e -v1 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeB_checkBoxGrp ; 
+	 }
+
+	global proc orientConstOnSwitch ()
+	 {
+		checkBoxGrp -e -v1 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ;
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ;  
+		checkBoxGrp -e -v2 0 connectionTypeB_checkBoxGrp ; 
+	 }
+	//End/////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Rig Type Check Box Auto Settings Start//////////////////////////////////////////
+	global proc fkRigOnSwitch ()
+	 {
+		checkBoxGrp -e -v3 0 rigType_checkBox ; 
+	 }
+
+	global proc singleRigOnSwitch ()
+	 {
+		checkBoxGrp -e -v2 0 rigType_checkBox ; 
+	 }
+	//End RIg Type Check Box Auto Settings Start//////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Current Shape Selected//////////////////////////////////////////////////////////
+	global proc currentShapeSelected ()
+	 {
+		string $currentShape	= `optionMenu -q -v ctrlShapes_Opt` ;
+		if ($currentShape=="Selected Shape")
+		 {
+			string $seleObj[]	= `ls -sl` ;
+			textField -e -tx $seleObj[0] seletedShape_textField ;
+		 }
+		else 
+		 {
+			textField -e -tx "" seletedShape_textField ;
+		 }
+	 }
+	//End Current Shape Selected///////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Create Driver Shape Start///////////////////////////////////////////////////////
+	global proc createDriverShape ()
+	 {
+		int $currentShape	= `optionMenu -q -sl ctrlShapes_Opt` ;
+
+		switch ($currentShape)
+		 { 
+			//Circle		
+   			case 1: 
+				string $cricleNode[]		= `circle -c 0 0 0 -nr 0 1 0 -sw 360 -r 1 -d 3 -ut 0 -tol 0.01 -s 8 -ch 0 -n "ShapeCricle_Subin"` ; 
+				select $cricleNode ;	
+        		break ; 
+
+			//Square
+   			case 2: 	
+				string $squareNodeDr		= `curve 	-d 1 -p 1 0 -1 -p -1 0 -1 -p -1 0 1 -p 1 0 1 -p 1 0 -1 -k 0 -k 1 -k 2 -k 3 -k 4` ;
+				string $squareNode		= `rename $squareNodeDr "ShapeSquare_Subin"` ;
+				select $squareNode ;	
+        		break ; 
+
+			//Cross
+   			case 3: 
+				string $crossNodeDr		= `curve 	-d 1 -p -0.2 0 0.2 -p -1 0 0.2 -p -1 0 -0.2 -p -0.2 0 -0.2 -p -0.2 0 -1 -p 0.2 0 -1 -p 0.2 0 -0.2 -p 1 0 -0.2 -p 1 0 0.2 -p 0.2 0 0.2 -p 0.2 0 1 -p -0.2 0 1 -p -0.2 0 0.2 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12` ;
+				string $crossNode		= `rename $crossNodeDr "ShapeCross_Subin"` ;
+				select $crossNode ;			
+        		break ; 
+
+			//Triangle
+   			case 4: 
+				string $triangleNodeDr	= `curve 	-d 1 -p -1 0 -1 -p 0 0 1 -p 1 0 -1 -p -1 0 -1 -k 0 -k 1 -k 2 -k 3` ;
+				string $triangleNode		= `rename $triangleNodeDr "ShapeTriangle_Subin"`  ;
+				select $triangleNode ;	
+        		break ; 
+
+			//Single Arrow
+   			case 5: 
+				string $sArrowNodeDr		= `curve 	-d 1 -p -0.99 0 0 -p 0 0 1.32 -p 0.99 0 0 -p 0.33 0 0 -p 0.33 0 -0.99 -p -0.33 0 -0.99 -p -0.33 0 0 -p -0.99 0 0 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7` ;
+				string $sArrowNode		= `rename $sArrowNodeDr "ShapeSArrow_Subin"`  ;
+				select $sArrowNode ;	
+        		break ; 
+
+			//Double Arrow
+   			case 6:
+				string $dArrowNodeDr		= `curve	-d 1 -p -0.99 0 0.99 -p 0 0 2.31 -p 0.99 0 0.99 -p 0.33 0 0.99 -p 0.33 0 -0.99 -p 0.99 0 -0.99 -p 0 0 -2.31 -p -0.99 0 -0.99 -p -0.33 0 -0.99 -p -0.33 0 0.99 -p -0.99 0 0.99 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10` ;
+				string $dArrowNode		= `rename $dArrowNodeDr "ShapeDArrow_Subin"`  ;
+				select $dArrowNode ;
+        		break ; 
+
+			//Four Fat
+   			case 7:
+				string $fourFatNodeDr		= `curve 	-d 1 -p -0.1485 0 -0.54675 -p -0.297 0 -0.54675 -p 0 0 -1 -p 0.297 0 -0.54675 -p 0.1485 0 -0.54675 -p 0.1485 0 -0.1485 -p 0.54675 0 -0.1485 -p 0.54675 0 -0.297 -p 1 0 0 -p 0.54675 0 0.297 -p 0.54675 0 0.1485 -p 0.1485 0 0.1485 -p 0.1485 0 0.54675 -p 0.297 0 0.54675 -p 0 0 1 -p -0.297 0 0.54675 -p -0.1485 0 0.54675 -p -0.1485 0 0.1485 -p -0.54675 0 0.1485 -p -0.54675 0 0.297 -p -1 0 0 -p -0.54675 0 -0.297 -p -0.54675 0 -0.1485 -p -0.1485 0 -0.1485 -p -0.1485 0 -0.54675 -p -0.297 0 -0.54675 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25` ;
+				string $fourFatNode		= `rename $fourFatNodeDr "ShapeFourFat_Subin"`  ;
+				select $fourFatNode ;
+        		break ; 
+
+			//N Arrow on Ball 
+   			case 8:
+				string $nArrowOnBallDr	= `curve 	-d 1 -p 0 0 -1.001567 -p -0.336638 0.327886 -0.751175 -p -0.0959835 0.327886 -0.751175 -p -0.0959835 0.500458 -0.500783 -p -0.0959835 0.604001 -0.0987656 -p -0.500783 0.500458 -0.0987656 -p -0.751175 0.327886 -0.0987656 -p -0.751175 0.327886 -0.336638 -p -1.001567 0 0 -p -0.751175 0.327886 0.336638 -p -0.751175 0.327886 0.0987656 -p -0.500783 0.500458 0.0987656 -p -0.0959835 0.604001 0.0987656 -p -0.0959835 0.500458 0.500783 -p -0.0959835 0.327886 0.751175 -p -0.336638 0.327886 0.751175 -p 0 0 1.001567 -p 0.336638 0.327886 0.751175 -p 0.0959835 0.327886 0.751175 -p 0.0959835 0.500458 0.500783 -p 0.0959835 0.604001 0.0987656 
+										-p 0.500783 0.500458 0.0987656 -p 0.751175 0.327886 0.0987656 -p 0.751175 0.327886 0.336638 -p 1.001567 0 0 -p 0.751175 0.327886 -0.336638 -p 0.751175 0.327886 -0.0987656 -p 0.500783 0.500458 -0.0987656 -p 0.0959835 0.604001 -0.0987656 -p 0.0959835 0.500458 -0.500783 -p 0.0959835 0.327886 -0.751175 -p 0.336638 0.327886 -0.751175 -p 0 0 -1.001567 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32` ;
+				string $nArrowOnBallNode	= `rename $nArrowOnBallDr "ShapeNArrowOnBall_Subin"` ;
+				select $nArrowOnBallNode ;
+        		break ; 
+
+			//S Arrow on Ball
+   			case 9:
+				string $sArrowOnBallDr	= `curve 	-d 1 -p 0 0 -0.84279 -p 0.0258065 0.0158684 -0.831987 -p 0.0593868 0.0356358 -0.816657 -p 0.0988627 0.0575215 -0.796841 -p 0.138184 0.0777701 -0.77523 -p 0.177289 0.0962653 -0.751936 -p 0.216118 0.112899 -0.727084 -p 0.254608 0.127571 -0.700803 -p 0.292701 0.140192 -0.673229 -p 0.330335 0.15068 -0.644505 -p 0.273646 0.163804 -0.656731 -p 0.215992 0.174443 -0.666643 -p 0.157576 0.18256 -0.674204 -p 0.0986056 0.188126 -0.67939 -p 0.0986056 0.227216 -0.634845 -p 0.0986056 0.26359 -0.588055 -p 0.0986056 0.297118 -0.539186 -p 0.0986056 0.327683 -0.488411 -p 0.0986056 0.355175 -0.435909 -p 0.0986056 0.379499 -0.381865 -p 0.0986056 0.400567 -0.326472 
+										-p 0.0986056 0.418306 -0.269924 -p 0.0986056 0.432653 -0.212422 -p 0.0986056 0.443557 -0.154169 -p 0.0986056 0.45071 -0.0981266 -p 0.154169 0.443557 -0.0986056 -p 0.212422 0.432653 -0.0986056 -p 0.269924 0.418306 -0.0986056 -p 0.326472 0.400567 -0.0986056 -p 0.381865 0.379499 -0.0986056 -p 0.435909 0.355175 -0.0986056 -p 0.488411 0.327683 -0.0986056 -p 0.539186 0.297118 -0.0986056 -p 0.588055 0.26359 -0.0986056 -p 0.634845 0.227216 -0.0986056 -p 0.67939 0.188126 -0.0986056 -p 0.674204 0.18256 -0.157576 -p 0.666643 0.174443 -0.215992 -p 0.656731 0.163804 -0.273646 -p 0.644505 0.15068 -0.330335 -p 0.673229 0.140192 -0.292701 -p 0.700803 0.127571 -0.254608
+										-p 0.727084 0.112899 -0.216118 -p 0.751936 0.0962653 -0.177289 -p 0.77523 0.0777701 -0.138184 -p 0.796841 0.0575215 -0.0988627 -p 0.816657 0.0356358 -0.0593868 -p 0.831987 0.0158684 -0.0258065 -p 0.84279 0 0 -p 0.831987 0.0158684 0.0258065 -p 0.816657 0.0356358 0.0593868 -p 0.796841 0.0575215 0.0988627 -p 0.77523 0.0777701 0.138184 -p 0.751936 0.0962653 0.177289 -p 0.727084 0.112899 0.216118 -p 0.700803 0.127571 0.254608 -p 0.673229 0.140192 0.292701 -p 0.644505 0.15068 0.330335 -p 0.656731 0.163804 0.273646 -p 0.666643 0.174443 0.215992 -p 0.674204 0.18256 0.157576 -p 0.67939 0.188126 0.0986056 -p 0.634845 0.227216 0.0986056 -p 0.588055 0.26359 0.0986056 
+										-p 0.539186 0.297118 0.0986056 -p 0.488411 0.327683 0.0986056 -p 0.435909 0.355175 0.0986056 -p 0.381865 0.379499 0.0986056 -p 0.326472 0.400567 0.0986056 -p 0.269924 0.418306 0.0986056 -p 0.212422 0.432653 0.0986056 -p 0.154169 0.443557 0.0986056 -p 0.0986056 0.45071 0.0981266 -p 0.0986056 0.443557 0.154169 -p 0.0986056 0.432653 0.212422 -p 0.0986056 0.418306 0.269924 -p 0.0986056 0.400567 0.326472 -p 0.0986056 0.379499 0.381865 -p 0.0986056 0.355175 0.435909 -p 0.0986056 0.327683 0.488411 -p 0.0986056 0.297118 0.539186 -p 0.0986056 0.26359 0.588055 -p 0.0986056 0.227216 0.634845 -p 0.0986056 0.188126 0.67939 -p 0.157576 0.18256 0.674204 -p 0.215992 0.174443 0.666643
+										-p 0.273646 0.163804 0.656731 -p 0.330335 0.15068 0.644505 -p 0.292701 0.140192 0.673229 -p 0.254608 0.127571 0.700803 -p 0.216118 0.112899 0.727084 -p 0.177289 0.0962653 0.751936 -p 0.138184 0.0777701 0.77523 -p 0.0988627 0.0575215 0.796841 -p 0.0593868 0.0356358 0.816657 -p 0.0258065 0.0158684 0.831987 -p 0 0 0.84279 -p -0.0258065 0.0158684 0.831987 -p -0.0593868 0.0356358 0.816657 -p -0.0988627 0.0575215 0.796841 -p -0.138184 0.0777701 0.77523 -p -0.177289 0.0962653 0.751936 -p -0.216118 0.112899 0.727084 -p -0.254608 0.127571 0.700803 -p -0.292701 0.140192 0.673229 -p -0.330335 0.15068 0.644505 -p -0.273646 0.163804 0.656731 -p -0.215992 0.174443 0.666643
+										-p -0.157576 0.18256 0.674204 -p -0.0986056 0.188126 0.67939 -p -0.0986056 0.227216 0.634845 -p -0.0986056 0.26359 0.588055 -p -0.0986056 0.297118 0.539186 -p -0.0986056 0.327683 0.488411 -p -0.0986056 0.355175 0.435909 -p -0.0986056 0.379499 0.381865 -p -0.0986056 0.400567 0.326472 -p -0.0986056 0.418306 0.269924 -p -0.0986056 0.432653 0.212422 -p -0.0986056 0.443557 0.154169 -p -0.0981266 0.45071 0.0986056 -p -0.154169 0.443557 0.0986056 -p -0.212422 0.432653 0.0986056 -p -0.269924 0.418306 0.0986056 -p -0.326472 0.400567 0.0986056 -p -0.381865 0.379499 0.0986056 -p -0.435909 0.355175 0.0986056 -p -0.488411 0.327683 0.0986056 -p -0.539186 0.297118 0.0986056
+										-p -0.588055 0.26359 0.0986056 -p -0.634845 0.227216 0.0986056 -p -0.67939 0.188126 0.0986056 -p -0.674204 0.18256 0.157576 -p -0.666643 0.174443 0.215992 -p -0.656731 0.163804 0.273646 -p -0.644505 0.15068 0.330335 -p -0.673229 0.140192 0.292701 -p -0.700803 0.127571 0.254608 -p -0.727084 0.112899 0.216118 -p -0.751936 0.0962653 0.177289 -p -0.77523 0.0777701 0.138184 -p -0.796841 0.0575215 0.0988627 -p -0.816657 0.0356358 0.0593868 -p -0.831987 0.0158684 0.0258065 -p -0.84279 0 0 -p -0.831987 0.0158684 -0.0258065 -p -0.816657 0.0356358 -0.0593868 -p -0.796841 0.0575215 -0.0988627 -p -0.77523 0.0777701 -0.138184 -p -0.751936 0.0962653 -0.177289 -p -0.727084 0.112899 -0.216118 
+										-p -0.700803 0.127571 -0.254608 -p -0.673229 0.140192 -0.292701 -p -0.644505 0.15068 -0.330335 -p -0.656731 0.163804 -0.273646 -p -0.666643 0.174443 -0.215992 -p -0.674204 0.18256 -0.157576 -p -0.67939 0.188126 -0.0986056 -p -0.634845 0.227216 -0.0986056 -p -0.588055 0.26359 -0.0986056 -p -0.539186 0.297118 -0.0986056 -p -0.488411 0.327683 -0.0986056 -p -0.435909 0.355175 -0.0986056 -p -0.381865 0.379499 -0.0986056 -p -0.326472 0.400567 -0.0986056 -p -0.269924 0.418306 -0.0986056 -p -0.212422 0.432653 -0.0986056 -p -0.154169 0.443557 -0.0986056 -p -0.0986056 0.45071 -0.0981266 -p -0.0986056 0.443557 -0.154169 -p -0.0986056 0.432653 -0.212422 -p -0.0986056 0.418306 -0.269924
+										-p -0.0986056 0.400567 -0.326472 -p -0.0986056 0.379499 -0.381865 -p -0.0986056 0.355175 -0.435909 -p -0.0986056 0.327683 -0.488411 -p -0.0986056 0.297118 -0.539186 -p -0.0986056 0.26359 -0.588055 -p -0.0986056 0.227216 -0.634845 -p -0.0986056 0.188126 -0.67939 -p -0.157576 0.18256 -0.674204 -p -0.215992 0.174443 -0.666643 -p -0.273646 0.163804 -0.656731 -p -0.330335 0.15068 -0.644505 -p -0.292701 0.140192 -0.673229 -p -0.254608 0.127571 -0.700803 -p -0.216118 0.112899 -0.727084 -p -0.177289 0.0962653 -0.751936 -p -0.138184 0.0777701 -0.77523 -p -0.0988627 0.0575215 -0.796841 -p -0.0593868 0.0356358 -0.816657 -p -0.0258065 0.0158684 -0.831987 -p 0 0 -0.84279 -k 0 -k 1 
+										-k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33 -k 34 -k 35 -k 36 -k 37 -k 38 -k 39 -k 40 -k 41 -k 42 -k 43 -k 44 -k 45 -k 46 -k 47 -k 48 -k 49 -k 50 -k 51 -k 52 -k 53 -k 54 -k 55 -k 56 -k 57 -k 58 -k 59 -k 60 -k 61 -k 62 -k 63 -k 64 -k 65 -k 66 -k 67 -k 68 -k 69 -k 70 -k 71 -k 72 -k 73 -k 74 -k 75 -k 76 -k 77 -k 78 -k 79 -k 80 -k 81 -k 82 -k 83 -k 84 -k 85 -k 86 -k 87 -k 88 -k 89 -k 90 -k 91 -k 92 -k 93 -k 94 -k 95 -k 96 -k 97 -k 98 -k 99 -k 100 -k 101 -k 102 -k 103 -k 104 -k 105 -k 106 -k 107 -k 108 -k 109 -k 110 -k 111 -k 112 -k 113 -k 114 
+										-k 115 -k 116 -k 117 -k 118 -k 119 -k 120 -k 121 -k 122 -k 123 -k 124 -k 125 -k 126 -k 127 -k 128 -k 129 -k 130 -k 131 -k 132 -k 133 -k 134 -k 135 -k 136 -k 137 -k 138 -k 139 -k 140 -k 141 -k 142 -k 143 -k 144 -k 145 -k 146 -k 147 -k 148 -k 149 -k 150 -k 151 -k 152 -k 153 -k 154 -k 155 -k 156 -k 157 -k 158 -k 159 -k 160 -k 161 -k 162 -k 163 -k 164 -k 165 -k 166 -k 167 -k 168 -k 169 -k 170 -k 171 -k 172 -k 173 -k 174 -k 175 -k 176 -k 177 -k 178 -k 179 -k 180 -k 181 -k 182 -k 183 -k 184 -k 185 -k 186 -k 187 -k 188 -k 189 -k 190 -k 191 -k 192` ;
+				string $sArrowOnBallNode	= `rename $sArrowOnBallDr "ShapeSArrowOnBall_Subin"` ;
+				select $sArrowOnBallNode ;
+        		break ; 
+
+			//Single Pin
+   			case 10:
+				string $singlePinDr		= `curve	-d 1 -p 0 0 0 -p 0 0 0.677274 -p -0.0337341 0 0.679042 -p -0.0670985 0 0.684326 -p -0.0997278 0 0.693069 -p -0.131265 0 0.705175 -p -0.161363 0 0.720511 -p -0.189694 0 0.738909 -p -0.215946 0 0.760168 -p -0.239832 0 0.784054 -p -0.261091 0 0.810306 -p -0.279489 0 0.838637 -p -0.294825 0 0.868735 -p -0.306931 0 0.900272 -p -0.315674 0 0.932901 -p -0.320958 0 0.966266 -p -0.322726 0 1 -p -0.320958 0 1.033734 -p -0.315674 0 1.067099 -p -0.306931 0 1.099728 -p -0.294825 0 1.131265 -p -0.279489 0 1.161363 -p -0.261091 0 1.189694 -p -0.239832 0 1.215946 -p -0.215946 0 1.239832 -p -0.189694 0 1.261091 -p -0.161363 0 1.279489 -p -0.131265 0 1.294825 -p -0.0997278 0 1.306931 -p -0.0670985 0 1.315674 
+										-p -0.0337341 0 1.320958 -p 0 0 1.322726 -p 0.0337341 0 1.320958 -p 0.0670985 0 1.315674 -p 0.0997278 0 1.306931 -p 0.131265 0 1.294825 -p 0.161363 0 1.279489 -p 0.189694 0 1.261091 -p 0.215946 0 1.239832 -p 0.239832 0 1.215946 -p 0.261091 0 1.189694 -p 0.279489 0 1.161363 -p 0.294825 0 1.131265 -p 0.306931 0 1.099728 -p 0.315674 0 1.067099 -p 0.320958 0 1.033734 -p 0.322726 0 1 -p 0.320958 0 0.966266 -p 0.315674 0 0.932901 -p 0.306931 0 0.900272 -p 0.294825 0 0.868735 -p 0.279489 0 0.838637 -p 0.261091 0 0.810306 -p 0.239832 0 0.784054 -p 0.215946 0 0.760168 -p 0.189694 0 0.738909 -p 0.161363 0 0.720511 -p 0.131265 0 0.705175 -p 0.0997278 0 0.693069 -p 0.0670985 0 0.684326 -p 0.0337341 0 0.679042 
+										-p 0 0 0.677274 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33 -k 34 -k 35 -k 36 -k 37 -k 38 -k 39 -k 40 -k 41 -k 42 -k 43 -k 44 -k 45 -k 46 -k 47 -k 48 -k 49 -k 50 -k 51 -k 52 -k 53 -k 54 -k 55 -k 56 -k 57 -k 58 -k 59 -k 60 -k 61` ;
+				string $singlePinNode		= `rename $singlePinDr "ShapeSinglePin_Subin"` ;
+				select $singlePinNode ;
+        		break ; 
+
+			//Two Pin
+   			case 11:
+				string $twoPinDr		= `curve 	-d 1 -p 0 0 -0.677274 -p 0.0337341 0 -0.679042 -p 0.0670985 0 -0.684326 -p 0.0997278 0 -0.693069 -p 0.131265 0 -0.705175 -p 0.161363 0 -0.720511 -p 0.189694 0 -0.738909 -p 0.215946 0 -0.760168 -p 0.239832 0 -0.784054 -p 0.261091 0 -0.810306 -p 0.279489 0 -0.838637 -p 0.294825 0 -0.868735 -p 0.306931 0 -0.900272 -p 0.315674 0 -0.932901 -p 0.320958 0 -0.966266 -p 0.322726 0 -1 -p 0.320958 0 -1.033734 -p 0.315674 0 -1.067099 -p 0.306931 0 -1.099728 -p 0.294825 0 -1.131265 -p 0.279489 0 -1.161363 -p 0.261091 0 -1.189694 -p 0.239832 0 -1.215946 -p 0.215946 0 -1.239832 -p 0.189694 0 -1.261091 -p 0.161363 0 -1.279489 -p 0.131265 0 -1.294825 -p 0.0997278 0 -1.306931 -p 0.0670985 0 -1.315674 -p 0.0337341 0 -1.320958 
+										-p 0 0 -1.322726 -p -0.0337341 0 -1.320958 -p -0.0670985 0 -1.315674 -p -0.0997278 0 -1.306931 -p -0.131265 0 -1.294825 -p -0.161363 0 -1.279489 -p -0.189694 0 -1.261091 -p -0.215946 0 -1.239832 -p -0.239832 0 -1.215946 -p -0.261091 0 -1.189694 -p -0.279489 0 -1.161363 -p -0.294825 0 -1.131265 -p -0.306931 0 -1.099728 -p -0.315674 0 -1.067099 -p -0.320958 0 -1.033734 -p -0.322726 0 -1 -p -0.320958 0 -0.966266 -p -0.315674 0 -0.932901 -p -0.306931 0 -0.900272 -p -0.294825 0 -0.868735 -p -0.279489 0 -0.838637 -p -0.261091 0 -0.810306 -p -0.239832 0 -0.784054 -p -0.215946 0 -0.760168 -p -0.189694 0 -0.738909 -p -0.161363 0 -0.720511 -p -0.131265 0 -0.705175 -p -0.0997278 0 -0.693069 -p -0.0670985 0 -0.684326 
+										-p -0.0337341 0 -0.679042 -p 0 0 -0.677274 -p 0 0 0.677274 -p -0.0337341 0 0.679042 -p -0.0670985 0 0.684326 -p -0.0997278 0 0.693069 -p -0.131265 0 0.705175 -p -0.161363 0 0.720511 -p -0.189694 0 0.738909 -p -0.215946 0 0.760168 -p -0.239832 0 0.784054 -p -0.261091 0 0.810306 -p -0.279489 0 0.838637 -p -0.294825 0 0.868735 -p -0.306931 0 0.900272 -p -0.315674 0 0.932901 -p -0.320958 0 0.966266 -p -0.322726 0 1 -p -0.320958 0 1.033734 -p -0.315674 0 1.067099 -p -0.306931 0 1.099728 -p -0.294825 0 1.131265 -p -0.279489 0 1.161363 -p -0.261091 0 1.189694 -p -0.239832 0 1.215946 -p -0.215946 0 1.239832 -p -0.189694 0 1.261091 -p -0.161363 0 1.279489 -p -0.131265 0 1.294825 -p -0.0997278 0 1.306931 -p -0.0670985 0 1.315674 
+										-p -0.0337341 0 1.320958 -p 0 0 1.322726 -p 0.0337341 0 1.320958 -p 0.0670985 0 1.315674 -p 0.0997278 0 1.306931 -p 0.131265 0 1.294825 -p 0.161363 0 1.279489 -p 0.189694 0 1.261091 -p 0.215946 0 1.239832 -p 0.239832 0 1.215946 -p 0.261091 0 1.189694 -p 0.279489 0 1.161363 -p 0.294825 0 1.131265 -p 0.306931 0 1.099728 -p 0.315674 0 1.067099 -p 0.320958 0 1.033734 -p 0.322726 0 1 -p 0.320958 0 0.966266 -p 0.315674 0 0.932901 -p 0.306931 0 0.900272 -p 0.294825 0 0.868735 -p 0.279489 0 0.838637 -p 0.261091 0 0.810306 -p 0.239832 0 0.784054 -p 0.215946 0 0.760168 -p 0.189694 0 0.738909 -p 0.161363 0 0.720511 -p 0.131265 0 0.705175 -p 0.0997278 0 0.693069 -p 0.0670985 0 0.684326 -p 0.0337341 0 0.679042 -p 0 0 0.677274 
+										-k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33 -k 34 -k 35 -k 36 -k 37 -k 38 -k 39 -k 40 -k 41 -k 42 -k 43 -k 44 -k 45 -k 46 -k 47 -k 48 -k 49 -k 50 -k 51 -k 52 -k 53 -k 54 -k 55 -k 56 -k 57 -k 58 -k 59 -k 60 -k 61 -k 62 -k 63 -k 64 -k 65 -k 66 -k 67 -k 68 -k 69 -k 70 -k 71 -k 72 -k 73 -k 74 -k 75 -k 76 -k 77 -k 78 -k 79 -k 80 -k 81 -k 82 -k 83 -k 84 -k 85 -k 86 -k 87 -k 88 -k 89 -k 90 -k 91 -k 92 -k 93 -k 94 -k 95 -k 96 -k 97 -k 98 -k 99 -k 100 -k 101 -k 102 -k 103 -k 104 -k 105 -k 106 -k 107 -k 108 -k 109 -k 110 -k 111 -k 112 -k 113 -k 114 -k 115 -k 116 -k 117 -k 118 -k 119 -k 120 -k 121` ;
+        			string $twoPinNode		= `rename $twoPinDr "ShapeTwoPin_Subin"` ;
+				select $twoPinNode ;
+			break ; 
+
+			case 12:
+				string $cogPlaneDr		= `curve -d 1 -p -0.452868 0 -0.901735 -p 0.452868 0 -0.901735 -p 0.873877 0 0.504533 -p 0 0 0.796049 -p -0.873877 0 0.504533 -p -0.452868 0 -0.901735 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5` ;
+				string $cogPlaneNode		= `rename $cogPlaneDr "ShapeCogPlane_Subin"` ;
+				select $cogPlaneNode ;
+			break ; 
+
+			//Empty   
+   			case 13:
+				print "Please Select Shape in Option Menu" ;
+			break ; 
+
+
+			//Cube
+   			case 14:
+				string $cubeDr			= `curve 	-d 1 -p 1 1 1 -p 1 1 -1 -p -1 1 -1 -p -1 1 1 -p 1 1 1 -p 1 -1 1 -p 1 -1 -1 -p 1 1 -1 -p 1 -1 -1 -p -1 -1 -1 -p -1 1 -1 -p -1 -1 -1 -p -1 -1 1 -p -1 1 1 -p -1 -1 1 -p 1 -1 1 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15` ;
+        			string $cubeNode		= `rename $cubeDr "ShapeCube_Subin"` ;
+				select $cubeNode ;
+			break ; 
+
+			//Normal Sphere
+   			case 15:
+				string $nSphereDr		= `curve 	-d 1 -p 0 0 1 -p 0 0.5 0.866025 -p 0 0.866025 0.5 -p 0 1 0 -p 0 0.866025 -0.5 -p 0 0.5 -0.866025 -p 0 0 -1 -p 0 -0.5 -0.866025 -p 0 -0.866025 -0.5 -p 0 -1 0 -p 0 -0.866025 0.5 -p 0 -0.5 0.866025 -p 0 0 1 -p 0.707107 0 0.707107 -p 1 0 0 -p 0.707107 0 -0.707107 -p 0 0 -1 -p -0.707107 0 -0.707107 -p -1 0 0 -p -0.707107 0 0.707107 -p 0 0 1 -p 0 0.5 0.866025 -p 0 0.866025 0.5 -p 0 1 0 -p -0.5 0.866025 0 -p -0.866025 0.5 0 -p -1 0 0 -p -0.866025 -0.5 0 -p -0.5 -0.866025 0 -p 0 -1 0 -p 0.5 -0.866025 0 -p 0.866025 -0.5 0 -p 1 0 0 -p 0.866025 0.5 0 -p 0.5 0.866025 0 -p 0 1 0 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33 -k 34 -k 35` ;
+        			string $nSphereNode		= `rename $nSphereDr "ShapeMSphere_Subin"` ;
+				select $nSphereNode ;
+			break ; 
+
+			//Smooth Sphere
+   			case 16:
+				string $sSphereDr		= `curve	-d 1 -p 0 1.001829 0 -p 0 0.996341 0.10472 -p 0 0.979937 0.208292 -p 0 0.952796 0.309582 -p 0 0.915217 0.407481 -p 0 0.86761 0.500915 -p 0 0.810497 0.588861 -p 0 0.744504 0.670355 -p 0 0.670355 0.744504 -p 0 0.588861 0.810497 -p 0 0.500915 0.86761 -p 0 0.407481 0.915217 -p 0 0.309582 0.952796 -p 0 0.208292 0.979937 -p 0 0.10472 0.996341 -p 0 0 1.001829 -p 0 -0.10472 0.996341 -p 0 -0.208292 0.979937 -p 0 -0.309582 0.952796 -p 0 -0.407481 0.915217 -p 0 -0.500915 0.86761 -p 0 -0.588861 0.810497 -p 0 -0.670355 0.744504 -p 0 -0.744504 0.670355 -p 0 -0.810497 0.588861 -p 0 -0.86761 0.500915 -p 0 -0.915217 0.407481 -p 0 -0.952796 0.309582 -p 0 -0.979937 0.208292 -p 0 -0.996341 0.10472 -p 0 -1.001829 0 -p 0 -0.996341 -0.10472 -p 0 -0.979937 -0.208292 -p 0 -0.952796 -0.309582
+										-p 0 -0.915217 -0.407481 -p 0 -0.86761 -0.500915 -p 0 -0.810497 -0.588861 -p 0 -0.744504 -0.670355 -p 0 -0.670355 -0.744504 -p 0 -0.588861 -0.810497 -p 0 -0.500915 -0.86761 -p 0 -0.407481 -0.915217 -p 0 -0.309582 -0.952796 -p 0 -0.208292 -0.979937 -p 0 -0.10472 -0.996341 -p 0 0 -1.001829 -p 0 0.10472 -0.996341 -p 0 0.208292 -0.979937 -p 0 0.309582 -0.952796 -p 0 0.407481 -0.915217 -p 0 0.500915 -0.86761 -p 0 0.588861 -0.810497 -p 0 0.670355 -0.744504 -p 0 0.744504 -0.670355 -p 0 0.810497 -0.588861 -p 0 0.86761 -0.500915 -p 0 0.915217 -0.407481 -p 0 0.952796 -0.309582 -p 0 0.979937 -0.208292 -p 0 0.996341 -0.10472 -p 0 1.001829 0 -p 0.10472 0.996341 0 -p 0.208292 0.979937 0 -p 0.309582 0.952796 0 -p 0.407481 0.915217 0 -p 0.500915 0.86761 0 -p 0.588861 0.810497 0 
+										-p 0.670355 0.744504 0 -p 0.744504 0.670355 0 -p 0.810497 0.588861 0 -p 0.86761 0.500915 0 -p 0.915217 0.407481 0 -p 0.952796 0.309582 0 -p 0.979937 0.208292 0 -p 0.996341 0.10472 0 -p 1.001829 0 0 -p 0.996341 -0.10472 0 -p 0.979937 -0.208292 0 -p 0.952796 -0.309582 0 -p 0.915217 -0.407481 0 -p 0.86761 -0.500915 0 -p 0.810497 -0.588861 0 -p 0.744504 -0.670355 0 -p 0.670355 -0.744504 0 -p 0.588861 -0.810497 0 -p 0.500915 -0.86761 0 -p 0.407481 -0.915217 0 -p 0.309582 -0.952796 0 -p 0.208292 -0.979937 0 -p 0.10472 -0.996341 0 -p 0 -1.001829 0 -p -0.10472 -0.996341 0 -p -0.208292 -0.979937 0 -p -0.309582 -0.952796 0 -p -0.407481 -0.915217 0 -p -0.500915 -0.86761 0 -p -0.588861 -0.810497 0 -p -0.670355 -0.744504 0 -p -0.744504 -0.670355 0 -p -0.810497 -0.588861 0 -p -0.86761 -0.500915 0 
+										-p -0.915217 -0.407481 0 -p -0.952796 -0.309582 0 -p -0.979937 -0.208292 0 -p -0.996341 -0.10472 0 -p -1.001829 0 0 -p -0.996341 0.10472 0 -p -0.979937 0.208292 0 -p -0.952796 0.309582 0 -p -0.915217 0.407481 0 -p -0.86761 0.500915 0 -p -0.810497 0.588861 0 -p -0.744504 0.670355 0 -p -0.670355 0.744504 0 -p -0.588861 0.810497 0 -p -0.500915 0.86761 0 -p -0.407481 0.915217 0 -p -0.309582 0.952796 0 -p -0.208292 0.979937 0 -p -0.10472 0.996341 0 -p 0 1.001829 0 -p 0 0.996341 -0.10472 -p 0 0.979937 -0.208292 -p 0 0.952796 -0.309582 -p 0 0.915217 -0.407481 -p 0 0.86761 -0.500915 -p 0 0.810497 -0.588861 -p 0 0.744504 -0.670355 -p 0 0.670355 -0.744504 -p 0 0.588861 -0.810497 -p 0 0.500915 -0.86761 -p 0 0.407481 -0.915217 -p 0 0.309582 -0.952796 -p 0 0.208292 -0.979937 -p 0 0.10472 -0.996341 
+										-p 0 0 -1.001829 -p 0.10472 0 -0.996341 -p 0.208292 0 -0.979937 -p 0.309582 0 -0.952796 -p 0.407481 0 -0.915217 -p 0.500915 0 -0.86761 -p 0.588861 0 -0.810497 -p 0.670355 0 -0.744504 -p 0.744504 0 -0.670355 -p 0.810497 0 -0.588861 -p 0.86761 0 -0.500915 -p 0.915217 0 -0.407481 -p 0.952796 0 -0.309582 -p 0.979937 0 -0.208292 -p 0.996341 0 -0.10472 -p 1.001829 0 0 -p 0.996341 0 0.10472 -p 0.979937 0 0.208292 -p 0.952796 0 0.309582 -p 0.915217 0 0.407481 -p 0.86761 0 0.500915 -p 0.810497 0 0.588861 -p 0.744504 0 0.670355 -p 0.670355 0 0.744504 -p 0.588861 0 0.810497 -p 0.500915 0 0.86761 -p 0.407481 0 0.915217 -p 0.309582 0 0.952796 -p 0.208292 0 0.979937 -p 0.10472 0 0.996341 -p 0 0 1.001829 -p -0.10472 0 0.996341 -p -0.208292 0 0.979937 -p -0.309582 0 0.952796 -p -0.407481 0 0.915217 
+										-p -0.500915 0 0.86761 -p -0.588861 0 0.810497 -p -0.670355 0 0.744504 -p -0.744504 0 0.670355 -p -0.810497 0 0.588861 -p -0.86761 0 0.500915 -p -0.915217 0 0.407481 -p -0.952796 0 0.309582 -p -0.979937 0 0.208292 -p -0.996341 0 0.10472 -p -1.001829 0 0 -p -0.996341 0 -0.10472 -p -0.979937 0 -0.208292 -p -0.952796 0 -0.309582 -p -0.915217 0 -0.407481 -p -0.86761 0 -0.500915 -p -0.810497 0 -0.588861 -p -0.744504 0 -0.670355 -p -0.670355 0 -0.744504 -p -0.588861 0 -0.810497 -p -0.500915 0 -0.86761 -p -0.407481 0 -0.915217 -p -0.309582 0 -0.952796 -p -0.208292 0 -0.979937 -p -0.10472 0 -0.996341 -p 0 0 -1.001829 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 
+										-k 31 -k 32 -k 33 -k 34 -k 35 -k 36 -k 37 -k 38 -k 39 -k 40 -k 41 -k 42 -k 43 -k 44 -k 45 -k 46 -k 47 -k 48 -k 49 -k 50 -k 51 -k 52 -k 53 -k 54 -k 55 -k 56 -k 57 -k 58 -k 59 -k 60 -k 61 -k 62 -k 63 -k 64 -k 65 -k 66 -k 67 -k 68 -k 69 -k 70 -k 71 -k 72 -k 73 -k 74 -k 75 -k 76 -k 77 -k 78 -k 79 -k 80 -k 81 -k 82 -k 83 -k 84 -k 85 -k 86 -k 87 -k 88 -k 89 -k 90 -k 91 -k 92 -k 93 -k 94 -k 95 -k 96 -k 97 -k 98 -k 99 -k 100 -k 101 -k 102 -k 103 -k 104 -k 105 -k 106 -k 107 -k 108 -k 109 -k 110 -k 111 -k 112 -k 113 -k 114 -k 115 -k 116 -k 117 -k 118 -k 119 -k 120 -k 121 -k 122 -k 123 -k 124 -k 125 -k 126 -k 127 -k 128 -k 129 -k 130 -k 131 -k 132 -k 133 -k 134 -k 135 -k 136 -k 137 -k 138 -k 139 -k 140 -k 141 -k 142 -k 143 -k 144 -k 145 -k 146 -k 147 -k 148 -k 149 -k 150 -k 151 -k 152 -k 153 -k 154 
+										-k 155 -k 156 -k 157 -k 158 -k 159 -k 160 -k 161 -k 162 -k 163 -k 164 -k 165 -k 166 -k 167 -k 168 -k 169 -k 170 -k 171 -k 172 -k 173 -k 174 -k 175 -k 176 -k 177 -k 178 -k 179 -k 180 -k 181 -k 182 -k 183 -k 184 -k 185 -k 186 -k 187 -k 188 -k 189 -k 190 -k 191 -k 192 -k 193 -k 194 -k 195` ;
+				string $sSphereNode		= `rename $sSphereDr "ShapeSSphere_Subin"` ;
+				select $sSphereNode ;
+			break ; 
+
+			//Normal Cylinder
+   			case 17:
+				string $nCylinderDr		= `curve	-d 1 -p 0 1 -1 -p 0 -1 -1 -p -0.707107 -1 -0.707107 -p -0.707107 1 -0.707107 -p -1 1 0 -p -1 -1 0 -p -0.707107 -1 0.707107 -p -0.707107 1 0.707107 -p 0 1 1 -p 0 -1 1 -p 0.707107 -1 0.707107 -p 0.707107 1 0.707107 -p 1 1 0 -p 1 -1 0 -p 0.707107 -1 -0.707107 -p 0.707107 1 -0.707107 -p 0 1 -1 -p 0 -1 -1 -p 0 1 -1 -p -0.707107 1 -0.707107 -p -0.707107 -1 -0.707107 -p -1 -1 0 -p -1 1 0 -p -0.707107 1 0.707107 -p -0.707107 -1 0.707107 -p 0 -1 1 -p 0 1 1 -p 0.707107 1 0.707107 -p 0.707107 -1 0.707107 -p 1 -1 0 -p 1 1 0 -p 0.707107 1 -0.707107 -p 0.707107 -1 -0.707107 -p 0 -1 -1 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33` ;
+				string $nCylinderNode		= `rename $nCylinderDr "ShapeNCylinder_Subin"` ;
+				select $nCylinderNode ;
+			break ; 
+
+			//Smooth Cylinder
+   			case 18:
+				string $sCylinderDr		= `curve 	-d 1 -p 0 1 -1.001829 -p -0.10472 1 -0.996341 -p -0.208292 1 -0.979937 -p -0.309582 1 -0.952796 -p -0.407481 1 -0.915217 -p -0.500915 1 -0.86761 -p -0.588861 1 -0.810497 -p -0.670355 1 -0.744504 -p -0.744504 1 -0.670355 -p -0.744504 -1 -0.670355 -p -0.810497 -1 -0.588861 -p -0.86761 -1 -0.500915 -p -0.915217 -1 -0.407481 -p -0.952796 -1 -0.309582 -p -0.979937 -1 -0.208292 -p -0.996341 -1 -0.10472 -p -1.001829 -1 0 -p -1.001829 1 0 -p -0.996341 1 0.10472 -p -0.979937 1 0.208292 -p -0.952796 1 0.309582 -p -0.915217 1 0.407481 -p -0.86761 1 0.500915 -p -0.810497 1 0.588861 -p -0.744504 1 0.670355 -p -0.670355 1 0.744504 -p -0.670355 -1 0.744504 -p -0.588861 -1 0.810497 -p -0.500915 -1 0.86761 -p -0.407481 -1 0.915217 -p -0.309582 -1 0.952796 -p -0.208292 -1 0.979937 
+										-p -0.10472 -1 0.996341 -p 0 -1 1.001829 -p 0 1 1.001829 -p 0.10472 1 0.996341 -p 0.208292 1 0.979937 -p 0.309582 1 0.952796 -p 0.407481 1 0.915217 -p 0.500915 1 0.86761 -p 0.588861 1 0.810497 -p 0.670355 1 0.744504 -p 0.744504 1 0.670355 -p 0.744504 -1 0.670355 -p 0.810497 -1 0.588861 -p 0.86761 -1 0.500915 -p 0.915217 -1 0.407481 -p 0.952796 -1 0.309582 -p 0.979937 -1 0.208292 -p 0.996341 -1 0.10472 -p 1.001829 -1 0 -p 1.001829 1 0 -p 0.996341 1 -0.10472 -p 0.979937 1 -0.208292 -p 0.952796 1 -0.309582 -p 0.915217 1 -0.407481 -p 0.86761 1 -0.500915 -p 0.810497 1 -0.588861 -p 0.744504 1 -0.670355 -p 0.670355 1 -0.744504 -p 0.670355 -1 -0.744504 -p 0.588861 -1 -0.810497 -p 0.500915 -1 -0.86761 -p 0.407481 -1 -0.915217 -p 0.309582 -1 -0.952796 -p 0.208292 -1 -0.979937 
+										-p 0.10472 -1 -0.996341 -p 0 -1 -1.001829 -p 0 1 -1.001829 -p 0 -1 -1.001829 -p -0.10472 -1 -0.996341 -p -0.208292 -1 -0.979937 -p -0.309582 -1 -0.952796 -p -0.407481 -1 -0.915217 -p -0.500915 -1 -0.86761 -p -0.588861 -1 -0.810497 -p -0.670355 -1 -0.744504 -p -0.744504 -1 -0.670355 -p -0.744504 1 -0.670355 -p -0.810497 1 -0.588861 -p -0.86761 1 -0.500915 -p -0.915217 1 -0.407481 -p -0.952796 1 -0.309582 -p -0.979937 1 -0.208292 -p -0.996341 1 -0.10472 -p -1.001829 1 0 -p -1.001829 -1 0 -p -0.996341 -1 0.10472 -p -0.979937 -1 0.208292 -p -0.952796 -1 0.309582 -p -0.915217 -1 0.407481 -p -0.86761 -1 0.500915 -p -0.810497 -1 0.588861 -p -0.744504 -1 0.670355 -p -0.670355 -1 0.744504 -p -0.670355 1 0.744504 -p -0.588861 1 0.810497 -p -0.500915 1 0.86761 -p -0.407481 1 0.915217 
+										-p -0.309582 1 0.952796 -p -0.208292 1 0.979937 -p -0.10472 1 0.996341 -p 0 1 1.001829 -p 0 -1 1.001829 -p 0.10472 -1 0.996341 -p 0.208292 -1 0.979937 -p 0.309582 -1 0.952796 -p 0.407481 -1 0.915217 -p 0.500915 -1 0.86761 -p 0.588861 -1 0.810497 -p 0.670355 -1 0.744504 -p 0.744504 -1 0.670355 -p 0.744504 1 0.670355 -p 0.810497 1 0.588861 -p 0.86761 1 0.500915 -p 0.915217 1 0.407481 -p 0.952796 1 0.309582 -p 0.979937 1 0.208292 -p 0.996341 1 0.10472 -p 1.001829 1 0 -p 1.001829 -1 0 -p 0.996341 -1 -0.10472 -p 0.979937 -1 -0.208292 -p 0.952796 -1 -0.309582 -p 0.915217 -1 -0.407481 -p 0.86761 -1 -0.500915 -p 0.810497 -1 -0.588861 -p 0.744504 -1 -0.670355 -p 0.670355 -1 -0.744504 -p 0.670355 1 -0.744504 -p 0.588861 1 -0.810497 -p 0.500915 1 -0.86761 -p 0.407481 1 -0.915217 
+										-p 0.309582 1 -0.952796 -p 0.208292 1 -0.979937 -p 0.10472 1 -0.996341 -p 0 1 -1.001829 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33 -k 34 -k 35 -k 36 -k 37 -k 38 -k 39 -k 40 -k 41 -k 42 -k 43 -k 44 -k 45 -k 46 -k 47 -k 48 -k 49 -k 50 -k 51 -k 52 -k 53 -k 54 -k 55 -k 56 -k 57 -k 58 -k 59 -k 60 -k 61 -k 62 -k 63 -k 64 -k 65 -k 66 -k 67 -k 68 -k 69 -k 70 -k 71 -k 72 -k 73 -k 74 -k 75 -k 76 -k 77 -k 78 -k 79 -k 80 -k 81 -k 82 -k 83 -k 84 -k 85 -k 86 -k 87 -k 88 -k 89 -k 90 -k 91 -k 92 -k 93 -k 94 -k 95 -k 96 -k 97 -k 98 -k 99 -k 100 -k 101 -k 102 -k 103 -k 104 -k 105 -k 106 -k 107 -k 108 -k 109 -k 110 -k 111 -k 112 -k 113 -k 114 
+										-k 115 -k 116 -k 117 -k 118 -k 119 -k 120 -k 121 -k 122 -k 123 -k 124 -k 125 -k 126 -k 127 -k 128 -k 129 -k 130 -k 131 -k 132 -k 133 -k 134 -k 135 -k 136` ;
+				string $sCylinderNode		= `rename $sCylinderDr "ShapeSCylinder_Subin"` ;
+				select $sCylinderNode ;
+
+			break ; 
+
+			//Hexagon
+   			case 19:
+				string $hexagonDr		= `curve	-d 1 -p 0.5 1 0.866025 -p 1 1 0 -p 1 -1 0 -p 0.5 -1 -0.866025 -p 0.5 1 -0.866025 -p -0.5 1 -0.866026 -p -0.5 -1 -0.866026 -p -1 -1 -1.5885e-007 -p -1 1 -1.5885e-007 -p -0.5 1 0.866025 -p -0.5 -1 0.866025 -p 0.5 -1 0.866025 -p 0.5 1 0.866025 -p -0.5 1 0.866025 -p -0.5 -1 0.866025 -p -1 -1 -1.5885e-007 -p -1 1 -1.5885e-007 -p -0.5 1 -0.866026 -p -0.5 -1 -0.866026 -p 0.5 -1 -0.866025 -p 0.5 1 -0.866025 -p 1 1 0 -p 1 -1 0 -p 0.5 -1 0.866025 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23` ;
+				string $hexagonNode		= `rename $hexagonDr "ShapeHexagon_Subin"` ;
+				select $hexagonNode ;
+			break ; 
+
+			//Cone
+   			case 20:
+				string $coneDr			= `curve	-d 1 -p 0.5 -1 0.866025 -p 0 1 0 -p 1 -1 0 -p 0.5 -1 0.866025 -p -0.5 -1 0.866025 -p 0 1 0 -p -1 -1 -1.5885e-007 -p -0.5 -1 0.866025 -p -1 -1 -1.5885e-007 -p -0.5 -1 -0.866026 -p 0 1 0 -p 0.5 -1 -0.866025 -p -0.5 -1 -0.866026 -p 0.5 -1 -0.866025 -p 1 -1 0 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14` ;
+				string $coneNode		= `rename $coneDr "ShapeCone_Subin"` ;
+				select $coneNode ;  
+			break ; 
+
+			//Loc Shape
+   			case 21:
+				string $locDr			= `curve	-d 1 -p -1 0 0 -p 1 0 0 -p 0 0 0 -p 0 0 1 -p 0 0 0 -p 0 0 -1 -p 0 0 0 -p 0 1 0 -p 0 0 0 -p 0 -1 0 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9` ;
+				string $locNode		= `rename $locDr "ShapeLoc_Subin"` ;
+				select $locNode ;  
+			break ; 
+
+			//Star Shape
+   			case 22:
+				string $starDr			= `curve	-d 1 -p -0.0793461 0.0793461 -0.0793461 -p 0.0793461 0.0793461 -0.0793461 -p 0.0793461 0.0793461 0.0793461 -p -0.0793461 0.0793461 0.0793461 -p -0.0793461 0.0793461 -0.0793461 -p -0.0793461 -0.0793461 -0.0793461 -p -0.0793461 -0.0793461 0.0793461 -p -0.0793461 0.0793461 0.0793461 -p -0.0793461 -0.0793461 0.0793461 -p 0.0793461 -0.0793461 0.0793461 -p 0.0793461 0.0793461 0.0793461 -p 0.0793461 -0.0793461 0.0793461 -p 0.0793461 -0.0793461 -0.0793461 -p 0.0793461 0.0793461 -0.0793461 -p 0.0793461 -0.0793461 -0.0793461 -p -0.0793461 -0.0793461 -0.0793461 -p 0 0 -1 -p 0.0793461 -0.0793461 -0.0793461 
+										-p 0.0793461 0.0793461 -0.0793461 -p 0 0 -1 -p -0.0793461 0.0793461 -0.0793461 -p -1 0 0 -p -0.0793461 -0.0793461 -0.0793461 -p -0.0793461 -0.0793461 0.0793461 -p -1 0 0 -p -0.0793461 0.0793461 0.0793461 -p 0 0 1 -p -0.0793461 -0.0793461 0.0793461 -p 0.0793461 -0.0793461 0.0793461 -p 0 0 1 -p 0.0793461 0.0793461 0.0793461 -p 1 0 0 -p 0.0793461 -0.0793461 0.0793461 -p 0.0793461 -0.0793461 -0.0793461 -p 0.0793461 0.0793461 -0.0793461 -p 1 0 0 -p 0.0793461 -0.0793461 -0.0793461 -p 0 -1 0 -p 0.0793461 -0.0793461 0.0793461 -p -0.0793461 -0.0793461 0.0793461 -p 0 -1 0 -p -0.0793461 -0.0793461 -0.0793461 
+										-p -0.0793461 0.0793461 -0.0793461 -p 0 1 0 -p 0.0793461 0.0793461 -0.0793461 -p 0.0793461 0.0793461 0.0793461 -p 0 1 0 -p -0.0793461 0.0793461 0.0793461 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23 -k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -k 33 -k 34 -k 35 -k 36 -k 37 -k 38 -k 39 -k 40 -k 41 -k 42 -k 43 -k 44 -k 45 -k 46 -k 47` ;
+				string $starNode		= `rename $starDr "ShapeStar_Subin"` ;
+				select $starNode ;  
+			break ; 
+
+			//Selected Shape
+   			case 23:
+				string $sourceShapeTF	= `textField -q -tx seletedShape_textField` ;
+				string $sourceShape[]	= `duplicate -rr -n "Selected_Subin" $sourceShapeTF` ;
+				select $sourceShape[0] ; 
+
+			break ; 
+		 }
+	 }
+	//End Create Driver Shape/////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Driver Axis Setup///////////////////////////////////////////////////////////////
+	global proc driverAxisSetup ()
+	 {
+		int $axis		= `optionMenu -q -sl ctrlAxis_Opt` ;
+
+		switch ($axis)
+		 { 
+   			case 1: 
+				string $seleShape[]		= `ls -sl` ;
+				setAttr ($seleShape[0] + ".rotateZ") 90 ;
+				makeIdentity -apply true -t 1 -r 1 -s 1 -n 0 $seleShape[0] ;
+        			break ; 
+   			case 2: 
+				print "Hai Subin..................................." ;
+        			break ; 
+   			case 3: 
+				string $seleShape[]		= `ls -sl` ;
+				setAttr ($seleShape[0] + ".rotateX") 90 ;
+				makeIdentity -apply true -t 1 -r 1 -s 1 -n 0 $seleShape[0] ;
+        			break ; 
+		 }
+	 }
+	//////////////////////////////////////////////////////////////////////////////////
+	//End Driver Axis Setup///////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Lock And Hide Switch Start//////////////////////////////////////////////////////
+	global proc lockAndHideSwitch()
+	 {
+		int $translateLock	= `checkBoxGrp -q -v2 translateLH_checkBox` ;
+		int $translateHide	= `checkBoxGrp -q -v3 translateLH_checkBox` ;
+
+			int $translateX	= `checkBoxGrp -q -v1 translateAxis_checkBox` ;
+			int $translateY	= `checkBoxGrp -q -v2 translateAxis_checkBox` ;
+			int $translateZ	= `checkBoxGrp -q -v3 translateAxis_checkBox` ;
+
+		int $rotateLock	= `checkBoxGrp -q -v2 rotateLH_checkBox` ;
+		int $rotateHide	= `checkBoxGrp -q -v3 rotateLH_checkBox` ;
+
+			int $rotateX	= `checkBoxGrp -q -v1 rotateAxis_checkBox` ;
+			int $rotateY	= `checkBoxGrp -q -v2 rotateAxis_checkBox` ;
+			int $rotateZ	= `checkBoxGrp -q -v3 rotateAxis_checkBox` ;
+
+		int $scaleLock	= `checkBoxGrp -q -v2 scaleLH_checkBox` ;
+		int $scaleHide	= `checkBoxGrp -q -v3 scaleLH_checkBox` ;
+
+			int $scaleX	= `checkBoxGrp -q -v1 scaleAxis_checkBox` ;
+			int $scaleY	= `checkBoxGrp -q -v2 scaleAxis_checkBox` ;
+			int $scaleZ	= `checkBoxGrp -q -v3 scaleAxis_checkBox` ;
+	
+		int $visibilityLock	= `checkBoxGrp -q -v2 visibilityLH_checkBox` ;
+		int $visibilityHide	= `checkBoxGrp -q -v3 visibilityLH_checkBox` ;
+
+		string $seleObj[]	= `ls -sl` ;
+
+		//Lock Translate
+		if ($translateLock==1)
+		 {
+			if ($translateX==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".translateX") ;
+			 }
+			if ($translateY==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".translateY") ;
+			 }
+			if ($translateZ==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".translateZ") ;
+			 }			
+		 }
+
+		//Hide Translate
+		if ($translateHide==1)
+		 {
+			if ($translateX==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".translateX") ;
+			 }
+			if ($translateY==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".translateY") ;
+			 }
+			if ($translateZ==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".translateZ") ;
+			 }
+		 }
+
+		//Lock Rotate
+		if ($rotateLock==1)
+		 {
+			if ($rotateX==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".rotateX") ;
+			 }
+			if ($rotateY==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".rotateY") ;
+			 }
+			if ($rotateZ==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".rotateZ") ;
+			 }			
+		 }
+
+		//Hide Rotate
+		if ($rotateHide==1)
+		 {
+			if ($rotateX==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".rotateX") ;
+			 }
+			if ($rotateY==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".rotateY") ;
+			 }
+			if ($rotateZ==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".rotateZ") ;
+			 }
+		 }
+
+		//Lock scale
+		if ($scaleLock==1)
+		 {
+			if ($scaleX==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".scaleX") ;
+			 }
+			if ($scaleY==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".scaleY") ;
+			 }
+			if ($scaleZ==1)
+			 {
+				setAttr -lock true ($seleObj[0] + ".scaleZ") ;
+			 }			
+		 }
+
+		//Hide scale
+		if ($scaleHide==1)
+		 {
+			if ($scaleX==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".scaleX") ;
+			 }
+			if ($scaleY==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".scaleY") ;
+			 }
+			if ($scaleZ==1)
+			 {
+				setAttr -keyable false ($seleObj[0] + ".scaleZ") ;
+			 }
+		 }
+
+		//Lock Visibility
+		if ($visibilityLock==1)
+		 {
+			setAttr -lock true ($seleObj[0] + ".visibility") ;
+		 }
+
+		//Hide Visibility
+		if ($visibilityHide==1)
+		 {
+			setAttr -keyable false ($seleObj[0] + ".visibility") ;
+		 }
+	 }
+	//End Lock And Hide Switch Start//////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Color Apply/////////////////////////////////////////////////////////////////////
+	global proc colorApply_b()
+	 {
+		int $currentColor		= `colorIndexSliderGrp  -q -value shapeColore_slider` ;	
+		string $seleShape[]		= `ls -sl` ;
+		int $seleSize			= `size $seleShape` ;
+
+		if ($currentColor>0)
+		 {
+			int $i ;
+			for ($i=0; $i<$seleSize; $i++)
+			 {
+      				setAttr ($seleShape[$i] + ".overrideEnabled") 1 ;
+      				setAttr ($seleShape[$i] + ".overrideColor") ($currentColor-1) ;
+
+				string $controlShape[]	= `listRelatives -s $seleShape[$i]` ;
+				int $nodeSize			= `size $controlShape` ;
+
+				int $n ;
+				for ($n=0; $n<$nodeSize; $n++)
+				 { 
+					setAttr ($controlShape[$n] + ".overrideEnabled") 1 ;
+    					setAttr ($controlShape[$n] + ".overrideColor") ($currentColor-1) ;
+				 }
+			 }
+		 }
+		else if ($currentColor==0)
+		 {
+			print (".....Please select the color......................." + "\n") ;
+		 }	
+	 }	
+	//End Color Apply/////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Clean Color/////////////////////////////////////////////////////////////////////
+	global proc cleanColor_b ()
+	 {
+		string $seleShape[]		= `ls -sl` ;
+		int $seleSize			= `size $seleShape` ;
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {
+      			setAttr ($seleShape[$i] + ".overrideColor") 0 ;
+    			setAttr ($seleShape[$i] + ".overrideEnabled") 0 ;
+
+			string $controlShape[]	= `listRelatives -s $seleShape[$i]` ;
+			int $nodeSize			= `size $controlShape` ;
+
+			int $n ;
+			for ($n=0; $n<$nodeSize; $n++)
+			 { 
+            			setAttr ($controlShape[$n] + ".overrideColor") 0 ;
+    				setAttr ($controlShape[$n] + ".overrideEnabled") 0 ;
+			 }
+		 }
+		colorIndexSliderGrp -e -value 0 shapeColore_slider ;		
+	 }
+	//////////////////////////////////////////////////////////////////////////////////
+	//End Clean Color/////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Sum Shape Size//////////////////////////////////////////////////////////////////
+	global proc sumShapeSize_b()
+	 {
+		float	$shapeSize		= `floatField -q -value shapeSizefloatField` ;
+
+		string $seleShape[]		= `ls -sl` ;
+		int $seleSize			= `size $seleShape` ;
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {
+			select $seleShape[$i] ;
+ 			selectCurveCV("all") ;
+			scale -r -ocp ($shapeSize+1) ($shapeSize+1) ($shapeSize+1) ;
+		 }
+		select $seleShape ;
+	 }
+	//End Sum Shape Size//////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Subtract Shape Size/////////////////////////////////////////////////////////////
+	global proc subtractShapeSize_b()
+	 {
+		float	$shapeSize		= `floatField -q -value shapeSizefloatField` ;
+
+		string $seleShape[]		= `ls -sl` ;
+		int $seleSize			= `size $seleShape` ;		
+
+		float $subtractValue	= (($shapeSize/$shapeSize)-0.1) ;
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {
+			select $seleShape[$i] ;
+ 			selectCurveCV("all") ;
+			scale -r -ocp $subtractValue $subtractValue $subtractValue ;
+		 }
+		select $seleShape ;
+	 }
+	//End Subtract Shape Size/////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Shape Rotate X//////////////////////////////////////////////////////////////////
+	global proc shapeRotateX_b()
+	 {
+		float	$rotateValu	= `floatField -q -value shapeRotatefloatField` ;
+
+		string $seleShape[]	= `ls -sl` ;
+		int $seleSize		= `size $seleShape` ;
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {
+			select $seleShape[$i] ;
+ 			selectCurveCV("all") ;
+			rotate -r -ocp -os $rotateValu 0 0 ;
+		 }
+		select $seleShape ;		
+	 }
+	//End Shape Rotate X//////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Shape Rotate Y//////////////////////////////////////////////////////////////////
+	global proc shapeRotateY_b()
+	 {
+		float	$rotateValu	= `floatField -q -value shapeRotatefloatField` ;
+
+		string $seleShape[]	= `ls -sl` ;
+		int $seleSize		= `size $seleShape` ;
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {
+			select $seleShape[$i] ;
+ 			selectCurveCV("all") ;
+			rotate -r -ocp -os 0 $rotateValu 0 ;
+		 }
+		select $seleShape ;		
+	 }
+	//End Shape Rotate Y//////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Shape Rotate Z//////////////////////////////////////////////////////////////////
+	global proc shapeRotateZ_b()
+	 {
+		float	$rotateValu	= `floatField -q -value shapeRotatefloatField` ;
+
+		string $seleShape[]	= `ls -sl` ;
+		int $seleSize		= `size $seleShape` ;
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {
+			select $seleShape[$i] ;
+ 			selectCurveCV("all") ;
+			rotate -r -ocp -os 0 0 $rotateValu ;
+		 }
+		select $seleShape ;		
+	 }
+	//End Shape Rotate Z//////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Shape Tranfer///////////////////////////////////////////////////////////////////
+	global proc shapeTranfer_b()
+	 {
+		string $currShape 	= `optionMenu -q -v ctrlShapes_Opt` ;
+		float $shapeSize	= `floatField -q -value shapeSizefloatField` ;
+		int $currentColor	= `colorIndexSliderGrp  -q -value shapeColore_slider` ;	
+
+
+		string $seleShape[]		= `ls -sl` ;
+		int $seleSize			= `size $seleShape` ;	
+
+		int $i ;
+		for ($i=0; $i<$seleSize; $i++)
+		 {	
+			createDriverShape ;
+				string $seleCtrl[]	= `ls -sl` ;
+
+				//Color
+				if ($currentColor>0)
+				 {
+					string $controlShape[]	= `listRelatives -s $seleCtrl[0]` ;
+
+      					setAttr ($seleCtrl[0] + ".overrideEnabled") 1 ;
+      					setAttr ($seleCtrl[0] + ".overrideColor") ($currentColor-1) ;
+ 
+      					setAttr ($controlShape[0] + ".overrideEnabled") 1 ;
+      					setAttr ($controlShape[0] + ".overrideColor") ($currentColor-1) ;
+				 }
+
+				//Shape Size
+				setAttr ($seleCtrl[0] + ".scaleX") $shapeSize ;
+				setAttr ($seleCtrl[0] + ".scaleY") $shapeSize ;
+				setAttr ($seleCtrl[0] + ".scaleZ") $shapeSize ;
+
+			if ($currShape=="Selected Shape")
+			 {
+				print ("Axis is not Set" + "\n") ;
+			 }
+			else 
+			 {
+				driverAxisSetup ;
+			 }
+
+			//Snap
+			string $pConst[]	= `pointConstraint -offset 0 0 0 -weight 1 $seleShape[$i] $seleCtrl[0]` ;
+			string $oConst[]	= `orientConstraint -offset 0 0 0 -weight 1 $seleShape[$i] $seleCtrl[0]` ;
+			string $sConst[]	= `scaleConstraint -offset 1 1 1 -weight 1 $seleShape[$i] $seleCtrl[0]` ;
+			delete $pConst[0] $oConst[0] $sConst[0] ;
+
+			parent $seleCtrl[0] $seleShape[$i] ;
+			makeIdentity -apply true -t 1 -r 1 -s 1 -n 0 $seleCtrl[0] ;
+
+			string $shapeA[]	= `listRelatives -s $seleShape[$i]` ;
+			int $nodeASize		= `size $shapeA` ;
+
+			int $a ;
+			for ($a=0; $a<$nodeASize; $a++)
+			 { 
+				delete $shapeA[$a]; 
+			 }
+
+			string $shapeB[]	= `listRelatives -s $seleCtrl[0]` ;
+			int $nodeBSize		= `size $shapeB` ;
+
+			int $b ;
+			for ($b=0; $b<$nodeBSize; $b++)
+			 { 
+				parent -r -s $shapeB[$b] $seleShape[$i] ;
+				print $shapeB[$b] ;
+				rename $shapeB[$b] ($seleShape[$i] + "Shape") ;
+			 }
+			delete $seleCtrl[0] ; 
+		 }
+		select -cl ;
+	 }
+	//End Shape Tranfer///////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Driver Offset Group Setup///////////////////////////////////////////////////////
+	global proc driverOffsetGroupSetup ()
+	 {
+		int $offsetCount	= `intField -q -value offsetGroupCount_intField` ;
+
+		if ($offsetCount==1)
+		 {
+			string $groups[]	= {"_SDK", "_OffsetGroup", "_Group"} ;
+			int $grpSize		= `size $groups` ;
+
+			int $i ;
+			for ($i=0; $i<$grpSize; $i++)
+			 {
+				string $null	= `group -em -n $groups[$i]` ;						
+			 }
+
+			int $p ;
+			for ($p=0; $p<($grpSize-1); $p++)
+			 {
+				parent $groups[$p] $groups[$p+1] ;
+			 }
+			select $groups ;			
+		 }
+		else if ($offsetCount>1)
+		 {
+			string $groups[]	= {"_SDK", "_OffsetGroup", "_Group"} ;
+			string $nulls[]	= {"_A_Group", "_B_Group", "_C_Group", "_D_Group", "_E_Group", "_F_Group", "_G_Group", "_H_Group", "_I_Group", "_J_Group", "_K_Group", "_L_Group",
+						   "M_Group", "_N_Group", "_O_Group", "_P_Group", "_Q_Group", "_R_Group", "_S_Group", "_T_Group", "_U_Group", "_V_Group", "_W_Group", "_X_Group", "_Y_Group", "_Z_Group"};
+			int $grpSize		= `size $groups` ;
+			int $nullSize		= `size $nulls` ;
+
+			int $a ;
+			for ($a=0; $a<$offsetCount; $a++)
+			 {
+				string $null	= `group -em -n $nulls[$a]` ;
+			 }
+
+			int $b ;
+			for ($b=0; $b<($offsetCount-1); $b++)
+			 {
+				parent $nulls[$b] $nulls[$b+1] ;										
+			 }
+
+			int $i ;
+			for ($i=0; $i<$grpSize; $i++)
+			 {
+				string $null	= `group -em -n $groups[$i]` ;						
+			 }
+
+			int $p ;
+			for ($p=1; $p<($grpSize-1); $p++)
+			 {
+				parent $groups[$p] $groups[$p+1] ;
+			 }
+
+			parent $groups[0] $nulls[0] ;
+			parent $nulls[$offsetCount-1] $groups[$grpSize-2] ;
+			select -hi $groups ;	
+		 }
+	 }
+	//End Driver Offset Group Setup///////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Build Control Apply/////////////////////////////////////////////////////////////
+	global proc buildCtrl_Apply ()
+	 {
+		int $driverSwitch		= `checkBox -q -v driverName_checkBox` ;
+		string $driverName		= `textField -q -tx driverName_textField` ;
+		string $driverNameSuffix	= `textField -q -tx driverNameSuffix_textField` ;
+
+		int $drivenSwitch		= `checkBox -q -v drivenName_checkBox` ;
+		string $drivenName		= `textField -q -tx drivenName_textField` ;
+		string $drivenNameSuffix	= `textField -q -tx drivenNameSuffix_textField` ;
+
+		int $hierarchySwitch		= `checkBoxGrp	-q -v1 rigType_checkBox` ;
+		int $fkSwitch			= `checkBoxGrp	-q -v2 rigType_checkBox` ;
+		int $singleSwitch		= `checkBoxGrp	-q -v3 rigType_checkBox` ;
+
+		int $parentConstSwitch	= `checkBoxGrp -q -v1 connectionTypeA_checkBoxGrp` ; 
+		int $scaleConstSwitch		= `checkBoxGrp -q -v2 connectionTypeA_checkBoxGrp` ; 
+		int $pointConstSwitch		= `checkBoxGrp -q -v3 connectionTypeA_checkBoxGrp` ; 
+		int $parentingSwitch		= `checkBoxGrp -q -v1 connectionTypeB_checkBoxGrp` ; 
+		int $connectionSwitch		= `checkBoxGrp -q -v2 connectionTypeB_checkBoxGrp` ; 
+		int $orientConstSwitch	= `checkBoxGrp -q -v3 connectionTypeB_checkBoxGrp` ;
+		float $shapeSize		= `floatField -q -value shapeSizefloatField` ;
+		int $currentColor		= `colorIndexSliderGrp  -q -value shapeColore_slider` ;	
+
+		string $suffix			= "_Group" ;
+
+		string $seleDriven[]		= `ls -sl` ;
+		int $seleSize			= `size $seleDriven` ;
+
+
+			//Rename Driven Name 
+			string $currentDriven	;
+
+			if ($drivenSwitch==1)
+			 {
+				int $c ;
+				for ($c=0; $c<$seleSize; $c++)
+				 {
+					if ($c>=9)
+					 {
+						$currentDriven		= `rename $seleDriven[$c] ($drivenName + "_" + ($c+1) + "_" + $drivenNameSuffix)` ;
+					 }
+					else if ($c<=10)
+					 {					
+						$currentDriven		= `rename $seleDriven[$c] ($drivenName + "_0" + ($c+1) + "_" + $drivenNameSuffix)` ;
+					 }
+				 }
+				print (".....Driven	name is Changed to " + $drivenName + "......................." + "\n") ;
+			
+			 }
+			else if ($drivenSwitch==0)
+			 {
+				print (".....Driven	name is not Change......................." + "\n") ;
+			 }
+
+		string $seleObj[]		= `ls -sl` ;
+
+		//Hierarchy Name Quary
+		string $hierarchyName ;
+		if ($driverSwitch == 1)
+		 {
+			$hierarchyName		= $driverName ;			
+		 }
+		else
+		 {
+			$hierarchyName		= $seleObj[0] ;
+		 }
+		//End Hierarchy Name Quary
+
+		//Create Hierarchy Group
+		string $hierarchyGrp ;
+		if  ($hierarchySwitch==1) 
+		 {
+			$hierarchyGrp	= `group -em -n ($hierarchyName + $suffix)` ;
+		 }
+		else
+		 {
+			print "... Hierarchy Group is not Created ..................." ;
+		 }
+		//End Create Hierarchy Group		
+		
+		int $a ;
+		for ($a=0; $a<$seleSize; $a++)
+		 {
+			createDriverShape ;
+			string $seleCtrl[]	= `ls -sl` ;
+
+				//Color
+
+				if ($currentColor>0)
+				 {
+					string $controlShape[]	= `listRelatives -s $seleCtrl[0]` ;
+
+      					setAttr ($seleCtrl[0] + ".overrideEnabled") 1 ;
+      					setAttr ($seleCtrl[0] + ".overrideColor") ($currentColor-1) ;
+ 
+      					setAttr ($controlShape[0] + ".overrideEnabled") 1 ;
+      					setAttr ($controlShape[0] + ".overrideColor") ($currentColor-1) ;
+				 }
+
+				//Shape Size
+				setAttr ($seleCtrl[0] + ".scaleX") $shapeSize ;
+				setAttr ($seleCtrl[0] + ".scaleY") $shapeSize ;
+				setAttr ($seleCtrl[0] + ".scaleZ") $shapeSize ;
+
+			driverAxisSetup ;
+
+			driverOffsetGroupSetup ;
+			string $seleGrps[]		= `ls -sl` ;
+			int $grpSize			= `size $seleGrps` ;
+
+			parent $seleCtrl[0] $seleGrps[0] ;
+
+			//Snap
+			select $seleObj[$a] $seleGrps[$grpSize-1] ;		
+			string $pConst[]		= `pointConstraint -offset 0 0 0 -weight 1`;
+			string $oConst[]		= `orientConstraint -offset 0 0 0 -weight 1`;
+			string $sConst[]		= `scaleConstraint -offset 1 1 1 -weight 1`;
+			delete $pConst[0] $oConst[0] $sConst[0] ;
+
+			//Control Name Quary
+			string $ctrlName ;
+	
+			if ($driverSwitch == 1)
+			 {
+				$ctrlName	= $driverName ;			
+			 }
+			else
+			 {
+				$ctrlName	= $seleObj[$a] ;
+			 }
+
+			string $offsetDriver ;
+			string $driver ;
+
+			//Rename Control And Offset Group
+			if ($a>=9)
+			 {
+				//Rename Offset Group
+				int $b ;
+				for ($b=0; $b<$grpSize; $b++)
+				 {
+					$offsetDriver 	= `rename $seleGrps[$b] ($ctrlName + "_" +($a+1) + "_" + $driverNameSuffix + $seleGrps[$b])` ;					
+				 }
+
+				//Rename Control
+ 				$driver	= `rename $seleCtrl[0] ($ctrlName + "_" +($a+1) + "_" + $driverNameSuffix)` ;
+			 }
+			else if ($a<=10)
+			 {	
+				//Rename Offset Group
+				int $b ;
+				for ($b=0; $b<$grpSize; $b++)
+				 {
+					$offsetDriver 	= `rename $seleGrps[$b] ($ctrlName + "_0" +($a+1) + "_" + $driverNameSuffix + $seleGrps[$b])` ;					
+				 }
+
+				//Rename Control
+ 				$driver	= `rename $seleCtrl[0] ($ctrlName + "_0" +($a+1) + "_" + $driverNameSuffix)` ;
+			 }
+
+			select $driver $seleObj[$a] $offsetDriver ;
+			//joint1_01_Ctrl//joint1//joint1_01_Ctrl_Group
+
+			//Lock And Hide
+			lockAndHideSwitch ;
+
+			//Driver Connection Type
+
+			//Parent Constraint
+			if  ($parentConstSwitch==1) 
+			 {
+				string $seleNode[]	= `ls -sl` ;
+				select $seleNode[0] $seleNode[1] ;
+				string $pConst[]	= `parentConstraint -mo -weight 1 -n ($seleNode[1] + "_parentConstraint")` ;
+			 }
+			else
+			 {
+				print "Parent Constraint is not Connected" ;
+			 }
+
+			//Scale Constraint
+			if  ($scaleConstSwitch==1) 
+			 {
+				string $seleNode[]	= `ls -sl` ;
+				select $seleNode[0] $seleNode[1] ;
+				string $pConst[]	= `scaleConstraint -mo -weight 1 -n ($seleNode[1] + "_scaleConstraint")` ;
+			 }
+			else
+			 {
+				print "Scale Constraint is not Connected" ;
+			 }	
+
+			//Point Constraint
+			if  ($pointConstSwitch==1) 
+			 {
+				string $seleNode[]	= `ls -sl` ;
+				select $seleNode[0] $seleNode[1] ;
+				string $pConst[]	= `pointConstraint -offset 0 0 0 -weight 1 -n ($seleNode[1] + "_pointConstraint")` ;
+			 }
+			else
+			 {
+				print "Point Constraint is not Connected" ;
+			 }
+
+			//Parenting
+			if  ($parentingSwitch==1) 
+			 {
+				string $seleNode[]		= `ls -sl` ;
+				string $drivenParent[]	= `listRelatives -p $seleNode[1]` ;
+
+				if (`objExists $drivenParent[0]`)
+				 {
+					if  ($fkSwitch	==1) 
+					 {
+						parent $seleNode[2] $drivenParent[0] ;
+					 }
+					else
+					 {
+						print "Hai Subin : Parenting" ;
+					 }
+				 }
+				else
+				 {
+					print "Hai Subin : Parenting" ;
+				 }
+				parent $seleNode[1] $seleNode[0] ;						
+			 }
+			else
+			 {
+				print "Parenting is not Connected" ;
+			 }
+
+
+			//Connection
+			if  ($connectionSwitch==1) 
+			 {
+				string $seleNode[]	= `ls -sl` ;
+				string $nullGroup	= `group -em -n ($seleNode[1] + $suffix)` ; 
+
+				//Snap
+				select $seleNode[1] $nullGroup ;		
+				string $pConst[]		= `pointConstraint -offset 0 0 0 -weight 1`;
+				string $oConst[]		= `orientConstraint -offset 0 0 0 -weight 1`;
+				string $sConst[]		= `scaleConstraint -offset 1 1 1 -weight 1`;
+				delete $pConst[0] $oConst[0] $sConst[0] ;
+
+				string $drivenParent[]	= `listRelatives -p $seleNode[1]` ;
+
+				if (`objExists $drivenParent[0]`)
+				 {
+					parent $nullGroup $drivenParent[0] ;
+				 }
+				else
+				 {
+					print "Hai Subin : Connection" ;
+				 }
+				parent $seleNode[1] $nullGroup ;
+
+				connectAttr -f ($seleNode[0] + ".translateX") ($seleNode[1] + ".translateX") ;
+				connectAttr -f ($seleNode[0] + ".translateY") ($seleNode[1] + ".translateY") ;
+				connectAttr -f ($seleNode[0] + ".translateZ") ($seleNode[1] + ".translateZ") ;
+
+				connectAttr -f ($seleNode[0] + ".rotateX") ($seleNode[1] + ".rotateX") ;
+				connectAttr -f ($seleNode[0] + ".rotateY") ($seleNode[1] + ".rotateY") ;
+				connectAttr -f ($seleNode[0] + ".rotateZ") ($seleNode[1] + ".rotateZ") ;
+
+				connectAttr -f ($seleNode[0] + ".scaleX") ($seleNode[1] + ".scaleX");
+				connectAttr -f ($seleNode[0] + ".scaleY") ($seleNode[1] + ".scaleY") ;
+				connectAttr -f ($seleNode[0] + ".scaleZ") ($seleNode[1] + ".scaleZ") ;
+			 }
+			else
+			 {
+				print "Connection is not Connected" ;
+			 }		
+
+			//Orient Constraint
+			if  ($orientConstSwitch==1) 
+			 {
+				string $seleNode[]	= `ls -sl` ;
+				select $seleNode[0] $seleNode[1] ;
+				string $pConst[]	= `orientConstraint -offset 0 0 0 -weight 1 -n ($seleNode[1] + "_orientConstraint")` ;
+			 }
+			else
+			 {
+				print "Orient Constraint is not Connected" ;
+			 }
+			//End Driver Connection Type
+
+			//Add To Hierarchy
+			if ($hierarchySwitch==1) 
+			 {
+				if ($parentingSwitch==0)
+				 {
+					parent $offsetDriver $hierarchyGrp ;		
+				 }
+				else if ($parentingSwitch==1 && $fkSwitch==1)
+				 {
+					if ($a==0)
+					 {
+						parent $offsetDriver $hierarchyGrp ;	
+					 }
+				 }
+				else if ($parentingSwitch==1 && $fkSwitch==0)
+				 {
+					parent $offsetDriver $hierarchyGrp ;	
+				 }
+			 }
+			else
+			 {
+				print "...Controls are not added into Hierarchy..................." ;
+			 }
+
+			select $driver $seleObj[$a] $offsetDriver ;
+			//End Add To Hierarchy
+			//select -cl ;	
+		 }	
+
+		//FK Rig Connection
+		if ($fkSwitch==1 && $parentingSwitch==0)
+		 {			
+			if ($driverSwitch == 1)
+			 {
+				select -r  ($driverName + "_*" + $driverNameSuffix + $suffix) ;
+				string $offsetGrps[]	= `ls -sl` ;
+
+				select -r  ($driverName + "_*" + $driverNameSuffix) ;
+				string $offsetNodes[]	= `ls -sl` ;	
+			
+				int $offNodeSize	= `size  $offsetNodes` ;
+				int $d ;
+				for ($d=0; $d<($offNodeSize-1); $d++)
+				 {
+					string $conNode[]	= `listRelatives -c $offsetGrps[$d+1]` ;
+
+					select -r  $offsetNodes[$d] $conNode[0] ;
+					string $pConstConn[]	= `parentConstraint -mo -weight 1` ;
+					string $pConstConn[]	= `scaleConstraint -mo -weight 1` ;
+				 }
+			 }
+			else
+			 {
+				int $b ;
+				for ($b=0; $b<($seleSize-1); $b++)
+				 {
+					$offsetA	= $seleObj[$b] ;
+					$offsetB	= $seleObj[$b+1] ;
+					select -r ($offsetB + "*" + $driverNameSuffix + $suffix) ($offsetA + "*" + ($b+1) + "_" +$driverNameSuffix) ;
+
+					string $seleConn[]	= `ls -sl` ;
+					string $conNode[]	= `listRelatives -c $seleConn[0]` ;
+
+					select -r  $seleConn[1] $conNode[0] ;
+					string $pConstConn[]	= `parentConstraint -mo -weight 1` ;
+					string $pConstConn[]	= `scaleConstraint -mo -weight 1` ;
+				 }
+			 }
+		 }
+		select -cl ;
+	 }
+	//End Build Control Apply/////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Reset Driver Name///////////////////////////////////////////////////////////////
+	global proc driverNameReset ()
+	 {
+		textField -e -tx "Ctrl" driverNameSuffix_textField ;
+	 }
+	//End Reset Driver Name///////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Reset Driven Name///////////////////////////////////////////////////////////////
+	global proc drivenNameReset ()
+	 {
+		textField -e -tx "Ctrl" drivenNameSuffix_textField ;
+	 }
+	//End Reset Driven Name///////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////
+
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//Reset GUI///////////////////////////////////////////////////////////////////////
+	global proc buildCtrl_Reset ()
+	 {
+		optionMenu -e -sl 1 ctrlShapes_Opt ;	
+		optionMenu -e -sl 1  ctrlType_Opt ;
+		optionMenu -e -sl 1 ctrlAxis_Opt ;	
+
+		checkBoxGrp -e -v1 0 translateLH_checkBox ;			
+		checkBoxGrp -e -v2 0 translateLH_checkBox ;
+		checkBoxGrp -e -v3 0 translateLH_checkBox ;		
+		checkBoxGrp -e -v1 0 translateAxis_checkBox ;		
+		checkBoxGrp -e -v2 0 translateAxis_checkBox ;		
+		checkBoxGrp -e -v3 0 translateAxis_checkBox ;	
+
+		checkBoxGrp -e -v1 0 rotateLH_checkBox ;			
+		checkBoxGrp -e -v2 0 rotateLH_checkBox ;
+		checkBoxGrp -e -v3 0 rotateLH_checkBox ;		
+		checkBoxGrp -e -v1 0 rotateAxis_checkBox ;		
+		checkBoxGrp -e -v2 0 rotateAxis_checkBox ;		
+		checkBoxGrp -e -v3 0 rotateAxis_checkBox ;	
+
+		checkBoxGrp -e -v1 0 scaleLH_checkBox ;			
+		checkBoxGrp -e -v2 0 scaleLH_checkBox ;
+		checkBoxGrp -e -v3 0 scaleLH_checkBox ;		
+		checkBoxGrp -e -v1 0 scaleAxis_checkBox ;		
+		checkBoxGrp -e -v2 0 scaleAxis_checkBox ;		
+		checkBoxGrp -e -v3 0 scaleAxis_checkBox ;	
+ 	
+		checkBoxGrp -e -v1 0 visibilityLH_checkBox ;			
+		checkBoxGrp -e -v2 0 visibilityLH_checkBox ;
+		checkBoxGrp -e -v3 0 visibilityLH_checkBox ;
+
+		checkBoxGrp -e -v1 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeA_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeA_checkBoxGrp ;
+		checkBoxGrp -e -v1 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v2 0 connectionTypeB_checkBoxGrp ; 
+		checkBoxGrp -e -v3 0 connectionTypeB_checkBoxGrp ; 
+
+		checkBox -e -v 0 driverName_checkBox ;
+		textField -e -tx "" driverName_textField ;
+		textField -e -tx "Ctrl" driverNameSuffix_textField ;
+
+		checkBox -e -v 0 drivenName_checkBox ;
+		textField -e -tx "" drivenName_textField  ;
+		textField -e -tx "Jnt" drivenNameSuffix_textField ;
+
+		checkBoxGrp -e -v1 0 rigType_checkBox ; 
+		checkBoxGrp -e -v2 0 rigType_checkBox; 
+		checkBoxGrp -e -v3 0 rigType_checkBox ;
+
+   		intField -e -value 1 offsetGroupCount_intField ;
+ 
+		colorIndexSliderGrp -e -value 0 shapeColore_slider ;		
+
+		floatField -e -value 1.00 shapeSizefloatField ;
+	
+		floatField -e -value 90.00 shapeRotatefloatField ;
+	 }
+	//End Reset GUI///////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////

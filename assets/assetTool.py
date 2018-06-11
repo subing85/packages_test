@@ -31,33 +31,26 @@ from PySide import QtUiTools
 import shiboken
 
 from module import openPySide
-from module import openStyleSheet
+from module import studioStyleSheet
 from pipe import pipeLayout
 from assets import studioAsset
-reload(studioAsset)  
 
-
-from maya import cmds
-from maya import mel
 from pymel import core as pymel
 from maya import OpenMayaUI as openMayaUI
 from maya import OpenMaya as openMaya
 
 CURRENT_PATH = os.path.dirname (__file__)
-
 PRJECT_PATH = os.environ['PROJECT_PATH']
 PROJECT_NICE_NAME = os.environ['PROJECT_NICE_NAME']
 PROJECT_FULL_NAME = os.environ['PROJECT_FULL_NAME']
 PRJECT_PATH = os.environ['PROJECT_PATH']
 DATABASE_PATH = os.environ['DATABASE_PATH']
 PACKAGE_PATH = os.environ['PACKAGE_PATH']
-DATABASE_SOURCE = (os.path.join (PACKAGE_PATH,  'pipe', 'pipeInput_%s.json'% PROJECT_NICE_NAME))
-
+ICON_PATH = os.environ['ICON_PATH']
+DATABASE_SOURCE = os.environ['DATABASE_SOURCE']
 UI_PATH = os.path.join (CURRENT_PATH, 'assetTool_ui.ui')
 MAYA_MAIN_WINOW = shiboken.wrapInstance(long(openMayaUI.MQtUtil.mainWindow()), QtGui.QWidget)
-
-FROM, BASE = openPySide.loadUi (UI_PATH)    
-
+FROM, BASE = openPySide.loadUi (UI_PATH)   
 
 
 def runMayaUiDemo():
@@ -71,26 +64,26 @@ def runMayaUiDemo():
         :return   None
         
         :example to execute        
-            from assets import studioAsset
-            reload(studioAsset)
-            wind = studioAsset.runMayaUiDemo()   
+            from assets import assetTool
+            reload(assetTool)
+            wind = assetTool.runMayaUiDemo()   
             wind.show()     
     '''    
     
-    if (cmds.window("MainWindow_asset", ex=True)):
-        cmds.deleteUI ('MainWindow_asset')        
+    if (pymel.window("MainWindow_asset", ex=True)):
+        pymel.deleteUI ('MainWindow_asset')        
     else:
         #sys.stdout.write("tool is already open!\n")
         pass
     
-    wind = StudioAsset()
+    wind = AssetTool()
     wind.show()  
         
 
-class StudioAsset (FROM, BASE):
+class AssetTool (FROM, BASE):
 
     def __init__(self, parent=MAYA_MAIN_WINOW):
-        super(StudioAsset, self).__init__(parent) #QtGui.QMainWindow.__init__(self, parent)
+        super(AssetTool, self).__init__(parent) #QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self) 
     
         try:
@@ -98,11 +91,16 @@ class StudioAsset (FROM, BASE):
         except NameError:
             __file__ = sys.argv[0]            
             
-        styleSheet = openStyleSheet.StyleSheet (self)
+        styleSheet = studioStyleSheet.StyleSheet (self)
         styleSheet.setStyleSheet()
         
         self.setWindowTitle ('Studio Asset v0.1')
-        self.resize (460, 500)        
+        self.resize (720, 500)   
+         
+        studioStyleSheet.setIcon(self.action_add, '%s/add.png'% (ICON_PATH), [24,24], False)
+                   
+        self.treeWidget.setHeaderHidden(True)
+        self.treeWidget.setAlternatingRowColors(True)
         
         self.pipe = pipeLayout.Layout (DATABASE_SOURCE)
         
@@ -115,19 +113,29 @@ class StudioAsset (FROM, BASE):
         # 
         # self.floatingLayout = pymel.paneLayout (cn='single', w=300, p=mainWindow)
         # 
-        # cmds.dockControl ('MainWindow_asset', l='Smart Bake - v0.1', area='left', content=self.floatingLayout, allowedArea=['right', 'left'])        
-        # cmds.control ('MainWindow_asset', e=1, p=self.floatingLayout)        
+        # pymel.dockControl ('MainWindow_asset', l='Smart Bake - v0.1', area='left', content=self.floatingLayout, allowedArea=['right', 'left'])        
+        # pymel.control ('MainWindow_asset', e=1, p=self.floatingLayout)        
         #=======================================================================
         
         self.button_refresh.clicked.connect (self.loadValuesToWidgets)
         self.button_create.clicked.connect (self.create)
         self.button_close.clicked.connect (self.close)
         
-        self.uiConfigure ()
-        self.loadValuesToWidgets()   
+        self.comboBox_assetType.currentIndexChanged.connect (self.loadAssetToTreeWdget)
+        self.action_add.triggered.connect (self.addAssetName)
+        
+        self.resetUI ()
+        self.loadValuesToWidgets()
+        self.loadAssetToTreeWdget() 
+        self.rightClickMenu()
         
         
-    def uiConfigure (self):       
+    def resetUI (self):
+        
+        self.lineEdit_assetName.clear()
+        self.lineEdit_modelVersion.clear()
+        self.lineEdit_puppetVersion.clear()
+        self.lineEdit_renderVersion.clear()        
         
         assetTypes = self.pipe._pipeAttributes['assets']['primary']['catagory']['types']['values']       
         self.comboBox_assetType.addItems(assetTypes)       
@@ -137,9 +145,10 @@ class StudioAsset (FROM, BASE):
         
         assetPath = os.path.abspath(os.path.join(PRJECT_PATH, 'PreProduction', 'asset')).replace('\\', '/')
         
-        self.lineEdit_assetPath.setText(assetPath)        
+        self.lineEdit_assetPath.setText(assetPath)
+        self.comboBox_workStatus.setCurrentIndex(0)  
 
-
+    
     def loadValuesToWidgets (self):
         
         sa = studioAsset.StudioAsset(node=None)
@@ -216,7 +225,65 @@ class StudioAsset (FROM, BASE):
         
         
     def close(self):                
-        if (cmds.window("MainWindow_asset", ex=True)):
-            cmds.deleteUI ('MainWindow_asset')        
+        if (pymel.window("MainWindow_asset", ex=True)):
+            pymel.deleteUI ('MainWindow_asset') 
+        
+    
+    def loadAssetToTreeWdget(self):
+        
+        self.resetUI()
+        
+        assetType = str(self.comboBox_assetType.currentText())
+        
+        sa = studioAsset.StudioAsset(node=None)
+        result = sa.getAssets(assetType=assetType, dataType='database')
+        
+        self.treeWidget.clear()
+        
+        if not result:
+            return None
+         
+        for eachAsset in result :
+            item = QtGui.QTreeWidgetItem (self.treeWidget)                
+            item.setText (0, eachAsset)
+            #item.setFlags (QtCore.Qt.ItemIsSelectable|QtCore.Qt.ItemIsEditable|QtCore.Qt.ItemIsUserCheckable|QtCore.Qt.ItemIsEnabled|QtCore.Qt.ItemIsTristate)                
+            
+            icon = QtGui.QIcon ()
+            icon.addPixmap(QtGui.QPixmap('%s/%s.png'% (ICON_PATH, assetType)), QtGui.QIcon.Normal, QtGui.QIcon.Off)           
+            item.setIcon (0, icon)
+            
+            
+    def rightClickMenu (self) :     
+        #custom Context Menu        
+        self.treeWidget.setContextMenuPolicy (QtCore.Qt.CustomContextMenu)        
+        self.treeWidget.customContextMenuRequested.connect (self.onContextMenu)
 
+        self.popMenu    = QtGui.QMenu (self)
+        self.popMenu.addAction (self.action_add)
+   
+    
+    def onContextMenu (self, point) :
+        #Right click menu
+        '''
+        index       = self.treeWidget.indexAt (point)
+        if not index.isValid():
+            return        
+        item        = self.treeWidget.indexAt (point)
+        #self.popMenu.popup (QtGui.QCursor.pos())
+        #self.popMenu.exec_ (self.treeWidget.mapToGlobal(point))
+        self.popMenu.exec_ (QtGui.QCursor.pos())
+        '''
+        self.popMenu.exec_ (QtGui.QCursor.pos())  
+                    
+
+    def addAssetName(self):
+        
+        selectedItem = self.treeWidget.selectedItems ()
+        
+        if not selectedItem:
+            warnings.warn ('function addAssetName your selection is none') 
+            
+        currentItem = str (selectedItem[-1].text (0))        
+        self.lineEdit_assetName.setText(currentItem)
+        
 #End##################################################################################

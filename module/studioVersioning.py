@@ -40,6 +40,7 @@ from module import jsonManager
 
 
 class Versioning (object):	
+	
 	'''
 	Description
 		This Class can manage Semantic Versioning.

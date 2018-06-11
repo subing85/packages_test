@@ -3,20 +3,17 @@ Studio Blender Puppet v0.1
 Date : March 25, 2018
 Last modified: March 25, 2018
 Author: Subin. Gopi (subing85@gmail.com)
-
 # Copyright (c) 2018, Subin Gopi
 # All rights reserved.
-
 # WARNING! All changes made in this file will be lost!
-
 Description
     This module manage to the all kind of publish and its interface 
  
 example   
     import imp
-    from module.blender import buildPuppet
-    imp.reload(buildPuppet)
-    buildPuppet.launch()
+    from module.blender import studioPuppet
+    imp.reload(studioPuppet)
+    puppet.launch()
 '''
 
 
@@ -44,7 +41,7 @@ imp.reload(jointBiped)
 context = None
 
 CURRENT_PATH = os.path.dirname (__file__) # CURRENT_PATH = os.getcwd()
-UI_FILE = '{}/buildPuppet_ui.ui'.format (CURRENT_PATH)
+UI_FILE = '{}/studioPuppet_ui.ui'.format (CURRENT_PATH)
 FROM, BASE = uic.loadUiType (UI_FILE)
 
 class Puppet (FROM, BASE):
@@ -148,6 +145,3 @@ register()
 #     window.show()   
 #     #sys.exit (app.exec())
 #===============================================================================
-
-
-

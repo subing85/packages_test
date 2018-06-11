@@ -1,0 +1,1 @@
+C:\Python33\Lib\site-packages\PyQt4\pyuic4.bat assetTool_ui.ui -o assetTool_ui.py 

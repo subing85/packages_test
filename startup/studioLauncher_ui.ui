@@ -90,13 +90,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QPushButton" name="button_blender">
-              <property name="text">
-               <string>Blender</string>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
              <widget class="QPushButton" name="button_maya2016">
               <property name="text">
@@ -104,17 +97,24 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QPushButton" name="button_natron">
-              <property name="text">
-               <string>Natron</string>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="0">
              <widget class="QPushButton" name="button_studioPipe">
               <property name="text">
                <string>Studio Pipe</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="button_blender">
+              <property name="text">
+               <string>Blender</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="button_natron">
+              <property name="text">
+               <string>Natron</string>
               </property>
              </widget>
             </item>

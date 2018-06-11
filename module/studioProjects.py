@@ -28,7 +28,7 @@ class StudioProjects(object):
                             'BAN': {'fullName': 'Boy And Nurse',
                                     'niceName': 'BAN',
                                     'path': 'Z:/BAN',
-                                    'applications':  ['gimp', 'maya2016', 'natron', 'studioPipe']                                  
+                                    'applications':  ['gimp', 'maya2016', 'blender', 'natron', 'studioPipe']                                  
                                     }
                             }
         

@@ -246,10 +246,10 @@ class StudioAsset(object):
         if not assets:
             warnings.warn ('function getAssets empty database') 
             return None
-
         
         if assetType not in assets:
             warnings.warn ('{} does not exists in the database'.format(assetType))  
+            return None
             
         result = assets[assetType]          
         return result

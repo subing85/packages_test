@@ -25,7 +25,7 @@ from PyQt4 import uic
 
 from module import studioDatabase
 from pipe import pipeLayout
-from module import qtWidgets
+from module import studioStyleSheet
 
 reload (studioDatabase)
 
@@ -237,7 +237,7 @@ class Details (object):
                 button_backward.setMaximumSize(QtCore.QSize(30, 30))
                 horizontalLayout_movie.addWidget (button_backward) 
                                   
-                qtWidgets.setIcon(button_backward, ICON_PATH, [30, 30], False)              
+                studioStyleSheet.setIcon(button_backward, ICON_PATH, [30, 30], False)              
                                            
                 button_play = QtGui.QPushButton()
                 button_play.setObjectName('button_play')
@@ -247,7 +247,7 @@ class Details (object):
                 button_play.setMaximumSize(QtCore.QSize(30, 30))  
                 horizontalLayout_movie.addWidget (button_play)  
                              
-                qtWidgets.setIcon(button_play, ICON_PATH, [30, 30], False)              
+                studioStyleSheet.setIcon(button_play, ICON_PATH, [30, 30], False)              
                    
                 button_forward = QtGui.QPushButton()
                 button_forward.setObjectName('button_forward')
@@ -257,7 +257,7 @@ class Details (object):
                 button_forward.setMaximumSize(QtCore.QSize(30, 30))
                 horizontalLayout_movie.addWidget (button_forward) 
                               
-                qtWidgets.setIcon(button_forward, ICON_PATH, [30, 30], False)            
+                studioStyleSheet.setIcon(button_forward, ICON_PATH, [30, 30], False)            
                 
                 spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
                 horizontalLayout_movie.addItem(spacerItem)

@@ -26,7 +26,7 @@ from PyQt4 import uic
 
 from module import studioDatabase
 from pipe import pipeLayout
-from module import qtWidgets
+from module import studioStyleSheet
 
 from pipe import studioDetails
 reload (studioDatabase)
@@ -87,10 +87,10 @@ class Pipes (QtGui.QMainWindow):
               
     
     def uiConfigure (self) :
-        qtWidgets.setIcon(self.action_addOn, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)            
-        qtWidgets.setIcon(self.action_update, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)            
-        qtWidgets.setIcon(self.action_remove, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)    
-        qtWidgets.setToolBar (None, [self.action_addOn, self.action_update, self.action_remove], self.horizontalLayout_shelf, True)        
+        studioStyleSheet.setIcon(self.action_addOn, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)            
+        studioStyleSheet.setIcon(self.action_update, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)            
+        studioStyleSheet.setIcon(self.action_remove, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)    
+        studioStyleSheet.setToolBar (None, [self.action_addOn, self.action_update, self.action_remove], self.horizontalLayout_shelf, True)        
         self.treeWidget_properties.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)   
         
 
@@ -128,7 +128,7 @@ class Pipes (QtGui.QMainWindow):
              
             pushButton.clicked.connect (partial (self.setCurrentPipeLayout, ecahLayout, self.treeWidget_properties))            
             pushButton.setStyleSheet ('Text-align:left;')             
-            qtWidgets.setIcon(pushButton, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)
+            studioStyleSheet.setIcon(pushButton, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)
             
             
     def setCurrentPipeLayout (self, layout, treeWidget):

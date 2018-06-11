@@ -24,19 +24,21 @@ import pprint
 import threading
 from functools import partial
 
-
 from PyQt4 import QtCore 
 from PyQt4 import QtGui
 from PyQt4 import uic
 
 from module import studioProjects
-from module import qtWidgets
 from module import studioConsole
 from module import jsonManager
-from module import openStyleSheet
+from module import studioStyleSheet
 from module import studioVersioning
    
 CURRENT_PATH = os.path.dirname (__file__)
+
+if 'PACKAGE_PATH' not in os.environ:
+    os.environ['PACKAGE_PATH'] = 'Z:/packages'
+
 PACKAGE_PATH = os.environ['PACKAGE_PATH']
 #CURRENT_PATH = os.getcwd()
 UI_FILE = '{}/studioLauncher_ui.ui'.format (CURRENT_PATH)
@@ -58,7 +60,7 @@ class Launcher (FROM, BASE):
             __file__ = sys.argv[0] 
             
         try :
-            styleSheet = openStyleSheet.StyleSheet (self)
+            styleSheet = studioStyleSheet.StyleSheet (self)
             styleSheet.setStyleSheet ()            
         except :
             pass
@@ -73,7 +75,7 @@ class Launcher (FROM, BASE):
         self.loadProject()                              
 
         for eachWidget in self.findChildren(QtGui.QPushButton) :            
-            qtWidgets.setIcon(eachWidget, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)             
+            studioStyleSheet.setIcon(eachWidget, '{}/icons'.format (os.path.dirname(CURRENT_PATH)), [50, 50], False)             
         
         self.button_gimp.clicked.connect (partial (self.launchApplication, 'gimp'))
         self.button_blender.clicked.connect (partial (self.launchApplication, 'blender'))
@@ -133,7 +135,6 @@ class Launcher (FROM, BASE):
         os.environ['DATABASE_PATH'] = '{}/dataBase'.format (self.sp.projects[currentProject]['path']) 
         os.environ['PIPEINPUT_FILE'] = os.path.abspath(os.path.join (PACKAGE_PATH, 'pipe', 'pipeInput_%s.json'% self.sp.projects[currentProject]['niceName'])).replace('\\', '/')
         os.environ['DATABASE_SOURCE'] = os.path.abspath(os.path.join (PACKAGE_PATH,  'pipe', 'pipeInput_%s.json'% self.sp.projects[currentProject]['niceName'])).replace('\\', '/')
-
 
         self.annotation ()   
         print '\nCurrent Project\t- ', currentProject

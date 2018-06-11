@@ -33,7 +33,7 @@ from functools import partial
 
 from module import collectBundels
 from pipe import pipeLayout
-
+from module import studioStyleSheet
 #reload(collectBundels)
 #reload(pipeLayout)
 

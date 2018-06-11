@@ -29,5 +29,5 @@ echo "Loading Blender, please wait .............................."
 echo ""
 
 start "" "%BLENDER_PATH%"
-
+exit
 : End: : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :

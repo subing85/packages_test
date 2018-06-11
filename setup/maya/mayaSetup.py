@@ -68,25 +68,27 @@ def customSetup():
     pymel.optionVar(fv=('defaultCameraFarClipValue', 1000000))
     pymel.undoInfo(state=True, infinity=True)
        
-    #load plugins
-    plugins = { 'vray': 'C:/Program Files/Autodesk/Maya2016/vray/plug-ins/vrayformaya.mll',
-                'xgenVRay': 'C:/Program Files/Autodesk/Maya2016/vray/plug-ins/xgenVRay.py',            
-                'AbcExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcExport.mll',
-                'AbcImport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcImport.mll',
-                'animImportExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/animImportExport.mll',
-                'gpuCache': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/gpuCache.mll',
-                #'ik2Bsolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ik2Bsolver.mll',
-                #'ikSpringSolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ikSpringSolver.mll',
-                #'MayaMuscle': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/MayaMuscle.mll',
-                'objExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/objExport.mll',
-                'fbxmaya': 'C:/Program Files/Autodesk/Maya2016/plug-ins/fbx/plug-ins/fbxmaya.mll',
-                }
-        
-    for eachPlugin, pluginPath in plugins.iteritems():
-        try:
-            pymel.loadPlugin(pluginPath, qt=True)
-        except Exception as result:
-            print result            
+    #===========================================================================
+    # #load plugins
+    # plugins = { 'vray': 'C:/Program Files/Autodesk/Maya2016/vray/plug-ins/vrayformaya.mll',
+    #             'xgenVRay': 'C:/Program Files/Autodesk/Maya2016/vray/plug-ins/xgenVRay.py',            
+    #             'AbcExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcExport.mll',
+    #             'AbcImport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/AbcImport.mll',
+    #             'animImportExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/animImportExport.mll',
+    #             'gpuCache': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/gpuCache.mll',
+    #             #'ik2Bsolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ik2Bsolver.mll',
+    #             #'ikSpringSolver': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/ikSpringSolver.mll',
+    #             #'MayaMuscle': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/MayaMuscle.mll',
+    #             'objExport': 'C:/Program Files/Autodesk/Maya2016/bin/plug-ins/objExport.mll',
+    #             'fbxmaya': 'C:/Program Files/Autodesk/Maya2016/plug-ins/fbx/plug-ins/fbxmaya.mll',
+    #             }
+    #     
+    # for eachPlugin, pluginPath in plugins.iteritems():
+    #     try:
+    #         pymel.loadPlugin(pluginPath, qt=True)
+    #     except Exception as result:
+    #         print result            
+    #===========================================================================
     
     #pymel.mel.eval('unifiedRenderGlobalsWindow;') 
     #pymel.mel.eval('updateRendererUI;')    

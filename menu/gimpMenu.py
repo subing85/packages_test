@@ -29,7 +29,7 @@ import pprint
 
 from functools import partial
 
-from module import openStyleSheet
+from module import studioStyleSheet
 
 
 CURRENT_PATH = os.path.dirname (__file__) # CURRENT_PATH = os.getcwd()
@@ -61,7 +61,7 @@ class Menu (FROM, BASE):
         except NameError:
             __file__ = sys.argv[0]            
             
-        openStyleSheet.StyleSheet (self)
+        studioStyleSheet.StyleSheet (self)
         
         self.setWindowTitle ('Studio Publi-SH v0.1')
         self.resize (200, 450)
