@@ -44,6 +44,7 @@ imp.reload(studioBlender)
 
 class Biped (object):
     
+    
     def __init__(self):
         
         self.input = inputNames.Names()
@@ -63,17 +64,17 @@ class Biped (object):
         ''' 
                 
         #create leg fit skeleton  
-        pelvis_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 5.5), radius=self.jointRadius, name=self.input._pelvis)        
-        knee_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 3.25), radius=self.jointRadius, name=self.input._knee)
-        ankle_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 1.0), radius=self.jointRadius, name=self.input._ankle)
-        legPole_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, -2.5, 3.25), radius=self.jointRadius, name=self.input._legPoleVector)
+        pelvis_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 5.5), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._pelvis))        
+        knee_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 3.25), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._knee))
+        ankle_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 1.0), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._ankle))
+        legPole_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, -2.5, 3.25), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._legPoleVector))
 
-        ball_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, -0.75, 0.5), radius=self.jointRadius, name=self.input._ball)
-        toe_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, -1.5, 0), radius=self.jointRadius, name=self.input._toe)
-        heel_contextObject  = studioBlender.createEmptyObject ('SPHERE', False, (1, 0.75, 0), radius=self.jointRadius, name=self.input._heel)
+        ball_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, -0.75, 0.5), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._ball))
+        toe_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, -1.5, 0), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._toe))
+        heel_contextObject  = studioBlender.createEmptyObject ('SPHERE', False, (1, 0.75, 0), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._heel))
         
-        bigToe_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.3, -0.75, 0), radius=self.jointRadius, name=self.input._bigToe)
-        pinkyToe_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1.7, -0.75, 0), radius=self.jointRadius, name=self.input._pinkyToe)
+        bigToe_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.3, -0.75, 0), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._bigToe))
+        pinkyToe_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1.7, -0.75, 0), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._pinkyToe))
         
         #create spine fit skeleton
         hip_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0, 0, 5.5), radius=self.jointRadius, name=self.input._hip)
@@ -113,59 +114,63 @@ class Biped (object):
         uvulaC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0, -0.25, 11.4), radius=self.jointRadius/2, name=self.input._uvulaC)
         uvulaD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0, -0.25, 11.25), radius=self.jointRadius/2, name=self.input._uvulaD)
         
-        earA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.5, 0, 11.5), radius=self.jointRadius/2, name=self.input._ear)
-        earTail_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.75, 0, 11.5), radius=self.jointRadius/2, name=self.input._earTail)     
+        earA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.5, 0, 11.5), radius=self.jointRadius/2, name='%s_%s'% (self.input._leftSide, self.input._ear))
+        earTail_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.75, 0, 11.5), radius=self.jointRadius/2, name='%s_%s'% (self.input._leftSide, self.input._earTail))     
         
         #create eye fit skeleton
-        eye_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.25, -0.75, 12), radius=self.jointRadius/2, name=self.input._eye)
-        eyeTail_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.25, -1, 12), radius=self.jointRadius/2, name=self.input._eyeTail)
+        eye_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.25, -0.75, 12), radius=self.jointRadius/2, name='%s_%s'% (self.input._leftSide, self.input._eye))
+        eyeTail_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.25, -1, 12), radius=self.jointRadius/2, name='%s_%s'% (self.input._leftSide, self.input._eyeTail))
         
         #create arm fit skeleton        
-        clavicle_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.5, 0, 10), radius=self.jointRadius, name=self.input._clavicle)
-        shoulder_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 10), radius=self.jointRadius, name=self.input._shoulder)        
-        elbow_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (2.5, 0, 10), radius=self.jointRadius, name=self.input._elbow)        
-        wrist_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4, 0, 10), radius=self.jointRadius, name=self.input._wrist)    
-        armPole_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (2.5, 1.5, 10), radius=self.jointRadius, name=self.input._armPoleVector)        
+        clavicle_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0.5, 0, 10), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._clavicle))
+        shoulder_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (1, 0, 10), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._shoulder))        
+        elbow_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (2.5, 0, 10), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._elbow))        
+        wrist_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4, 0, 10), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._wrist))    
+        armPole_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (2.5, 1.5, 10), radius=self.jointRadius, name='%s_%s'% (self.input._leftSide, self.input._armPoleVector))        
         
         #create arm finger fit skeleton        
-        thumbA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, -0.5, 10), radius=self.jointRadius/3, name=self.input._thumbA)    
-        thumbB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, -0.5, 10), radius=self.jointRadius/3, name=self.input._thumbB)    
-        thumbC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, -0.5, 10), radius=self.jointRadius/3, name=self.input._thumbC)    
-        thumbD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, -0.5, 10), radius=self.jointRadius/3, name=self.input._thumbD)    
-        thumbE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, -0.5, 10), radius=self.jointRadius/3, name=self.input._thumbE)    
+        thumbA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, -0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._thumbA))    
+        thumbB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, -0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._thumbB))    
+        thumbC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, -0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._thumbC))    
+        thumbD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, -0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._thumbD))    
+        thumbE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, -0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._thumbE))    
         
-        indexA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, -0.25, 10), radius=self.jointRadius/3, name=self.input._indexA)    
-        indexB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, -0.25, 10), radius=self.jointRadius/3, name=self.input._indexB)    
-        indexC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, -0.25, 10), radius=self.jointRadius/3, name=self.input._indexC)    
-        indexD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, -0.25, 10), radius=self.jointRadius/3, name=self.input._indexD)    
-        indexE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, -0.25, 10), radius=self.jointRadius/3, name=self.input._indexE)            
+        indexA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, -0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._indexA))    
+        indexB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, -0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._indexB))    
+        indexC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, -0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._indexC))    
+        indexD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, -0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._indexD))    
+        indexE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, -0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._indexE))            
             
-        middleA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, 0, 10), radius=self.jointRadius/3, name=self.input._middleA)    
-        middleB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, 0, 10), radius=self.jointRadius/3, name=self.input._middleB)    
-        middleC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, 0, 10), radius=self.jointRadius/3, name=self.input._middleC)    
-        middleD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, 0, 10), radius=self.jointRadius/3, name=self.input._middleD)    
-        middleE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, 0, 10), radius=self.jointRadius/3, name=self.input._middleE) 
+        middleA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, 0, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._middleA))    
+        middleB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, 0, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._middleB))    
+        middleC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, 0, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._middleC))    
+        middleD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, 0, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._middleD))    
+        middleE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, 0, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._middleE)) 
         
-        ringA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, 0.25, 10), radius=self.jointRadius/3, name=self.input._ringA)    
-        ringB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, 0.25, 10), radius=self.jointRadius/3, name=self.input._ringB)    
-        ringC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, 0.25, 10), radius=self.jointRadius/3, name=self.input._ringC)    
-        ringD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, 0.25, 10), radius=self.jointRadius/3, name=self.input._ringD)    
-        ringE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, 0.25, 10), radius=self.jointRadius/3, name=self.input._ringE)    
+        ringA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, 0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._ringA))    
+        ringB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, 0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._ringB))    
+        ringC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, 0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._ringC))    
+        ringD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, 0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._ringD))    
+        ringE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, 0.25, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._ringE))    
         
-        pinkyA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, 0.5, 10), radius=self.jointRadius/3, name=self.input._pinkyA)    
-        pinkyB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, 0.5, 10), radius=self.jointRadius/3, name=self.input._pinkyB)    
-        pinkyC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, 0.5, 10), radius=self.jointRadius/3, name=self.input._pinkyC)    
-        pinkyD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, 0.5, 10), radius=self.jointRadius/3, name=self.input._pinkyD)    
-        pinkyE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, 0.5, 10), radius=self.jointRadius/3, name=self.input._pinkyE)        
+        pinkyA_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.25, 0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._pinkyA))    
+        pinkyB_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.5, 0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._pinkyB))    
+        pinkyC_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.7, 0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._pinkyC))    
+        pinkyD_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (4.9, 0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._pinkyD))    
+        pinkyE_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (5.1, 0.5, 10), radius=self.jointRadius/3, name='%s_%s'% (self.input._leftSide, self.input._pinkyE))        
         
-        root_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0, 0, 0), radius=self.jointRadius*2, name=self.input._root)    
+        root_contextObject = studioBlender.createEmptyObject ('SPHERE', False, (0, 0, 0), radius=self.jointRadius, name=self.input._root)    
         
-        self.setLegHierarchy()
+        
+        
+        #self.createMirrorSkeleton()        
+        self.setLegHierarchy(types=self.input._leftSide)
+        #self.setLegHierarchy(types=self.input._rightSide)
         self.setSpineHierarchy()
         self.setHeadHierarchy()
-        self.setEarHierarchy()
-        self.setEyeHierarchy()
-        self.setArmHierarchy()
+        self.setEarHierarchy(types=self.input._leftSide)
+        self.setEyeHierarchy(types=self.input._leftSide)
+        self.setArmHierarchy(types=self.input._leftSide)
             
         bpy.ops.object.select_all(action='DESELECT')
         
@@ -206,7 +211,7 @@ class Biped (object):
         inputSkeletons = []
         
         for eachInput in inputList:
-            inputSkeletons.append (eachInput)     
+            inputSkeletons.append ('%s_%s'% (self.input._leftSide, eachInput))            
             #print ('%s_%s'% (self.input._leftSide, eachInput))
             
         axis = (-1, 1, 1)
@@ -272,9 +277,10 @@ class Biped (object):
                     }
         
         for eachChild, eachParent in parents.items():            
-            studioBlender.setParent(eachChild, eachParent)
+            studioBlender.setParent('%s_%s'% (types, eachChild), '%s_%s'% (types, eachParent))
         
-        studioBlender.setParent(self.input._pelvis, self.input._hip) #parent pelvis to hip (leg to spine)
+        #parent pelvis to hip (leg to spine)            
+        studioBlender.setParent('%s_%s'% (types, self.input._pelvis), self.input._hip)
         
 
     def setSpineHierarchy(self):
@@ -327,22 +333,24 @@ class Biped (object):
             
     def setEarHierarchy(self, types=None):
         
-        parents = { self.input._earTail: self.input._ear}         
+        parents = { self.input._earTail: self.input._ear,
+                    }         
                     
         for eachChild, eachParent in parents.items():            
-            studioBlender.setParent(eachChild, eachParent)
+            studioBlender.setParent('%s_%s'% (types, eachChild), '%s_%s'% (types, eachParent))
        
-        studioBlender.setParent(self.input._ear, self.input._upperJaw)
+        studioBlender.setParent('%s_%s'% (types, self.input._ear), self.input._upperJaw)
                             
             
     def setEyeHierarchy(self, types=None):
         
-        parents = { self.input._eyeTail: self.input._eye}         
+        parents = { self.input._eyeTail: self.input._eye,
+                    }         
                     
         for eachChild, eachParent in parents.items():            
-            studioBlender.setParent(eachChild, eachParent)           
+            studioBlender.setParent('%s_%s'% (types, eachChild), '%s_%s'% (types, eachParent))            
      
-        studioBlender.setParent(self.input._eye, self.input._upperJaw)
+        studioBlender.setParent('%s_%s'% (types, self.input._eye), self.input._upperJaw)
         
         
     def setArmHierarchy(self, types=None):
@@ -380,12 +388,13 @@ class Biped (object):
                     self.input._pinkyB: self.input._pinkyA,
                     self.input._pinkyC: self.input._pinkyB,
                     self.input._pinkyD: self.input._pinkyC,
-                    self.input._pinkyE: self.input._pinkyD                                                       
+                    self.input._pinkyE: self.input._pinkyD,                                                       
+                   
                     }         
                     
         for eachChild, eachParent in parents.items():            
-            studioBlender.setParent(eachChild, eachParent)          
+            studioBlender.setParent('%s_%s'% (types, eachChild), '%s_%s'% (types, eachParent))            
      
-        studioBlender.setParent(self.input._clavicle, self.input._chest)
+        studioBlender.setParent('%s_%s'% (types, self.input._clavicle), self.input._chest)
 
 #End##################################################################################################

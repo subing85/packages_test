@@ -27,9 +27,12 @@ class Names (object) :
         self._globals = 'Global'
         
         self._jointRadius = 0.1
+        self._scale = 1.0
         self._nameStyle = (0, 1, 2)
         #self._nameStyle = (1, 0, 2)
         #self._nameStyle = (2, 1, 0)
+        
+        self._root = 'Root'
         
         self._leg = 'Leg'
         self._legFinger = 'LegFinger'  
@@ -73,12 +76,14 @@ class Names (object) :
         self._uvulaC = 'UvulaC'
         self._uvulaD = 'UvulaD'  
         
+        self._eye = 'Eye'       
         self._eyeA = 'EyeA'
-        self._eyeB = 'EyeB'        
+        self._eyeB = 'EyeB' 
+        self._eyeTail = 'EyeTail'                
         self._eyeAim = 'EyeAim'
         
-        self._earA = 'EarA' 
-        self._earB = 'EarB'
+        self._ear = 'Ear' 
+        self._earTail = 'EarTail'
         
         self._clavicle = 'Clavicle'
         self._shoulder = 'Shoulder'
@@ -215,7 +220,9 @@ class Names (object) :
         self._poleVectorConstraint = 'PoleVectorConstraint'      
 
         self._ikHandle = 'IKHandle'
-        self._effector = 'IKEffector'             
+        self._effector = 'IKEffector' 
+        
+        self._bone = 'Bone'            
 
         self._hierarchyAppend = {'World': { '1_Control': ['Offset', 'Controls'], 
                                             '2_Geometry': ['Layout', 'Animation', 'Render'],
