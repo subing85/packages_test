@@ -66,9 +66,9 @@ class Controls(object):
         bpy.context.object.empty_draw_size = 0.0
         
         #parent the control to group
-        control.parent = bpy.context.object
-        
+        control.parent = bpy.context.object        
         return control, bpy.context.object
+        #return  control
         
     
 def blenderEmptyObject (shape=None, name=None, radius=None):     

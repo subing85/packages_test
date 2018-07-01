@@ -61,7 +61,7 @@ class Build(object):
         
         self.createArmatureBones()
         self.setBoneHierarchy()
-        #self.createHierarchy()
+        self.createHierarchy()
         
         self.createFootSetup(side=self.input._leftSide)
         #self.createFootSetup(side=self.input._rightSide)
@@ -92,8 +92,9 @@ class Build(object):
         bpy.ops.curve.primitive_nurbs_circle_add(   view_align=False, 
                                                     location=(0,0,0)
                                                     )
-
+        
         bpy.context.object.name = 'World'
+        #world = studioBlender.createEmptyObject ('CIRCLE', False, (0, 0, 0), radius=4.0, name='World')
             
         bpy.data.objects['Control_Group'].parent = bpy.data.objects['AssetName']
         bpy.data.objects['Geometry_Group'].parent = bpy.data.objects['AssetName']
@@ -346,15 +347,17 @@ class Build(object):
         
     def createFootSetup(self, side=None):
         
-        #create ik bones   
-        source= [   '%s_Pelvis_Bone'% side, 
-                    '%s_Knee_Bone'% side, 
-                    '%s_Ankle_Bone'% side, 
-                    '%s_Ball_Bone'% side
-                    ]
+        ctrl = studioControls.Controls() # control class
         
-        ikBones = studioBlender.duplicateBones(armature=self.armature, source=source, search='_Bone', replace='_IK')
-        fkBones = studioBlender.duplicateBones(armature=self.armature, source=source, search='_Bone', replace='_FK')
+        #create ik bones   
+        sourceBone= [   '%s_Pelvis_Bone'% side, 
+                        '%s_Knee_Bone'% side, 
+                        '%s_Ankle_Bone'% side, 
+                        '%s_Ball_Bone'% side
+                        ]
+        
+        ikBones = studioBlender.duplicateBones(armature=self.armature, source=sourceBone, search='_Bone', replace='_IK', deformer=False)
+        fkBones = studioBlender.duplicateBones(armature=self.armature, source=sourceBone, search='_Bone', replace='_FK', deformer=False)
         
         #ik setup
         #create ik handle
@@ -413,38 +416,36 @@ class Build(object):
         studioBlender.setParent(toeRoll_SDK.name, hellRoll_SDK.name)
         studioBlender.setParent(hellRoll_SDK.name, ankleIK_SDK.name)
         
-        ctrl = studioControls.Controls() # control class
-        
-        #create foot controls
+        #create foot controls        
         ankleIK_CtrlName = '%s_%s_%s_%s'% (side, self.input._ankle, self.input._ik, self.input._control)
-        ankle_CTRL = ctrl.create(shape='CUBE', name=ankleIK_CtrlName, radius=self.input._scale/2)
-        #snap the control to bone
-        studioBlender.sanpToBone (self.armature, '%s_Ankle_Bone'% side, ankle_CTRL[1].name, 'location', True, False)
+        ankle_IKCTRL, ankle_IKCTRLGROUP = ctrl.create(  shape='CUBE', 
+                                                        name=ankleIK_CtrlName, 
+                                                        radius=self.input._scale/2)
         
+        #snap the control to bone
+        studioBlender.sanpToBone (self.armature, '%s_Ankle_Bone'% side, ankle_IKCTRLGROUP.name, 'location', True, False)
+         
         ankle_constrain = ankleIK_SDK.constraints.new(type='COPY_TRANSFORMS')
-        ankle_constrain.target = ankle_CTRL[0]
+        ankle_constrain.target = ankle_IKCTRL
         ankle_constrain.target_space = 'WORLD'
         ankle_constrain.owner_space = 'WORLD'
         ankle_constrain.influence = 1   
-        
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='StretchSwitch', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='BallRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='ToeRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='HeelRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='BallTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='ToeTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='HeelTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='KneeVisibility', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        studioBlender.addAttribute(node=ankle_CTRL[0].name, longName='KneeTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
-        
-        
-        #bpy.ops.wm.properties_edit(data_path="object", property="leg", value="0", min=-1, max=1, use_soft_limits=False, soft_min=-1, soft_max=1, description="legstrech")
+         
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='StretchSwitch', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='AnkleRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='BallRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='ToeRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='HeelRoll', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+         
+        #studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='BallTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='ToeTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='HeelTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+         
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='KneeVisibility', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='KneeTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
 
         #=======================================================================
         # bpy.ops.wm.properties_add(data_path="object")
-        # 
         # setAttr "RT_Ankle_IK_Ctrl.switchStretch" 0;
         # setAttr "RT_Ankle_IK_Ctrl.lengthStrech" 10;
         # setAttr "RT_Ankle_IK_Ctrl.upperStretch" 0;
@@ -459,28 +460,193 @@ class Build(object):
         # setAttr "RT_Ankle_IK_Ctrl.heelTwist" 0;
         # setAttr "RT_Ankle_IK_Ctrl.kneeVisibility" 0;
         # setAttr "RT_Ankle_IK_Ctrl.kneeTwist" 0;
-        # 
         # lockTo Global, World, COG, Pelvis
         #=======================================================================
+        
+        #set driven ankle roll    
+        studioBlender.setDriven(node=ankleRoll_SDK.name,
+                                nodeAttr=['rotation_euler', 0],
+                                driver=ankle_IKCTRL.name,
+                                driverType='SUM',
+                                variableType='SINGLE_PROP',
+                                variableName='Ankle_Roll',
+                                driverAttr='AnkleRoll'
+                                )
+         
+        #set driven ball roll    
+        studioBlender.setDriven(node=ballRoll_SDK.name,
+                                nodeAttr=['rotation_euler', 0],
+                                driver=ankle_IKCTRL.name,
+                                driverType='SUM',
+                                variableType='SINGLE_PROP',
+                                variableName='Ball_Roll',
+                                driverAttr='BallRoll'
+                                )         
+         
+        #set driven toe roll    
+        studioBlender.setDriven(node=toeRoll_SDK.name,
+                                nodeAttr=['rotation_euler', 0],
+                                driver=ankle_IKCTRL.name, 
+                                driverType='SUM',
+                                variableType='SINGLE_PROP',
+                                variableName='Toe_Roll',
+                                driverAttr='ToeRoll'
+                                ) 
+         
+        #set driven toe twist    
+        studioBlender.setDriven(node=toeRoll_SDK.name,
+                                nodeAttr=['rotation_euler', 2],
+                                driver=ankle_IKCTRL.name, 
+                                driverType='SUM',
+                                variableType='SINGLE_PROP',
+                                variableName='Toe_Twist',
+                                driverAttr='ToeTwist'
+                                )           
+ 
+        #set driven hell roll    
+        studioBlender.setDriven(node=hellRoll_SDK.name,
+                                nodeAttr=['rotation_euler', 0],
+                                driver=ankle_IKCTRL.name, 
+                                driverType='SUM',
+                                variableType='SINGLE_PROP',
+                                variableName='Hell_Roll',
+                                driverAttr='HellRoll'
+                                ) 
+         
+        #set driven hell twist    
+        studioBlender.setDriven(node=hellRoll_SDK.name,
+                                nodeAttr=['rotation_euler', 2],
+                                driver=ankle_IKCTRL.name, 
+                                driverType='SUM',
+                                variableType='SINGLE_PROP',
+                                variableName='Hell_Twist',
+                                driverAttr='HellTwist'
+                                )         
+                
+        #ik stretch
+        
+        
+        
+        
+        
+        
+        #fk setup
+        
+        #pelvis fk control
+        pelvisFK_CtrlName = '%s_%s_%s_%s'% (side, self.input._pelvis, self.input._fk, self.input._control)        
+        pelvis_FKCTRL, pelvis_FKCTRLGROUP = ctrl.create(shape='CIRCLE', name=pelvisFK_CtrlName, radius=self.input._scale/1.25)       
+        
+        #snap the control to bone
+        studioBlender.sanpToBone (  self.armature, 
+                                    '%s_Pelvis_Bone'% side, 
+                                    pelvis_FKCTRLGROUP.name, 
+                                    'all', 
+                                    True, 
+                                    False)
+        
+        studioBlender.parentContrainToBone( armature=self.armature, 
+                                            bone='%s_Pelvis_FK'% side, 
+                                            source=pelvis_FKCTRL, 
+                                            type='WORLD')
 
-        '''
-        bpy.context.object.driver_add("location", 2)
+        #knee fk control  
+        kneeFK_CtrlName = '%s_%s_%s_%s'% (side, self.input._knee, self.input._fk, self.input._control)        
+        knee_FKCTRL, knee_FKCTRLGROUP = ctrl.create(shape='CIRCLE', name=kneeFK_CtrlName, radius=self.input._scale/1.25)       
         
-        bpy.context.object.type = 'AVERAGE'
-        bpy.context.object.type = 'SINGLE_PROP'
-        bpy.context.object.id = bpy.data.objects["L_Ankle_IK_Ctrl"]
-        bpy.context.object.data_path = "[\"BallRoll\"]"
+        #snap the control to bone
+        studioBlender.sanpToBone (  self.armature, 
+                                    '%s_Knee_Bone'% side, 
+                                    knee_FKCTRLGROUP.name, 
+                                    'all', 
+                                    True, 
+                                    False)
         
-        bpy.context.object.type = 'AVERAGE'
-        bpy.context.object.type = 'SINGLE_PROP'
-        bpy.context.object.id = bpy.data.objects["L_Ankle_IK_Ctrl"]
-        bpy.context.object.data_path = "[\"BallRoll\"]"
-        bpy.ops.graph.fmodifier_add(type='GENERATOR') 
-        '''  
+        studioBlender.parentContrainToBone( armature=self.armature, 
+                                            bone='%s_Knee_FK'% side, 
+                                            source=knee_FKCTRL, 
+                                            type='WORLD')        
+                
+        #ankle fk control  
+        ankleFK_CtrlName = '%s_%s_%s_%s'% (side, self.input._ankle, self.input._fk, self.input._control)        
+        ankle_FKCTRL, ankle_FKCTRLGROUP = ctrl.create(shape='CIRCLE', name=ankleFK_CtrlName, radius=self.input._scale/1.25)       
         
-        driver = ankleRoll_SDK.driver_add('rotation_euler', 0)
+        #snap the control to bone
+        studioBlender.sanpToBone (  self.armature, 
+                                    '%s_Ankle_Bone'% side, 
+                                    ankle_FKCTRLGROUP.name, 
+                                    'all', 
+                                    True, 
+                                    False)
         
-        print ('driver\t', driver)      
-              
-
+        studioBlender.parentContrainToBone( armature=self.armature, 
+                                            bone='%s_Ankle_FK'% side, 
+                                            source=ankle_FKCTRL, 
+                                            type='WORLD')               
+                       
+        #ball fk control  
+        ballFK_CtrlName = '%s_%s_%s_%s'% (side, self.input._ball, self.input._fk, self.input._control)        
+        ball_FKCTRL, ball_FKCTRLGROUP = ctrl.create(shape='CIRCLE', name=ballFK_CtrlName, radius=self.input._scale/1.25)       
+        
+        #snap the control to bone
+        studioBlender.sanpToBone (  self.armature, 
+                                    '%s_Ball_Bone'% side, 
+                                    ball_FKCTRLGROUP.name, 
+                                    'all', 
+                                    True, 
+                                    False)
+        
+        studioBlender.parentContrainToBone( armature=self.armature, 
+                                            bone='%s_Ball_FK'% side, 
+                                            source=ball_FKCTRL, 
+                                            type='WORLD')           
+                       
+        studioBlender.setParent(ball_FKCTRLGROUP.name, ankle_FKCTRL.name)
+        studioBlender.setParent(ankle_FKCTRLGROUP.name, knee_FKCTRL.name)
+        studioBlender.setParent(knee_FKCTRLGROUP.name, pelvis_FKCTRL.name)
+        
+        #ik fk switch
+        
+        ikPlevis_COST = studioBlender.parentContrainBoneToBone( armature=self.armature,
+                                                                target=sourceBone[0], 
+                                                                source=ikBones[0]
+                                                                )
+        
+        fkPelvis_CONST = studioBlender.parentContrainBoneToBone(armature=self.armature,
+                                                                target=sourceBone[0], 
+                                                                source=fkBones[0]
+                                                                )
+                    
+        
+        ikKnee_COST = studioBlender.parentContrainBoneToBone(   armature=self.armature,
+                                                                target=sourceBone[1], 
+                                                                source=ikBones[1])
+        
+        fkKnee_CONST = studioBlender.parentContrainBoneToBone(  armature=self.armature,
+                                                                target=sourceBone[1], 
+                                                                source=fkBones[1]
+                                                                ) 
+             
+        ikAnkle_COST = studioBlender.parentContrainBoneToBone(  armature=self.armature,
+                                                                target=sourceBone[2], 
+                                                                source=ikBones[2])
+        
+        fkAnkle_CONST = studioBlender.parentContrainBoneToBone( armature=self.armature,
+                                                                target=sourceBone[2], 
+                                                                source=fkBones[2]
+                                                                )      
+                
+        ikBall_COST = studioBlender.parentContrainBoneToBone(   armature=self.armature,
+                                                                target=sourceBone[3], 
+                                                                source=ikBones[3]
+                                                                )
+        
+        fkBall_CONST = studioBlender.parentContrainBoneToBone(  armature=self.armature,
+                                                                target=sourceBone[3], 
+                                                                source=fkBones[3]
+                                                                )      
+                
+            #twist streach and bendy
+        
+        
+        #set heiarchy
 

@@ -218,6 +218,8 @@ def createEmptyObject (type, align, location, radius, name):
 
 def setParent (source, target):
     
+    bpy.ops.object.mode_set(mode='OBJECT') 
+    
     bpy.ops.object.select_all(action='DESELECT')
     
     sourceNode = bpy.data.objects[source]
@@ -251,28 +253,29 @@ def sanpToBone (armature, bone, target, snapType, head, tail):
     bpy.data.objects[target].select = True
     bpy.context.scene.objects.active = bpy.data.objects[target]
     
+    position = 0
+    if tail:    
+        position = 1
+    elif head and tail:
+        position = 0.5    
+        
     if snapType=='location':
         bpy.ops.object.constraint_add_with_targets(type='COPY_LOCATION')
         bpy.context.object.constraints["Copy Location"].target = bpy.data.objects[armature]
         bpy.context.object.constraints["Copy Location"].subtarget = bone             
+        bpy.context.object.constraints["Copy Location"].head_tail = position
         
     elif snapType=='rotation':
         bpy.ops.object.constraint_add_with_targets(type='COPY_ROTATION')
         bpy.context.object.constraints["Copy Rotation"].target = bpy.data.objects[armature]
         bpy.context.object.constraints["Copy Rotation"].subtarget = bone        
+        bpy.context.object.constraints["Copy Rotation"].head_tail = position
     
     else:
         bpy.ops.object.constraint_add(type='COPY_TRANSFORMS')        
         bpy.context.object.constraints["Copy Transforms"].target = bpy.data.objects[armature]
         bpy.context.object.constraints["Copy Transforms"].subtarget = bone
-        
-    position = 0
-    if tail:    
-        position = 1
-    elif head and tail:
-        position = 0.5
-    
-    bpy.context.object.constraints["Copy Location"].head_tail = position
+        bpy.context.object.constraints["Copy Transforms"].head_tail = position
         
     bpy.ops.object.track_clear(type='CLEAR_KEEP_TRANSFORM')
     bpy.ops.object.constraints_clear()
@@ -312,8 +315,8 @@ def sanpToObject (source, target, snapType):
     bpy.ops.object.track_clear(type='CLEAR_KEEP_TRANSFORM')
     bpy.ops.object.constraints_clear()    
     
-    
-def duplicateBones(armature=None, source=None, search=None, replace=None):
+     
+def duplicateBones(armature=None, source=None, search=None, replace=None, deformer=True):
     
     bpy.ops.object.mode_set(mode='OBJECT')
     bpy.ops.object.select_all(action='DESELECT')
@@ -356,7 +359,11 @@ def duplicateBones(armature=None, source=None, search=None, replace=None):
             continue
         
         print ('abc\t', source[ing])
-        eachBone.name = source[ing].replace(search, replace) 
+        eachBone.name = source[ing].replace(search, replace)
+        
+        if deformer:
+            eachBone.use_deform = False
+        
         duplicateBoneList.append(eachBone.name)
         ing+=1
         
@@ -660,7 +667,6 @@ def collectHierarchy(root=None):
     return result
 
 
-
 def setIKContrain(armature=None, bone=None, ikHandle=None, chainCount=None, poleTarget=None):
     
     bpy.ops.object.mode_set(mode='OBJECT')
@@ -683,6 +689,47 @@ def setIKContrain(armature=None, bone=None, ikHandle=None, chainCount=None, pole
         ikConstrain.pole_target = poleTarget
         
     return ikConstrain
+
+def parentContrainBoneToBone(armature=None, target=None, source=None):
+    
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.select_all(action='DESELECT')
+    
+    armatureObject = bpy.data.objects[armature]
+    bpy.context.scene.objects.active = armatureObject
+    bpy.ops.object.mode_set(mode='POSE')
+    
+    #set constraint to target bone
+    targetBone = armatureObject.pose.bones[target]
+    constraint = targetBone.constraints.new(type='COPY_TRANSFORMS')
+    constraint.target = bpy.data.objects[armature]
+    constraint.subtarget = source
+
+    constraint.influence = 1
+    constraint.target_space = 'LOCAL'
+    constraint.owner_space = 'LOCAL'
+
+    constraint.name = '%s_Constraint'% target
+    
+    return constraint
+
+
+def parentContrainToBone(armature=None, bone=None, source=None, type=None):
+    
+    armatureObject = bpy.data.objects[armature]
+    bpy.context.scene.objects.active = armatureObject
+    bpy.ops.object.mode_set(mode='POSE')
+    
+    currentBone = armatureObject.pose.bones[bone]
+    
+    constrain = currentBone.constraints.new(type='COPY_TRANSFORMS')
+    constrain.target = source
+    constrain.target_space = type
+    constrain.owner_space = type
+    constrain.influence = 1
+        
+    return constrain
+ 
 
 
 def addAttribute(node=None, longName=None, attributeType=None, defaultValue=0, minValue=0, maxValue=1, description=None): 
@@ -715,5 +762,43 @@ def addAttribute(node=None, longName=None, attributeType=None, defaultValue=0, m
 
     
     #return True
+    
+def setDriven(node=None, nodeAttr=None, driver=None, driverType=None, variableType=None, variableName=None, driverAttr=None):
+    
+    '''
+    Description - Function for operating on set driven.      
+        :param node    <str>    example 'L_Ankle_Roll_SDK'
+        :param nodeAttr    <list>     example ['rotation_euler', 0], or ['location', 2]    
+        :param driver    <str>,     example 'L_Ankle_IK_Ctrl'
+        :param driverType    <str>    example 'SUM' or 'AVERAGE'
+        :param variableType    <str>    example 'SINGLE_PROP'
+        :param variableName    <str>    example 'Ankle_Roll'
+        :param driverAttr    <str>    example 'BallRoll'    
+    '''   
+    
+    bNode = bpy.data.objects[node]        
+    fCurve = bNode.driver_add(nodeAttr[0], nodeAttr[1])
+    fCurve.update()
+    fCurve.driver.type = driverType
+    newVariable = fCurve.driver.variables.new()
+    newVariable.type = variableType
+    newVariable.name = variableName      
+    #print ('driver\t', fCurve)     
+    
+    #=======================================================================
+    # bNode = bpy.data.objects['node]
+    # fCurve = ankleRoll_SDK.driver_add('rotation_euler', 0)
+    # fCurve.update()
+    # fCurve.driver.type = 'SUM'
+    # newVariable = fCurve.driver.variables.new()
+    # newVariable.type = 'SINGLE_PROP'
+    # newVariable.name = 'Ankle_Roll'        
+    # print ('driver\t', fCurve)   
+    #======================================================================= 
+    
+    return fCurve, newVariable
+    
+    
+
 
 #End##########################################################################################
