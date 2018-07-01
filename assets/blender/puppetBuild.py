@@ -82,18 +82,18 @@ class Build(object):
                     ]
         
         for eachGroup in groups :
-            bpy.ops.object.empty_add(   type='PLAIN_AXES', 
-                                        view_align=False, 
-                                        location=(0,0,0)
-                                        ) 
-            bpy.context.object.name = eachGroup
-            bpy.context.object.empty_draw_size = 0.0  
+            studioBlender.createGroup(name=eachGroup)
+
+        #=======================================================================
+        # bpy.ops.curve.primitive_nurbs_circle_add(   view_align=False, 
+        #                                             location=(0,0,0)
+        #                                             )
+        #bpy.context.object.name = 'World'
+        #=======================================================================
         
-        bpy.ops.curve.primitive_nurbs_circle_add(   view_align=False, 
-                                                    location=(0,0,0)
-                                                    )
+        world = studioBlender.createEmptyObject ('CIRCLE', False, (0, 0, 0), radius=1.0, name='World')         
+        driver = studioBlender.createEmptyObject ('CIRCLE', False, (0, 0, 0), radius=0.7, name='Driver') 
         
-        bpy.context.object.name = 'World'
         #world = studioBlender.createEmptyObject ('CIRCLE', False, (0, 0, 0), radius=4.0, name='World')
             
         bpy.data.objects['Control_Group'].parent = bpy.data.objects['AssetName']
@@ -113,6 +113,7 @@ class Build(object):
         bpy.data.objects['Root'].parent = bpy.data.objects['Skeleton_Group']            
 
         bpy.data.objects['World'].parent = bpy.data.objects['Offset']
+        bpy.data.objects['Driver'].parent = bpy.data.objects['World']
   
         
     def setBoneHierarchy(self):
@@ -346,8 +347,17 @@ class Build(object):
         
         
     def createFootSetup(self, side=None):
-        
+         
         ctrl = studioControls.Controls() # control class
+        
+        ik_CTRLGROUP = studioBlender.createGroup(name='%s_Leg_iK_%s_%s'% (side, self.input._control, self.input._group))
+        fk_CTRLGROUP = studioBlender.createGroup(name='%s_Leg_FK_%s_%s'% (side, self.input._control, self.input._group))
+        leg_SDKGROUP = studioBlender.createGroup(name='%s_Leg_SDK_%s'% (side, self.input._group))
+
+        ik_CTRLGROUP.parent = bpy.data.objects['Controls']
+        fk_CTRLGROUP.parent = bpy.data.objects['Controls']
+        leg_SDKGROUP.parent = bpy.data.objects['Skeleton_Group']
+              
         
         #create ik bones   
         sourceBone= [   '%s_Pelvis_Bone'% side, 
@@ -444,25 +454,7 @@ class Build(object):
         studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='KneeVisibility', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
         studioBlender.addAttribute(node=ankle_IKCTRL.name, longName='KneeTwist', attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
 
-        #=======================================================================
-        # bpy.ops.wm.properties_add(data_path="object")
-        # setAttr "RT_Ankle_IK_Ctrl.switchStretch" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.lengthStrech" 10;
-        # setAttr "RT_Ankle_IK_Ctrl.upperStretch" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.lowerStretch" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.stretch" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.footRoll" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.footRollAngle" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.footTwist" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.toeRoll" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.toeTwist" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.ballLift" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.heelTwist" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.kneeVisibility" 0;
-        # setAttr "RT_Ankle_IK_Ctrl.kneeTwist" 0;
-        # lockTo Global, World, COG, Pelvis
-        #=======================================================================
-        
+            
         #set driven ankle roll    
         studioBlender.setDriven(node=ankleRoll_SDK.name,
                                 nodeAttr=['rotation_euler', 0],
@@ -521,9 +513,17 @@ class Build(object):
                                 variableType='SINGLE_PROP',
                                 variableName='Hell_Twist',
                                 driverAttr='HellTwist'
-                                )         
+                                )        
+        
+        
+        #ik pelvis control
+        
+        
+        #ik pole vector control 
                 
         #ik stretch
+        
+        #ik bendy
         
         
         
@@ -645,8 +645,42 @@ class Build(object):
                                                                 source=fkBones[3]
                                                                 )      
                 
-            #twist streach and bendy
+        studioBlender.addAttribute(node='Driver', longName='%s_IK_FK_Switch'% side, attributeType=float, defaultValue=0, minValue=0, maxValue=1, description='IK Leg Stretch Switch')
+        
+        #=======================================================================
+        # studioBlender.setDriven(node=ikPlevis_COST.name,
+        #                         nodeAttr=['influance', 0],
+        #                         driver='Driver', 
+        #                         driverType='SUM',
+        #                         variableType='SINGLE_PROP',
+        #                         variableName='Pelvis_IK_FK',
+        #                         driverAttr='%s_IK_FK_Switch'% side
+        #                         )  
+        #=======================================================================
         
         
+        
+        
+        
+          
+        
+        #twist streach and bendy
+        
+        
+        
+        
+        
+     
         #set heiarchy
 
+        studioBlender.setParent(ankle_IKCTRLGROUP.name, ik_CTRLGROUP.name)
+       
+        studioBlender.setParent(pelvis_FKCTRLGROUP.name, fk_CTRLGROUP.name)
+        studioBlender.setParent(knee_FKCTRLGROUP.name, fk_CTRLGROUP.name)
+        studioBlender.setParent(ankle_FKCTRLGROUP.name, fk_CTRLGROUP.name)
+        studioBlender.setParent(ball_FKCTRLGROUP.name, fk_CTRLGROUP.name)
+        
+        studioBlender.setParent(ankleIK_SDK.name, leg_SDKGROUP.name)
+       
+        
+        

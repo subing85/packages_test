@@ -796,9 +796,20 @@ def setDriven(node=None, nodeAttr=None, driver=None, driverType=None, variableTy
     # print ('driver\t', fCurve)   
     #======================================================================= 
     
+
     return fCurve, newVariable
     
     
+def createGroup(name=None):    
 
+    bpy.ops.object.empty_add(   type='PLAIN_AXES', 
+                                view_align=False, 
+                                location=(0,0,0)
+                                ) 
+    bpy.context.object.name = name
+    bpy.context.object.empty_draw_size = 0.0
+    
+    return bpy.context.object
+        
 
 #End##########################################################################################
